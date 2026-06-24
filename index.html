@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>大数据技术复习指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400,50;9..144,500,60;9..144,600,70;9..144,700,80&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F6F3EE;
+  --surface: #FFFFFF;
+  --surface-alt: #F0ECE4;
+  --text: #1E1C18;
+  --text-secondary: #7A746E;
+  --text-muted: #9E9890;
+  --primary: #1B4965;
+  --primary-light: #EDF2F6;
+  --accent: #C8644A;
+  --accent-light: #FBF0EC;
+  --border: #E5DFD7;
+  --border-light: #F0ECE6;
+  --code-bg: #EDEAE2;
+  --tpl-bg: #FFF9F0;
+  --tpl-border: #E8D5B8;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Sora', -apple-system, sans-serif;
+  --max-w: 800px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-body);color:var(--text);background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased;padding-bottom:4rem}
+::selection{background:var(--primary);color:#fff}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1B4965 0%,#2A6F97 100%);color:#fff;padding:3.5rem 1.5rem 3rem;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:-40%;right:-20%;width:60%;height:120%;background:radial-gradient(ellipse,rgba(255,255,255,0.06) 0%,transparent 70%);pointer-events:none}
+.hero-inner{max-width:var(--max-w);margin:0 auto;position:relative;z-index:1}
+.hero-label{font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;opacity:0.7;margin-bottom:0.75rem;font-weight:600}
+.hero h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.2rem);font-weight:700;font-variation-settings:'SOFT' 80;line-height:1.15;margin-bottom:0.5rem}
+.hero p{font-size:clamp(0.9rem,2vw,1.05rem);opacity:0.8;max-width:600px;line-height:1.6}
+.hero-stats{margin-top:1.5rem;display:flex;gap:2rem;flex-wrap:wrap}
+.hero-stat{font-size:0.85rem;opacity:0.75}
+.hero-stat strong{font-weight:600;opacity:1;font-size:1rem}
+
+/* NAV */
+.nav-wrap{position:sticky;top:0;z-index:100;background:rgba(246,243,238,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav{max-width:var(--max-w);margin:0 auto;display:flex;gap:0;overflow-x:auto;padding:0 1rem;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{flex-shrink:0;padding:0.75rem 0.9rem;font-size:0.8rem;font-weight:500;color:var(--text-secondary);text-decoration:none;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap}
+.nav a:hover,.nav a.active{color:var(--primary);border-bottom-color:var(--primary)}
+
+/* MAIN */
+main{max-width:var(--max-w);margin:0 auto;padding:0 1.5rem}
+
+/* SECTION */
+section{margin-top:3rem}
+.section-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+.section-header h2{font-family:var(--font-display);font-size:clamp(1.2rem,3vw,1.6rem);font-weight:600;font-variation-settings:'SOFT' 70;color:var(--primary);line-height:1.2}
+.section-header .rule{flex:1;height:1px;background:var(--border)}
+.section-desc{font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem}
+
+/* Q ITEM */
+.q-item{border-bottom:1px solid var(--border-light);overflow:hidden}
+.q-item:first-child{border-top:1px solid var(--border-light)}
+.q-header{display:flex;align-items:baseline;gap:0.75rem;padding:1rem 0;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:background 0.2s}
+.q-header:hover{background:var(--primary-light);margin:0 -0.75rem;padding:1rem 0.75rem;border-radius:var(--radius-sm)}
+.q-num{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--primary);color:#fff;font-size:0.7rem;font-weight:600}
+.q-text{flex:1;font-size:0.92rem;font-weight:500;line-height:1.5;color:var(--text)}
+.q-toggle{flex-shrink:0;font-size:0.75rem;color:var(--text-muted);transition:transform 0.3s;width:1.2rem;text-align:center}
+.q-item.open .q-toggle{transform:rotate(45deg)}
+.q-answer{max-height:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.3s ease;opacity:0}
+.q-item.open .q-answer{max-height:5000px;opacity:1}
+.q-answer-inner{padding:0 0 1.2rem 2.35rem;font-size:0.88rem;color:var(--text-secondary);line-height:1.7}
+
+/* TEMPLATE CODE (original with blanks) */
+.q-template{max-height:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.3s ease;opacity:0}
+.q-item.open .q-template{max-height:5000px;opacity:1}
+.q-template pre{background:var(--tpl-bg);border:1px solid var(--tpl-border);border-left:3px solid var(--accent);border-radius:var(--radius-sm);padding:0.9rem 1rem;overflow-x:auto;font-size:0.82rem;line-height:1.6;margin:0 0 0.4rem 2.35rem}
+.q-template .tpl-label{font-size:0.7rem;font-weight:600;color:var(--accent);letter-spacing:0.05em;text-transform:uppercase;margin:0.5rem 0 0.2rem 2.35rem}
+.q-answer-inner .ans-label{font-size:0.7rem;font-weight:600;color:var(--primary);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:0.3rem}
+
+/* KNOWLEDGE ITEM */
+.k-list{list-style:none}
+.k-item{display:flex;align-items:baseline;gap:0.75rem;padding:0.75rem 0;border-bottom:1px solid var(--border-light);font-size:0.9rem}
+.k-item:first-child{border-top:1px solid var(--border-light)}
+.k-num{flex-shrink:0;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:600}
+.k-text{flex:1;line-height:1.6}
+
+/* CODE */
+pre{background:var(--code-bg);border-radius:var(--radius-sm);padding:1rem;overflow-x:auto;font-size:0.82rem;line-height:1.6;border:1px solid var(--border);margin-top:0.5rem}
+code{font-family:'JetBrains Mono','Fira Code',monospace}
+pre code{background:none!important;padding:0!important}
+.hljs{background:transparent!important}
+
+/* TAG */
+.tag{display:inline-block;font-size:0.65rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:0.15rem 0.5rem;border-radius:3px;margin-right:0.4rem;vertical-align:middle}
+.tag-code{background:var(--accent-light);color:var(--accent)}
+.tag-fill{background:var(--primary-light);color:var(--primary)}
+
+/* COMPREHENSIVE */
+.comp-q{padding:1rem 0;border-bottom:1px solid var(--border-light);font-size:0.9rem;line-height:1.6}
+.comp-q:first-child{border-top:1px solid var(--border-light)}
+.comp-q .q-label{font-weight:600;color:var(--primary);margin-bottom:0.3rem;cursor:pointer}
+.comp-q .q-answer{margin-top:0.5rem;color:var(--text-secondary);max-height:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.3s ease;opacity:0}
+.comp-q.open .q-answer{max-height:2000px;opacity:1}
+.comp-q .q-toggle{float:right;color:var(--text-muted);font-size:0.8rem;cursor:pointer;transition:transform 0.3s}
+.comp-q.open .q-toggle{transform:rotate(45deg)}
+
+/* FOOTER */
+footer{text-align:center;padding:3rem 1.5rem 1.5rem;font-size:0.75rem;color:var(--text-muted)}
+
+/* SCROLL INDICATOR */
+.scroll-progress{position:fixed;top:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent));z-index:200;transition:width 0.1s}
+
+/* RESPONSIVE */
+@media(max-width:500px){
+  .hero{padding:2.5rem 1.2rem 2rem}
+  main{padding:0 1rem}
+  .q-header{padding:0.85rem 0}
+  .q-answer-inner{padding-left:2.35rem}
+  .nav a{padding:0.6rem 0.7rem;font-size:0.75rem}
+  .hero-stats{gap:1.2rem}
+}
+
+@media print{
+  .nav-wrap,.scroll-progress{display:none}
+  .q-answer,.comp-q .q-answer,.q-template{max-height:none!important;opacity:1!important}
+  .q-item,.comp-q{break-inside:avoid}
+  body{background:#fff;padding:0}
+  .hero{padding:2rem 1.5rem;background:#1B4965!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="progress"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">复习指南</div>
+    <h1>大数据技术</h1>
+    <p>涵盖 Hadoop、MapReduce、HBase、Spark、Flink 核心知识点与编程题，适合考前冲刺与系统复习。</p>
+    <div class="hero-stats">
+      <span class="hero-stat"><strong>5</strong> 选择题知识点</span>
+      <span class="hero-stat"><strong>5</strong> 判断题知识点</span>
+      <span class="hero-stat"><strong>6</strong> 填空题</span>
+      <span class="hero-stat"><strong>16</strong> 编程题</span>
+      <span class="hero-stat"><strong>10</strong> 综合应用题</span>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-wrap" id="topNav">
+  <div class="nav">
+    <a href="#mcq">选择</a>
+    <a href="#tf">判断</a>
+    <a href="#fill">填空</a>
+    <a href="#code">编程</a>
+    <a href="#comprehensive">综合</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="mcq">
+  <div class="section-header"><h2>选择题知识点</h2><div class="rule"></div></div>
+  <div class="section-desc">大数据 4V、Hadoop 组件、MapReduce Shuffle、HBase vs RDBMS、Spark 组件</div>
+  <ul class="k-list" id="mcqList"></ul>
+</section>
+
+<section id="tf">
+  <div class="section-header"><h2>判断题知识点</h2><div class="rule"></div></div>
+  <div class="section-desc">HDFS 适用场景、HBase vs Hive、YARN 作用、NoSQL 事务、Flink 批流一体</div>
+  <ul class="k-list" id="tfList"></ul>
+</section>
+
+<section id="fill">
+  <div class="section-header"><h2>填空题</h2><div class="rule"></div></div>
+  <div class="section-desc">点击题目展开答案</div>
+  <div id="fillList"></div>
+</section>
+
+<section id="code">
+  <div class="section-header"><h2>编程题</h2><div class="rule"></div></div>
+  <div class="section-desc">所有代码控制在 10 行以内，点击题目展开代码</div>
+  <div id="codeList"></div>
+</section>
+
+<section id="comprehensive">
+  <div class="section-header"><h2>综合应用题</h2><div class="rule"></div></div>
+  <div class="section-desc">架构设计、技术选型、系统方案，点击展开答案要点</div>
+  <div id="compList"></div>
+</section>
+
+</main>
+
+<footer>大数据技术复习指南 &middot; 祝考试顺利</footer>
+
+<script>
+const DATA = {
+  mcq: [
+    { n:"大数据4V特征", t:"Volume（大量）、Velocity（高速）、Variety（多样）、Value（价值）" },
+    { n:"Hadoop 组件功能", t:"HDFS（分布式存储）、MapReduce（分布式计算）、YARN（资源调度）、Common（公共工具库）" },
+    { n:"MapReduce Shuffle", t:"Map 端：分区 → 排序 → 溢写 → 合并；Reduce 端：拉取 → 合并 → 排序 → 输入 Reducer" },
+    { n:"HBase vs 关系数据库", t:"HBase：列式存储、NoSQL、最终一致性、无事务、水平扩展；RDBMS：行式存储、SQL、ACID 事务、强一致、垂直扩展" },
+    { n:"Spark 组件", t:"SparkCore（基础引擎）、SparkSQL（结构化查询）、SparkStreaming（流处理）、MLlib（机器学习）、GraphX（图计算）" }
+  ],
+  tf: [
+    { n:"HDFS 适用场景", t:"适合：大文件存储、流式数据访问、一次写入多次读取。不适合：小文件、低延迟访问、大量随机写" },
+    { n:"HBase 与 Hive 区别", t:"HBase：NoSQL 数据库，支持实时读写；Hive：数据仓库工具，基于 MapReduce 做离线批处理，延迟高" },
+    { n:"YARN 作用", t:"集群资源管理与任务调度。核心组件：ResourceManager（全局资源管理）、NodeManager（单节点管理）、ApplicationMaster（任务协调）" },
+    { n:"NoSQL 事务特性", t:"BASE 理论：Basically Available（基本可用）、Soft State（软状态）、Eventually Consistent（最终一致性），不支持 ACID" },
+    { n:"Flink 批流一体", t:"正确。Flink 原生支持批处理（Batch）和流处理（Streaming）统一架构，同一 API 处理两种场景" }
+  ],
+  fill: [
+    { q:"HDFS 元数据结构", a:"（索引节点号，文件名，所属目录，权限，时间戳，块列表（块编号，副本位置））" },
+    { q:"Shuffle 概念", a:"映射任务输出到归约任务输入之间，对数据进行分区、排序、合并、传输的过程" },
+    { q:"HBase 数据坐标", a:"（行键，列族，列限定符，时间戳）四维唯一定位一个单元格" },
+    { q:"Spark RDD 操作类型", a:"转换操作（惰性执行，如映射/过滤/分组等）和行动操作（触发计算，如归约/收集/保存等）" },
+    { q:"NoSQL 三大基石", a:"CAP 定理（一致性/可用性/分区容忍性）、BASE 理论、最终一致性" },
+    { q:"流计算框架", a:"Storm、Flink、Spark Streaming、Kafka Streams、Pulsar Functions" }
+  ],
+  code: [
+    { q:"1. MapReduce 实现平均值计算<br><small>输入：文本文件每行一个整数；输出：所有整数的平均值。</small>",
+      tp: false,
+      a:`// Mapper
+static class AvgMapper extends Mapper&lt;Object,Text,Text,IntWritable&gt; {
+  public void map(Object k, Text v, Context c) throws IOException, InterruptedException {
+    c.write(new Text("avg"), new IntWritable(Integer.parseInt(v.toString())));
+  }
+}
+// Reducer
+static class AvgReducer extends Reducer&lt;Text,IntWritable,Text,DoubleWritable&gt; {
+  public void reduce(Text k, Iterable&lt;IntWritable&gt; vs, Context c) throws IOException, InterruptedException {
+    int s=0, n=0;
+    for(IntWritable v:vs){ s+=v.get(); n++; }
+    c.write(k, new DoubleWritable((double)s/n));
+  }
+}` },
+    { q:"2. MapReduce 实现 Join 操作（代码填空）<br><small>两个文件：员工(empId, name) 和 部门(empId, deptName)，输出员工及其部门。</small>",
+      tp: `// Map 端：为每条记录打标签
+// 员工文件: context.write(new Text(empId), new Text("emp,"+name));
+// 部门文件: context.write(new Text(empId), new Text("dept,"+deptName));
+
+// Reduce 端：根据标签拼接
+// for(Text v:values){
+//   String[] p=v.toString().split(",");
+//   if(p[0].equals("emp")) name=p[1];
+//   else dept=p[1];
+// }
+// context.write(key, new Text(name+","+dept));`,
+      a:`// Map: 输出标签化键值对
+context.write(new Text(fields[0]), new Text("emp,"+fields[1]));
+context.write(new Text(fields[0]), new Text("dept,"+fields[2]));
+
+// Reduce: 标记来源后拼接
+String name="", dept="";
+for(Text v:values){
+  String[] p=v.toString().split(",");
+  if(p[0].equals("emp")) name=p[1]; else dept=p[1];
+}
+context.write(key, new Text(name+","+dept));` },
+    { q:"3. WordCount Map 函数填空",
+      tp: `public static class TokenizerMapper extends Mapper&lt;Object, Text, Text, IntWritable&gt;{
+    private final static IntWritable one = new IntWritable(1);
+    private Text word = new Text();
+    public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+        StringTokenizer itr = new StringTokenizer(value.toString());
+        while (itr.hasMoreTokens()) {
+            word.set(itr.nextToken());
+            // 填空：输出键值对，键为单词，值为1
+            ______             ______;
+        }
+    }
+}`,
+      a:`context.write(word, one);` },
+    { q:"4. HBase 批量插入 100 条数据<br><small>行键 'row'+i，列族 'cf'，列 'col'，值随机</small>",
+      tp: false,
+      a:`Connection conn=ConnectionFactory.createConnection();
+Table t=conn.getTable(TableName.valueOf("test"));
+List&lt;Put&gt; puts=new ArrayList&lt;&gt;(); Random r=new Random();
+for(int i=0;i<100;i++){
+  Put p=new Put(Bytes.toBytes("row"+i));
+  p.addColumn(Bytes.toBytes("cf"),Bytes.toBytes("col"),Bytes.toBytes(String.valueOf(r.nextInt())));
+  puts.add(p);
+}
+t.put(puts); t.close(); conn.close();` },
+    { q:"5. HBase 建表 + 插入一行（填空）<br><small>创建表 student，列族 info，插入行键 001，info:name = Tom</small>",
+      tp: `Connection conn = ConnectionFactory.createConnection();
+Admin admin = conn.getAdmin();
+TableName tableName = TableName.valueOf("student");
+if (!admin.tableExists(tableName)) {
+    TableDescriptorBuilder builder = TableDescriptorBuilder.newBuilder(tableName);
+    ColumnFamilyDescriptor cf = ________________________; // 填空：创建列族描述符
+    builder.setColumnFamily(cf);
+    admin.createTable(builder.build());
+}
+Table table = conn.getTable(tableName);
+Put put = new Put(Bytes.toBytes("001"));
+put.________________________; // 填空：添加列 "info:name" 值为 "Tom"
+table.put(put);
+table.close();
+conn.close();`,
+      a:`// ① 创建列族描述符
+ColumnFamilyDescriptor cf = ColumnFamilyDescriptorBuilder.newBuilder(Bytes.toBytes("info")).build();
+// ② 添加列
+put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("name"), Bytes.toBytes("Tom"));` },
+    { q:"6. HBase 扫描表 student 并输出所有行",
+      tp: false,
+      a:`Connection conn=ConnectionFactory.createConnection();
+Table t=conn.getTable(TableName.valueOf("student"));
+ResultScanner rs=t.getScanner(new Scan());
+for(Result r:rs){
+  for(Cell c:r.listCells())
+    System.out.println(
+      Bytes.toString(CellUtil.cloneRow(c))+":"+
+      Bytes.toString(CellUtil.cloneFamily(c))+":"+
+      Bytes.toString(CellUtil.cloneQualifier(c))+"="+
+      Bytes.toString(CellUtil.cloneValue(c)));
+}
+rs.close(); conn.close();` },
+    { q:"7. Spark 单词计数（Scala）<br><small>读取 HDFS /user/input/data.txt，按字母序输出到 /user/output/result</small>",
+      tp: false,
+      a:`val sc=new SparkContext(new SparkConf().setAppName("WC"))
+sc.textFile("/user/input/data.txt")
+  .flatMap(_.split("\\\\s+"))
+  .map((_,1))
+  .reduceByKey(_+_)
+  .sortByKey()
+  .saveAsTextFile("/user/output/result")` },
+    { q:"8. HBase 查询表 student（填空）<br><small>查询行键 001，列族 info，列 name 的值</small>",
+      tp: `Connection conn = ConnectionFactory.createConnection();
+Table table = conn.getTable(TableName.valueOf("student"));
+Get get = new Get(Bytes.toBytes("001"));
+// 填空：添加要获取的列
+get.                                              ;
+Result result = table.get(get);
+// 填空：获取列的值并转换为字符串
+byte[] value =                                        ;
+System.out.println(Bytes.toString(value));
+table.close();
+conn.close();`,
+      a:`// ① 添加要获取的列
+get.addColumn(Bytes.toBytes("info"), Bytes.toBytes("name"));
+// ② 获取列的值并转换为字符串
+byte[] value = result.getValue(Bytes.toBytes("info"), Bytes.toBytes("name"));` },
+    { q:"9. Spark 文件合并去重（Scala）<br><small>读取 /input/A.txt 和 /input/B.txt，合并去重输出到 /output/merged.txt</small>",
+      tp: false,
+      a:`val sc=new SparkContext(new SparkConf().setAppName("Merge"))
+sc.textFile("/input/A.txt")
+  .union(sc.textFile("/input/B.txt"))
+  .distinct()
+  .coalesce(1)
+  .saveAsTextFile("/output/merged.txt")` },
+    { q:"10. Flink Socket 5 秒窗口统计（Scala）<br><small>从 localhost:9999 读取字符串，每 5 秒统计每个单词出现次数</small>",
+      tp: false,
+      a:`val env=StreamExecutionEnvironment.getExecutionEnvironment
+env.socketTextStream("localhost",9999)
+  .flatMap(_.split("\\\\s+"))
+  .map((_,1))
+  .keyBy(0)
+  .timeWindow(Time.seconds(5))
+  .sum(1)
+  .print()
+env.execute()` },
+    { q:"11. Flink Kafka 过滤 ERROR（Java）<br><small>从 Kafka topic 'log' 过滤出含 ERROR 的行</small>",
+      tp: false,
+      a:`env.addSource(new FlinkKafkaConsumer&lt;&gt;("log",new SimpleStringSchema(),props))
+  .filter(line->line.contains("ERROR"))
+  .print();
+env.execute();` },
+    { q:"12. Flink 滑动窗口平均值（Scala）<br><small>从 socket 读整数，每 10 秒统计过去 30 秒内的平均值</small>",
+      tp: false,
+      a:`val env=StreamExecutionEnvironment.getExecutionEnvironment
+env.socketTextStream("localhost",9999)
+  .map(x=>(1,x.toInt)).keyBy(0)
+  .window(SlidingProcessingTimeWindows.of(Time.seconds(30),Time.seconds(10)))
+  .apply((k,w,vals,out)=>{
+    val s=vals.map(_._2); out.collect(k,s.sum/s.size)
+  }).print()
+env.execute()` },
+    { q:"13. MaxMapper 填空<br><small>求一组整数最大值的 Map 函数，键为常量</small>",
+      tp: `public static class MaxMapper extends Mapper&lt;LongWritable, Text, IntWritable, IntWritable&gt; {
+    public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+        int num = Integer.parseInt(value.toString());
+        // 填空：输出键值对，键为常量，值为当前数字
+        ___                                   _ ;
+    }
+}`,
+      a:`// 填空：输出键值对，键为常量，值为当前数字
+context.write(new IntWritable(1), new IntWritable(num));` },
+    { q:"14. MapReduce 数据去重<br><small>输入两个文件，输出所有不重复的行</small>",
+      tp: false,
+      a:`static class DM extends Mapper&lt;Object,Text,Text,NullWritable&gt;{
+  public void map(Object k,Text v,Context c){ c.write(v,NullWritable.get()); }
+}
+static class DR extends Reducer&lt;Text,NullWritable,Text,NullWritable&gt;{
+  public void reduce(Text k,Iterable&lt;NullWritable&gt; vs,Context c){ c.write(k,NullWritable.get()); }
+}
+job.setMapperClass(DM.class); job.setReducerClass(DR.class);
+job.setOutputKeyClass(Text.class); job.setOutputValueClass(NullWritable.class);` },
+    { q:"15. Spark SQL 分组聚合<br><small>读取 JSON，按部门分组统计平均工资</small>",
+      tp: false,
+      a:`val spark=SparkSession.builder().appName("GA").getOrCreate()
+spark.read.json(args(0))
+  .groupBy("dept")
+  .avg("salary")
+  .show()` },
+    { q:"16. MapReduce 倒排索引<br><small>输入多个文档，输出每个单词及其出现的文档列表</small>",
+      tp: false,
+      a:`static class IM extends Mapper&lt;Object,Text,Text,Text&gt;{
+  public void map(Object k,Text v,Context c){
+    String fn=((FileSplit)c.getInputSplit()).getPath().getName();
+    for(String w:v.toString().split(" ")) c.write(new Text(w),new Text(fn));
+  }
+}
+static class IR extends Reducer&lt;Text,Text,Text,Text&gt;{
+  public void reduce(Text k,Iterable&lt;Text&gt; vs,Context c){
+    Set&lt;String&gt; s=new HashSet&lt;&gt;(); for(Text v:vs) s.add(v.toString());
+    c.write(k,new Text(String.join(",",s)));
+  }
+}` }
+  ],
+  comp: [
+    { q:"1. HDFS 写数据过程简述", a:"Client → NameNode 创建文件 → NN 返回 DN 列表 → Client 分块流水线写入 DN → DN 间副本复制 → ACK 确认 → 关闭" },
+    { q:"2. Region 三层定位过程与 ZooKeeper 作用", a:"Client → ZooKeeper（获取 Root 表位置）→ Root 表（获取 Meta 表位置）→ Meta 表（获取 Region 所在 RegionServer）→ 直接访问。<br><br>ZooKeeper 作用：存储 Root 表地址、监控 RegionServer 心跳、HMaster 选举" },
+    { q:"3. 电商推荐系统方案设计", a:"采集层（Flume/Kafka）→ 存储层（HDFS/HBase）→ 批处理（Spark MLlib 离线模型）→ 实时处理（Flink 实时特征）→ 推荐算法（协同过滤 / 矩阵分解）→ 结果（Redis 缓存）→ 展示层（API）" },
+    { q:"4. Hive vs Impala — 50TB + 每日100GB 复杂 SQL 分析", a:"推荐 Hive。Hive 适合大规模批处理、复杂 ETL、容错性强；Impala 适合低延迟交互查询但内存受限、高并发差。方案：Hive 做离线 ETL，Impala 做即席查询" },
+    { q:"5. 交通流量实时分析与预测系统设计", a:"采集（传感器 / Kafka）→ 实时（Flink 窗口聚合 + ML 预测）→ 存储（HBase 时序 + Redis 缓存）→ 离线（Spark SQL 历史分析）→ 可视化（ECharts 地图热力图）。<br><br>选 Flink 理由：真正的流处理、毫秒级延迟、Exactly-Once 语义、CEP 复杂事件处理" },
+    { q:"6. 点击流实时监测 + 每日离线聚合", a:"实时链路：Flume → Kafka → Flink → HBase（实时展示）。<br>离线链路：Kafka → HDFS → Spark SQL / Hive → MySQL（报表）。<br>数据流向：用户点击 → Nginx → Flume → Kafka → 分流到实时和离线链路" },
+    { q:"7. MySQL + HBase 混合使用场景", a:"MySQL：订单事务（ACID 强一致、Join、索引）。<br>HBase：用户行为日志（海量数据、高并发读写、水平扩展、稀疏列）。<br>各自优势互补" },
+    { q:"8. 医疗大数据安全与隐私保护", a:"技术措施：数据加密（TDE + 列加密）、访问控制（RBAC + ACL）、审计日志、脱敏脱标识、差分隐私。<br>管理措施：等保三级、数据分级、最小权限原则、匿名化处理、合规审计" },
+    { q:"9. 智慧城市可视化应用场景与图表类型", a:"① 交通流量 → 热力图 / 流图<br>② 环境监测（PM2.5、温度）→ 折线图 / 散点图<br>③ 公共安全 → 地理分布图 / 柱状图<br>④ 能源消耗 → 仪表盘 / 面积图" },
+    { q:"10. 电商个性化推荐系统方案", a:"采集（埋点 → Kafka）→ 存储（HDFS 海量 + HBase 实时）→ 批处理（Spark MLlib 训练 ALS/协同过滤）→ 实时（Flink 更新用户特征 + 实时召回）→ 算法（CF + CB + 深度学习排序）→ 结果（Redis）→ 展示（API）。<br><br>选型理由：Spark 离线训练，Flink 实时特征 + 实时计算" }
+  ]
+};
+
+function renderKList(id, items) {
+  const ul = document.getElementById(id);
+  items.forEach(d => {
+    const li = document.createElement('li');
+    li.className = 'k-item';
+    li.innerHTML = '<span class="k-num">'+d.n.charAt(0)+'</span><span class="k-text"><strong>'+d.n+'</strong>：'+d.t+'</span>';
+    ul.appendChild(li);
+  });
+}
+
+function renderCodeList(id, items) {
+  const container = document.getElementById(id);
+  items.forEach(d => {
+    const num = d.q.match(/^\d+/)?.[0]||'?';
+    const hasTpl = d.tp && d.tp.length > 0;
+    const tplHTML = hasTpl
+      ? '<div class="q-template"><div class="tpl-label">原标题代码（填空）</div><pre><code class="language-java">' + d.tp + '</code></pre></div>'
+      : '';
+    const ansLabel = hasTpl ? '<div class="ans-label">答案</div>' : '';
+    const div = document.createElement('div');
+    div.className = 'q-item';
+    div.innerHTML =
+      '<div class="q-header">' +
+        '<span class="q-num">'+num+'</span>' +
+        '<span class="q-text">'+d.q+' <span class="tag tag-code">代码</span></span>' +
+        '<span class="q-toggle">+</span>' +
+      '</div>' +
+      tplHTML +
+      '<div class="q-answer"><div class="q-answer-inner">' +
+        ansLabel +
+        '<pre><code class="language-java">' + d.a + '</code></pre>' +
+      '</div></div>';
+    div.addEventListener('click', () => {
+      div.classList.toggle('open');
+      if (div.classList.contains('open')) {
+        div.querySelectorAll('pre code').forEach(b => hljs.highlightElement(b));
+      }
+    });
+    container.appendChild(div);
+  });
+}
+
+function renderToggleList(id, items) {
+  const container = document.getElementById(id);
+  items.forEach(d => {
+    const div = document.createElement('div');
+    div.className = 'q-item';
+    div.innerHTML =
+      '<div class="q-header">' +
+        '<span class="q-text"><span class="tag tag-fill">填空</span> '+d.q+'</span>' +
+        '<span class="q-toggle">+</span>' +
+      '</div>' +
+      '<div class="q-answer"><div class="q-answer-inner">'+d.a+'</div></div>';
+    div.addEventListener('click', () => div.classList.toggle('open'));
+    container.appendChild(div);
+  });
+}
+
+function renderCompList(id, items) {
+  const container = document.getElementById(id);
+  items.forEach(d => {
+    const div = document.createElement('div');
+    div.className = 'comp-q';
+    div.innerHTML = '<div class="q-label">'+d.q+'<span class="q-toggle">+</span></div><div class="q-answer">'+d.a+'</div>';
+    div.addEventListener('click', () => div.classList.toggle('open'));
+    container.appendChild(div);
+  });
+}
+
+renderKList('mcqList', DATA.mcq);
+renderKList('tfList', DATA.tf);
+renderToggleList('fillList', DATA.fill);
+renderCodeList('codeList', DATA.code);
+renderCompList('compList', DATA.comp);
+
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progress.style.width = (window.scrollY / h * 100) + '%';
+});
+
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav a');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

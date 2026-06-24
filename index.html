@@ -1,1386 +1,535 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>前端开发者 | 李明 - 高级版</title>
-    <style>
-        :root {
-            --primary: #00d0ff;
-            --secondary: #7857FF;
-            --dark: #121212;
-            --light: #f5f5f7;
-            --accent: #64FFDA;
-            --panel-bg: rgba(30, 30, 30, 0.85);
-            --success: #2ecc71;
-            --warning: #f39c12;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', 'PingFang SC', -apple-system, sans-serif;
-        }
-        
-        body {
-            background: var(--dark);
-            color: var(--light);
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: 
-                radial-gradient(circle at 25% 25%, rgba(100, 255, 218, 0.05) 0%, transparent 30%),
-                radial-gradient(circle at 75% 75%, rgba(0, 208, 255, 0.05) 0%, transparent 30%);
-            background-attachment: fixed;
-        }
-        
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        
-        @media (min-width: 768px) {
-            .container {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        .panel {
-            background: var(--panel-bg);
-            border-radius: 16px;
-            padding: 30px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .panel:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 208, 255, 0.3);
-        }
-        
-        .panel::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                to bottom right,
-                rgba(0, 208, 255, 0.03) 0%,
-                rgba(120, 87, 255, 0.03) 50%,
-                transparent 100%
-            );
-            z-index: -1;
-            animation: rotate 25s linear infinite;
-        }
-        
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            line-height: 1.2;
-        }
-        
-        h2 {
-            font-size: 1.3rem;
-            font-weight: 500;
-            color: var(--light);
-            margin: 20px 0 10px;
-            position: relative;
-        }
-        
-        h2::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -8px;
-            width: 50px;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-        }
-        
-        p {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            margin-bottom: 15px;
-            font-weight: 300;
-        }
-        
-        .highlight {
-            color: var(--accent);
-            font-weight: 500;
-        }
-        
-        .skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .skill-tag {
-            background: rgba(100, 255, 218, 0.08);
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-        
-        .skill-tag:hover {
-            background: rgba(100, 255, 218, 0.2);
-            transform: scale(1.05);
-            box-shadow: 0 0 10px rgba(100, 255, 218, 0.2);
-        }
-
-        /* 新增技能进度条样式 */
-        .skill-item {
-            margin-bottom: 1.5rem;
-        }
-
-        .skill-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .skill-name {
-            color: var(--light);
-            font-weight: 500;
-        }
-
-        .skill-value {
-            color: var(--primary);
-            font-weight: 600;
-            animation: countUp 2s ease-out forwards;
-            opacity: 0;
-        }
-
-        .skill-bar {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .skill-progress {
-            height: 100%;
-            border-radius: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            position: relative;
-            transform: scaleX(0);
-            transform-origin: left;
-            animation: growProgressBar 2s ease-out forwards;
-        }
-
-        .skill-progress::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            animation: shine 3s infinite linear;
-        }
-
-        @keyframes countUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes growProgressBar {
-            from {
-                transform: scaleX(0);
-            }
-            to {
-                transform: scaleX(1);
-            }
-        }
-
-        @keyframes shine {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
-        }
-        
-        .qr-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding-bottom: 20px;
-        }
-        
-        .qr-code {
-            width: 180px;
-            height: 180px;
-            margin: 20px 0;
-            background: #fff;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 208, 255, 0.15);
-        }
-        
-        .qr-placeholder {
-            width: 160px;
-            height: 160px;
-            background: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .qr-code::before {
-            content: '';
-            position: absolute;
-            inset: -50%;
-            background: conic-gradient(
-                transparent 0deg, 
-                var(--primary) 60deg, 
-                transparent 120deg,
-                var(--secondary) 180deg,
-                transparent 240deg,
-                var(--primary) 300deg,
-                transparent 360deg
-            );
-            filter: blur(6px);
-            opacity: 0.3;
-            animation: rotate 5s linear infinite;
-            z-index: 1;
-        }
-        
-        .contact-info {
-            margin-top: 15px;
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 16px;
-            margin-top: 25px;
-        }
-        
-        .social-link {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--light);
-            transition: all 0.3s ease;
-            font-size: 1.2rem;
-            text-decoration: none;
-        }
-        
-        .social-link:hover {
-            background: var(--primary);
-            color: var(--dark);
-            transform: translateY(-3px);
-        }
-        
-        /* 导航栏样式 */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(18, 18, 18, 0.9);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1rem 2rem;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .logo-icon {
-            font-size: 1.5rem;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .logo-text {
-            font-weight: 600;
-            color: var(--light);
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .mobile-menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--light);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        .nav-link {
-            color: var(--light);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 0;
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--primary);
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .theme-toggle {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--light);
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-
-        .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
-        }
-
-        /* 英雄区域样式 */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 6rem 2rem 4rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-content {
-            max-width: 1200px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 4rem;
-            z-index: 1;
-        }
-
-        .hero-text {
-            flex: 1;
-        }
-
-        .hero-title {
-            font-size: 4.5rem;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 1rem;
-            line-height: 1.1;
-        }
-
-        .hero-subtitle {
-            font-size: 1.8rem;
-            color: var(--light);
-            margin-bottom: 2rem;
-            font-weight: 300;
-        }
-
-        .hero-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .hero-tag {
-            background: rgba(0, 208, 255, 0.1);
-            border: 1px solid rgba(0, 208, 255, 0.3);
-            color: var(--primary);
-            padding: 0.5rem 1.2rem;
-            border-radius: 2rem;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .hero-tag:hover {
-            background: rgba(0, 208, 255, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 208, 255, 0.2);
-        }
-
-        .hero-avatar {
-            flex: 0 0 auto;
-        }
-
-        .avatar-container {
-            width: 200px;
-            height: 200px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .avatar-orb {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(
-                var(--primary) 0deg,
-                var(--secondary) 120deg,
-                var(--accent) 240deg,
-                var(--primary) 360deg
-            );
-            animation: rotate 8s linear infinite;
-            filter: blur(10px);
-            opacity: 0.5;
-            position: absolute;
-        }
-
-        .avatar-initial {
-            width: 150px;
-            height: 150px;
-            background: var(--panel-bg);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            font-weight: 600;
-            color: var(--primary);
-            z-index: 2;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .hero-scroll {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            color: rgba(255, 255, 255, 0.7);
-            animation: bounce 2s infinite;
-        }
-
-        .scroll-arrow {
-            width: 20px;
-            height: 20px;
-            border-right: 2px solid var(--primary);
-            border-bottom: 2px solid var(--primary);
-            transform: rotate(45deg);
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            40% {
-                transform: translateX(-50%) translateY(-10px);
-            }
-            60% {
-                transform: translateX(-50%) translateY(-5px);
-            }
-        }
-
-        /* 联系方式区域样式 */
-        .contact-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        .contact-description {
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 0.5rem;
-            font-size: 1.1rem;
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        @media (min-width: 768px) {
-            .contact-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        .contact-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .contact-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(0, 208, 255, 0.15);
-        }
-
-        .contact-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-        }
-
-        .contact-card h3 {
-            margin-bottom: 0.75rem;
-            color: var(--light);
-        }
-
-        .contact-card p {
-            margin-bottom: 1rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .contact-copy, .contact-link-btn {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border: none;
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-
-        .contact-copy:hover, .contact-link-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(0, 208, 255, 0.3);
-        }
-
-        .social-platforms {
-            margin-bottom: 3rem;
-        }
-
-        .social-platforms h3 {
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .platform-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        @media (min-width: 768px) {
-            .platform-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        .platform-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 1.5rem;
-            text-align: center;
-            text-decoration: none;
-            color: var(--light);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .platform-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-        }
-
-        .platform-card.github:hover {
-            background: rgba(24, 23, 23, 0.2);
-            border-color: #333;
-        }
-
-        .platform-card.twitter:hover {
-            background: rgba(29, 161, 242, 0.1);
-            border-color: #1da1f2;
-        }
-
-        .platform-card.medium:hover {
-            background: rgba(0, 0, 0, 0.1);
-            border-color: #000;
-        }
-
-        .platform-card.codepen:hover {
-            background: rgba(0, 0, 0, 0.1);
-            border-color: #47cf73;
-        }
-
-        .platform-icon {
-            font-size: 2rem;
-        }
-
-        .platform-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .platform-desc {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .contact-form {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .contact-form h3 {
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.875rem 1rem;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
-            color: var(--light);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 208, 255, 0.1);
-        }
-
-        .form-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .submit-btn {
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border: none;
-            color: white;
-            padding: 0.875rem 2rem;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: block;
-            margin: 0 auto;
-            min-width: 200px;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 208, 255, 0.3);
-        }
-
-        /* 内容容器调整 */
-        body {
-            padding-top: 4rem !important;
-        }
-
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .icon {
-            margin-right: 10px;
-        }
-
-        footer {
-            grid-column: 1 / -1;
-            text-align: center;
-            margin-top: 40px;
-            padding: 2rem 0;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.5);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* 明亮主题样式 */
-        body.light-theme {
-            --dark: #ffffff;
-            --light: #121212;
-            --panel-bg: rgba(255, 255, 255, 0.92);
-        }
-
-        body.light-theme .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-theme .logo-text,
-        body.light-theme .nav-link,
-        body.light-theme .hero-subtitle,
-        body.light-theme .skill-name,
-        body.light-theme .contact-card h3,
-        body.light-theme .platform-name,
-        body.light-theme p {
-            color: var(--light);
-        }
-
-        body.light-theme .panel {
-            background: var(--panel-bg);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-theme .contact-card,
-        body.light-theme .platform-card {
-            background: rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-theme .qr-code {
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-theme .qr-placeholder {
-            background: #f8f9fa;
-            color: #666;
-        }
-
-        body.light-theme .form-input {
-            background: rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            color: var(--light);
-        }
-
-        body.light-theme .form-input::placeholder {
-            color: rgba(0, 0, 0, 0.5);
-        }
-
-        /* 粒子背景容器 */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        /* 响应式改进 */
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 3rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.5rem;
-            }
-
-            .hero-content {
-                flex-direction: column;
-                text-align: center;
-                gap: 2rem;
-            }
-
-            .navbar {
-                padding: 1rem;
-            }
-
-            .nav-menu {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: var(--dark);
-                flex-direction: column;
-                padding: 1rem;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-                gap: 1rem;
-            }
-
-            .nav-menu.active {
-                display: flex;
-            }
-
-            .mobile-menu-toggle {
-                display: block;
-            }
-
-            .container {
-                padding: 0 15px;
-            }
-
-            .avatar-container {
-                width: 150px;
-                height: 150px;
-            }
-
-            .avatar-initial {
-                width: 120px;
-                height: 120px;
-                font-size: 3rem;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .panel {
-                padding: 20px;
-            }
-
-            .contact-form {
-                padding: 1.5rem;
-            }
-
-            .hero {
-                padding: 5rem 1rem 3rem;
-            }
-
-            .hero-title {
-                font-size: 2.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.2rem;
-            }
-
-            .platform-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>大数据技术复习指南</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400,50;9..144,500,60;9..144,600,70;9..144,700,80&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F6F3EE;
+  --surface: #FFFFFF;
+  --surface-alt: #F0ECE4;
+  --text: #1E1C18;
+  --text-secondary: #7A746E;
+  --text-muted: #9E9890;
+  --primary: #1B4965;
+  --primary-light: #EDF2F6;
+  --accent: #C8644A;
+  --accent-light: #FBF0EC;
+  --border: #E5DFD7;
+  --border-light: #F0ECE6;
+  --code-bg: #EDEAE2;
+  --tpl-bg: #FFF9F0;
+  --tpl-border: #E8D5B8;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Sora', -apple-system, sans-serif;
+  --max-w: 800px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font-body);color:var(--text);background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased;padding-bottom:4rem}
+::selection{background:var(--primary);color:#fff}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1B4965 0%,#2A6F97 100%);color:#fff;padding:3.5rem 1.5rem 3rem;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:-40%;right:-20%;width:60%;height:120%;background:radial-gradient(ellipse,rgba(255,255,255,0.06) 0%,transparent 70%);pointer-events:none}
+.hero-inner{max-width:var(--max-w);margin:0 auto;position:relative;z-index:1}
+.hero-label{font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;opacity:0.7;margin-bottom:0.75rem;font-weight:600}
+.hero h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.2rem);font-weight:700;font-variation-settings:'SOFT' 80;line-height:1.15;margin-bottom:0.5rem}
+.hero p{font-size:clamp(0.9rem,2vw,1.05rem);opacity:0.8;max-width:600px;line-height:1.6}
+.hero-stats{margin-top:1.5rem;display:flex;gap:2rem;flex-wrap:wrap}
+.hero-stat{font-size:0.85rem;opacity:0.75}
+.hero-stat strong{font-weight:600;opacity:1;font-size:1rem}
+
+/* NAV */
+.nav-wrap{position:sticky;top:0;z-index:100;background:rgba(246,243,238,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav{max-width:var(--max-w);margin:0 auto;display:flex;gap:0;overflow-x:auto;padding:0 1rem;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{flex-shrink:0;padding:0.75rem 0.9rem;font-size:0.8rem;font-weight:500;color:var(--text-secondary);text-decoration:none;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap}
+.nav a:hover,.nav a.active{color:var(--primary);border-bottom-color:var(--primary)}
+
+/* MAIN */
+main{max-width:var(--max-w);margin:0 auto;padding:0 1.5rem}
+
+/* SECTION */
+section{margin-top:3rem}
+.section-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+.section-header h2{font-family:var(--font-display);font-size:clamp(1.2rem,3vw,1.6rem);font-weight:600;font-variation-settings:'SOFT' 70;color:var(--primary);line-height:1.2}
+.section-header .rule{flex:1;height:1px;background:var(--border)}
+.section-desc{font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem}
+
+/* Q ITEM */
+.q-item{border-bottom:1px solid var(--border-light);overflow:hidden}
+.q-item:first-child{border-top:1px solid var(--border-light)}
+.q-header{display:flex;align-items:baseline;gap:0.75rem;padding:1rem 0;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:background 0.2s}
+.q-header:hover{background:var(--primary-light);margin:0 -0.75rem;padding:1rem 0.75rem;border-radius:var(--radius-sm)}
+.q-num{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--primary);color:#fff;font-size:0.7rem;font-weight:600}
+.q-text{flex:1;font-size:0.92rem;font-weight:500;line-height:1.5;color:var(--text)}
+.q-toggle{flex-shrink:0;font-size:0.75rem;color:var(--text-muted);transition:transform 0.3s;width:1.2rem;text-align:center}
+.q-item.open .q-toggle{transform:rotate(45deg)}
+.q-answer{max-height:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.3s ease;opacity:0}
+.q-item.open .q-answer{max-height:5000px;opacity:1}
+.q-answer-inner{padding:0 0 1.2rem 2.35rem;font-size:0.88rem;color:var(--text-secondary);line-height:1.7}
+
+/* TEMPLATE CODE (original with blanks) */
+.q-template{max-height:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.3s ease;opacity:0}
+.q-item.open .q-template{max-height:5000px;opacity:1}
+.q-template pre{background:var(--tpl-bg);border:1px solid var(--tpl-border);border-left:3px solid var(--accent);border-radius:var(--radius-sm);padding:0.9rem 1rem;overflow-x:auto;font-size:0.82rem;line-height:1.6;margin:0 0 0.4rem 2.35rem}
+.q-template .tpl-label{font-size:0.7rem;font-weight:600;color:var(--accent);letter-spacing:0.05em;text-transform:uppercase;margin:0.5rem 0 0.2rem 2.35rem}
+.q-answer-inner .ans-label{font-size:0.7rem;font-weight:600;color:var(--primary);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:0.3rem}
+
+/* KNOWLEDGE ITEM */
+.k-list{list-style:none}
+.k-item{display:flex;align-items:baseline;gap:0.75rem;padding:0.75rem 0;border-bottom:1px solid var(--border-light);font-size:0.9rem}
+.k-item:first-child{border-top:1px solid var(--border-light)}
+.k-num{flex-shrink:0;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:600}
+.k-text{flex:1;line-height:1.6}
+
+/* CODE */
+pre{background:var(--code-bg);border-radius:var(--radius-sm);padding:1rem;overflow-x:auto;font-size:0.82rem;line-height:1.6;border:1px solid var(--border);margin-top:0.5rem}
+code{font-family:'JetBrains Mono','Fira Code',monospace}
+pre code{background:none!important;padding:0!important}
+.hljs{background:transparent!important}
+
+/* TAG */
+.tag{display:inline-block;font-size:0.65rem;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;padding:0.15rem 0.5rem;border-radius:3px;margin-right:0.4rem;vertical-align:middle}
+.tag-code{background:var(--accent-light);color:var(--accent)}
+.tag-fill{background:var(--primary-light);color:var(--primary)}
+
+/* COMPREHENSIVE */
+.comp-q{padding:1rem 0;border-bottom:1px solid var(--border-light);font-size:0.9rem;line-height:1.6}
+.comp-q:first-child{border-top:1px solid var(--border-light)}
+.comp-q .q-label{font-weight:600;color:var(--primary);margin-bottom:0.3rem;cursor:pointer}
+.comp-q .q-answer{margin-top:0.5rem;color:var(--text-secondary);max-height:0;overflow:hidden;transition:max-height 0.35s ease,opacity 0.3s ease;opacity:0}
+.comp-q.open .q-answer{max-height:2000px;opacity:1}
+.comp-q .q-toggle{float:right;color:var(--text-muted);font-size:0.8rem;cursor:pointer;transition:transform 0.3s}
+.comp-q.open .q-toggle{transform:rotate(45deg)}
+
+/* FOOTER */
+footer{text-align:center;padding:3rem 1.5rem 1.5rem;font-size:0.75rem;color:var(--text-muted)}
+
+/* SCROLL INDICATOR */
+.scroll-progress{position:fixed;top:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent));z-index:200;transition:width 0.1s}
+
+/* RESPONSIVE */
+@media(max-width:500px){
+  .hero{padding:2.5rem 1.2rem 2rem}
+  main{padding:0 1rem}
+  .q-header{padding:0.85rem 0}
+  .q-answer-inner{padding-left:2.35rem}
+  .nav a{padding:0.6rem 0.7rem;font-size:0.75rem}
+  .hero-stats{gap:1.2rem}
+}
+
+@media print{
+  .nav-wrap,.scroll-progress{display:none}
+  .q-answer,.comp-q .q-answer,.q-template{max-height:none!important;opacity:1!important}
+  .q-item,.comp-q{break-inside:avoid}
+  body{background:#fff;padding:0}
+  .hero{padding:2rem 1.5rem;background:#1B4965!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <span class="logo-icon">⚡</span>
-                <span class="logo-text">Frontend Dev</span>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="#about" class="nav-link">关于我</a></li>
-                <li><a href="#skills" class="nav-link">技能</a></li>
-                <li><a href="#contact" class="nav-link">联系</a></li>
-                <li><button class="theme-toggle" id="themeToggle">🌙</button></li>
-            </ul>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
-        </div>
-    </nav>
 
-    <!-- 英雄区域 -->
-    <header class="hero">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1 class="hero-title">李明</h1>
-                <p class="hero-subtitle">创造未来的数字体验</p>
-                <div class="hero-tags">
-                    <span class="hero-tag">前端架构师</span>
-                    <span class="hero-tag">UI/UX专家</span>
-                    <span class="hero-tag">技术创新者</span>
-                </div>
-            </div>
-            <div class="hero-avatar">
-                <div class="avatar-container">
-                    <div class="avatar-orb"></div>
-                    <div class="avatar-initial">L</div>
-                </div>
-            </div>
-        </div>
-        <div class="hero-scroll">
-            <span>探索更多</span>
-            <div class="scroll-arrow"></div>
-        </div>
-    </header>
+<div class="scroll-progress" id="progress"></div>
 
-    <div class="container">
-        <!-- 自我介绍板块 -->
-        <div class="panel" id="about">
-            <h1><span class="icon">👨‍💻</span>李明</h1>
-            <h2>资深前端开发工程师</h2>
-            
-            <p>你好！我是<span class="highlight">李明</span>，一个专注于<span class="highlight">现代Web技术</span>的前端开发者，拥有<span class="highlight">6年</span>专业开发经验。</p>
-            
-            <p>我热衷于创造<span class="highlight">高性能</span>、<span class="highlight">用户体验出色</span>的Web应用。擅长将复杂需求转化为优雅的前端解决方案。</p>
-            
-            <h2>技术栈</h2>
-            <h2><span class="icon">⚡</span>技术栈</h2>
-            <div class="skills" id="skills">
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">React & Next.js</span>
-                        <span class="skill-value">95%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 95%" data-value="95"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">TypeScript</span>
-                        <span class="skill-value">90%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 90%" data-value="90"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">Node.js & GraphQL</span>
-                        <span class="skill-value">85%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 85%" data-value="85"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">Three.js & WebGL</span>
-                        <span class="skill-value">80%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 80%" data-value="80"></div>
-                    </div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-header">
-                        <span class="skill-name">WebAssembly & PWA</span>
-                        <span class="skill-value">75%</span>
-                    </div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" style="width: 75%" data-value="75"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <h2>工作经历</h2>
-            <p>现任<span class="highlight">某科技公司</span>前端技术负责人，带领团队构建企业级SaaS平台。</p>
-            <p>曾任职于<span class="highlight">知名互联网公司</span>，负责核心产品的前端架构设计与实现。</p>
-            
-            <h2>开发理念</h2>
-            <p>1. <span class="highlight">代码质量优先</span> - 强调可维护性和可扩展性</p>
-            <p>2. <span class="highlight">性能优化</span> - 追求极致用户体验</p>
-            <p>3. <span class="highlight">技术创新</span> - 持续探索Web技术边界</p>
-        </div>
-        
-        <!-- 联系方式板块 -->
-        <div class="panel qr-section" id="contact">
-            <div class="contact-header">
-                <h2><span class="icon">📱</span>联系方式</h2>
-                <p class="contact-description">多种方式联系我，欢迎技术交流与合作</p>
-            </div>
-
-            <div class="contact-grid">
-                <div class="contact-card">
-                    <div class="contact-icon">📧</div>
-                    <h3>邮箱</h3>
-                    <p>li.ming@dev.com</p>
-                    <button class="contact-copy" data-text="li.ming@dev.com">复制</button>
-                </div>
-
-                <div class="contact-card">
-                    <div class="contact-icon">📱</div>
-                    <h3>微信</h3>
-                    <div class="qr-code">
-                        <div class="qr-placeholder">微信二维码</div>
-                    </div>
-                    <p>扫码添加微信好友</p>
-                </div>
-
-                <div class="contact-card">
-                    <div class="contact-icon">💼</div>
-                    <h3>领英</h3>
-                    <p>linkedin.com/in/liming</p>
-                    <a href="#" class="contact-link-btn">访问主页</a>
-                </div>
-            </div>
-
-            <div class="social-platforms">
-                <h3>社交媒体</h3>
-                <div class="platform-grid">
-                    <a href="https://github.com" class="platform-card github">
-                        <span class="platform-icon">👨‍💻</span>
-                        <span class="platform-name">GitHub</span>
-                        <span class="platform-desc">查看我的开源项目</span>
-                    </a>
-                    <a href="https://twitter.com" class="platform-card twitter">
-                        <span class="platform-icon">🐦</span>
-                        <span class="platform-name">Twitter</span>
-                        <span class="platform-desc">关注技术观点</span>
-                    </a>
-                    <a href="https://medium.com" class="platform-card medium">
-                        <span class="platform-icon">✍️</span>
-                        <span class="platform-name">博客</span>
-                        <span class="platform-desc">阅读技术文章</span>
-                    </a>
-                    <a href="https://codepen.io" class="platform-card codepen">
-                        <span class="platform-icon">🎨</span>
-                        <span class="platform-name">CodePen</span>
-                        <span class="platform-desc">查看代码示例</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="contact-form">
-                <h3>发送消息</h3>
-                <div class="form-group">
-                    <input type="text" placeholder="你的姓名" class="form-input">
-                </div>
-                <div class="form-group">
-                    <input type="email" placeholder="你的邮箱" class="form-input">
-                </div>
-                <div class="form-group">
-                    <textarea placeholder="你的消息..." class="form-input" rows="4"></textarea>
-                </div>
-                <button class="submit-btn">发送消息</button>
-            </div>
-        </div>
-        
-        <footer>
-            © 2026 李明 | 打造卓越的Web体验
-        </footer>
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">复习指南</div>
+    <h1>大数据技术</h1>
+    <p>涵盖 Hadoop、MapReduce、HBase、Spark、Flink 核心知识点与编程题，适合考前冲刺与系统复习。</p>
+    <div class="hero-stats">
+      <span class="hero-stat"><strong>5</strong> 选择题知识点</span>
+      <span class="hero-stat"><strong>5</strong> 判断题知识点</span>
+      <span class="hero-stat"><strong>6</strong> 填空题</span>
+      <span class="hero-stat"><strong>16</strong> 编程题</span>
+      <span class="hero-stat"><strong>10</strong> 综合应用题</span>
     </div>
+  </div>
+</header>
 
-    <!-- 粒子背景 -->
-    <canvas id="particlesCanvas" class="particles"></canvas>
+<nav class="nav-wrap" id="topNav">
+  <div class="nav">
+    <a href="#mcq">选择</a>
+    <a href="#tf">判断</a>
+    <a href="#fill">填空</a>
+    <a href="#code">编程</a>
+    <a href="#comprehensive">综合</a>
+  </div>
+</nav>
 
-    <script>
-        // 粒子背景动画
-        const canvas = document.getElementById('particlesCanvas');
-        const ctx = canvas.getContext('2d');
+<main>
 
-        // 设置画布尺寸
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+<section id="mcq">
+  <div class="section-header"><h2>选择题知识点</h2><div class="rule"></div></div>
+  <div class="section-desc">大数据 4V、Hadoop 组件、MapReduce Shuffle、HBase vs RDBMS、Spark 组件</div>
+  <ul class="k-list" id="mcqList"></ul>
+</section>
+
+<section id="tf">
+  <div class="section-header"><h2>判断题知识点</h2><div class="rule"></div></div>
+  <div class="section-desc">HDFS 适用场景、HBase vs Hive、YARN 作用、NoSQL 事务、Flink 批流一体</div>
+  <ul class="k-list" id="tfList"></ul>
+</section>
+
+<section id="fill">
+  <div class="section-header"><h2>填空题</h2><div class="rule"></div></div>
+  <div class="section-desc">点击题目展开答案</div>
+  <div id="fillList"></div>
+</section>
+
+<section id="code">
+  <div class="section-header"><h2>编程题</h2><div class="rule"></div></div>
+  <div class="section-desc">所有代码控制在 10 行以内，点击题目展开代码</div>
+  <div id="codeList"></div>
+</section>
+
+<section id="comprehensive">
+  <div class="section-header"><h2>综合应用题</h2><div class="rule"></div></div>
+  <div class="section-desc">架构设计、技术选型、系统方案，点击展开答案要点</div>
+  <div id="compList"></div>
+</section>
+
+</main>
+
+<footer>大数据技术复习指南 &middot; 祝考试顺利</footer>
+
+<script>
+const DATA = {
+  mcq: [
+    { n:"大数据4V特征", t:"Volume（大量）、Velocity（高速）、Variety（多样）、Value（价值）" },
+    { n:"Hadoop 组件功能", t:"HDFS（分布式存储）、MapReduce（分布式计算）、YARN（资源调度）、Common（公共工具库）" },
+    { n:"MapReduce Shuffle", t:"Map 端：分区 → 排序 → 溢写 → 合并；Reduce 端：拉取 → 合并 → 排序 → 输入 Reducer" },
+    { n:"HBase vs 关系数据库", t:"HBase：列式存储、NoSQL、最终一致性、无事务、水平扩展；RDBMS：行式存储、SQL、ACID 事务、强一致、垂直扩展" },
+    { n:"Spark 组件", t:"SparkCore（基础引擎）、SparkSQL（结构化查询）、SparkStreaming（流处理）、MLlib（机器学习）、GraphX（图计算）" }
+  ],
+  tf: [
+    { n:"HDFS 适用场景", t:"适合：大文件存储、流式数据访问、一次写入多次读取。不适合：小文件、低延迟访问、大量随机写" },
+    { n:"HBase 与 Hive 区别", t:"HBase：NoSQL 数据库，支持实时读写；Hive：数据仓库工具，基于 MapReduce 做离线批处理，延迟高" },
+    { n:"YARN 作用", t:"集群资源管理与任务调度。核心组件：ResourceManager（全局资源管理）、NodeManager（单节点管理）、ApplicationMaster（任务协调）" },
+    { n:"NoSQL 事务特性", t:"BASE 理论：Basically Available（基本可用）、Soft State（软状态）、Eventually Consistent（最终一致性），不支持 ACID" },
+    { n:"Flink 批流一体", t:"正确。Flink 原生支持批处理（Batch）和流处理（Streaming）统一架构，同一 API 处理两种场景" }
+  ],
+  fill: [
+    { q:"HDFS 元数据结构", a:"（inode 号，文件名，所属目录，权限，时间，块列表（blockId, 副本位置））" },
+    { q:"Shuffle 概念", a:"Map 输出到 Reduce 输入之间，数据分区、排序、合并、传输的过程" },
+    { q:"HBase 数据坐标", a:"（RowKey, ColumnFamily, Qualifier, Timestamp）四维唯一定位一个单元格" },
+    { q:"Spark RDD 操作类型", a:"Transformation（lazy 转换：map/filter/groupBy 等）和 Action（触发计算：reduce/collect/save 等）" },
+    { q:"NoSQL 三大基石", a:"CAP 定理（Consistency/Availability/Partition tolerance）、BASE 理论、最终一致性" },
+    { q:"流计算框架", a:"Storm、Flink、Spark Streaming、Kafka Streams、Pulsar Functions" }
+  ],
+  code: [
+    { q:"1. MapReduce 实现平均值计算<br><small>输入：文本文件每行一个整数；输出：所有整数的平均值。</small>",
+      tp: false,
+      a:`// Mapper
+static class AvgMapper extends Mapper&lt;Object,Text,Text,IntWritable&gt; {
+  public void map(Object k, Text v, Context c) throws IOException, InterruptedException {
+    c.write(new Text("avg"), new IntWritable(Integer.parseInt(v.toString())));
+  }
+}
+// Reducer
+static class AvgReducer extends Reducer&lt;Text,IntWritable,Text,DoubleWritable&gt; {
+  public void reduce(Text k, Iterable&lt;IntWritable&gt; vs, Context c) throws IOException, InterruptedException {
+    int s=0, n=0;
+    for(IntWritable v:vs){ s+=v.get(); n++; }
+    c.write(k, new DoubleWritable((double)s/n));
+  }
+}` },
+    { q:"2. MapReduce 实现 Join 操作（代码填空）<br><small>两个文件：员工(empId, name) 和 部门(empId, deptName)，输出员工及其部门。</small>",
+      tp: `// Map 端：为每条记录打标签
+// 员工文件: context.write(new Text(empId), new Text("emp,"+name));
+// 部门文件: context.write(new Text(empId), new Text("dept,"+deptName));
+
+// Reduce 端：根据标签拼接
+// for(Text v:values){
+//   String[] p=v.toString().split(",");
+//   if(p[0].equals("emp")) name=p[1];
+//   else dept=p[1];
+// }
+// context.write(key, new Text(name+","+dept));`,
+      a:`// Map: 输出标签化键值对
+context.write(new Text(fields[0]), new Text("emp,"+fields[1]));
+context.write(new Text(fields[0]), new Text("dept,"+fields[2]));
+
+// Reduce: 标记来源后拼接
+String name="", dept="";
+for(Text v:values){
+  String[] p=v.toString().split(",");
+  if(p[0].equals("emp")) name=p[1]; else dept=p[1];
+}
+context.write(key, new Text(name+","+dept));` },
+    { q:"3. WordCount Map 函数填空",
+      tp: `public static class TokenizerMapper extends Mapper&lt;Object, Text, Text, IntWritable&gt;{
+    private final static IntWritable one = new IntWritable(1);
+    private Text word = new Text();
+    public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+        StringTokenizer itr = new StringTokenizer(value.toString());
+        while (itr.hasMoreTokens()) {
+            word.set(itr.nextToken());
+            // 填空：输出键值对，键为单词，值为1
+            ______             ______;
         }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+    }
+}`,
+      a:`context.write(word, one);` },
+    { q:"4. HBase 批量插入 100 条数据<br><small>行键 'row'+i，列族 'cf'，列 'col'，值随机</small>",
+      tp: false,
+      a:`Connection conn=ConnectionFactory.createConnection();
+Table t=conn.getTable(TableName.valueOf("test"));
+List&lt;Put&gt; puts=new ArrayList&lt;&gt;(); Random r=new Random();
+for(int i=0;i<100;i++){
+  Put p=new Put(Bytes.toBytes("row"+i));
+  p.addColumn(Bytes.toBytes("cf"),Bytes.toBytes("col"),Bytes.toBytes(String.valueOf(r.nextInt())));
+  puts.add(p);
+}
+t.put(puts); t.close(); conn.close();` },
+    { q:"5. HBase 建表 + 插入一行（填空）<br><small>创建表 student，列族 info，插入行键 001，info:name = Tom</small>",
+      tp: `Connection conn = ConnectionFactory.createConnection();
+Admin admin = conn.getAdmin();
+TableName tableName = TableName.valueOf("student");
+if (!admin.tableExists(tableName)) {
+    TableDescriptorBuilder builder = TableDescriptorBuilder.newBuilder(tableName);
+    ColumnFamilyDescriptor cf = ________________________; // 填空：创建列族描述符
+    builder.setColumnFamily(cf);
+    admin.createTable(builder.build());
+}
+Table table = conn.getTable(tableName);
+Put put = new Put(Bytes.toBytes("001"));
+put.________________________; // 填空：添加列 "info:name" 值为 "Tom"
+table.put(put);
+table.close();
+conn.close();`,
+      a:`// ① 创建列族描述符
+ColumnFamilyDescriptor cf = ColumnFamilyDescriptorBuilder.newBuilder(Bytes.toBytes("info")).build();
+// ② 添加列
+put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("name"), Bytes.toBytes("Tom"));` },
+    { q:"6. HBase 扫描表 student 并输出所有行",
+      tp: false,
+      a:`Connection conn=ConnectionFactory.createConnection();
+Table t=conn.getTable(TableName.valueOf("student"));
+ResultScanner rs=t.getScanner(new Scan());
+for(Result r:rs){
+  for(Cell c:r.listCells())
+    System.out.println(
+      Bytes.toString(CellUtil.cloneRow(c))+":"+
+      Bytes.toString(CellUtil.cloneFamily(c))+":"+
+      Bytes.toString(CellUtil.cloneQualifier(c))+"="+
+      Bytes.toString(CellUtil.cloneValue(c)));
+}
+rs.close(); conn.close();` },
+    { q:"7. Spark 单词计数（Scala）<br><small>读取 HDFS /user/input/data.txt，按字母序输出到 /user/output/result</small>",
+      tp: false,
+      a:`val sc=new SparkContext(new SparkConf().setAppName("WC"))
+sc.textFile("/user/input/data.txt")
+  .flatMap(_.split("\\\\s+"))
+  .map((_,1))
+  .reduceByKey(_+_)
+  .sortByKey()
+  .saveAsTextFile("/user/output/result")` },
+    { q:"8. HBase 查询表 student（填空）<br><small>查询行键 001，列族 info，列 name 的值</small>",
+      tp: `Connection conn = ConnectionFactory.createConnection();
+Table table = conn.getTable(TableName.valueOf("student"));
+Get get = new Get(Bytes.toBytes("001"));
+// 填空：添加要获取的列
+get.                                              ;
+Result result = table.get(get);
+// 填空：获取列的值并转换为字符串
+byte[] value =                                        ;
+System.out.println(Bytes.toString(value));
+table.close();
+conn.close();`,
+      a:`// ① 添加要获取的列
+get.addColumn(Bytes.toBytes("info"), Bytes.toBytes("name"));
+// ② 获取列的值并转换为字符串
+byte[] value = result.getValue(Bytes.toBytes("info"), Bytes.toBytes("name"));` },
+    { q:"9. Spark 文件合并去重（Scala）<br><small>读取 /input/A.txt 和 /input/B.txt，合并去重输出到 /output/merged.txt</small>",
+      tp: false,
+      a:`val sc=new SparkContext(new SparkConf().setAppName("Merge"))
+sc.textFile("/input/A.txt")
+  .union(sc.textFile("/input/B.txt"))
+  .distinct()
+  .coalesce(1)
+  .saveAsTextFile("/output/merged.txt")` },
+    { q:"10. Flink Socket 5 秒窗口统计（Scala）<br><small>从 localhost:9999 读取字符串，每 5 秒统计每个单词出现次数</small>",
+      tp: false,
+      a:`val env=StreamExecutionEnvironment.getExecutionEnvironment
+env.socketTextStream("localhost",9999)
+  .flatMap(_.split("\\\\s+"))
+  .map((_,1))
+  .keyBy(0)
+  .timeWindow(Time.seconds(5))
+  .sum(1)
+  .print()
+env.execute()` },
+    { q:"11. Flink Kafka 过滤 ERROR（Java）<br><small>从 Kafka topic 'log' 过滤出含 ERROR 的行</small>",
+      tp: false,
+      a:`env.addSource(new FlinkKafkaConsumer&lt;&gt;("log",new SimpleStringSchema(),props))
+  .filter(line->line.contains("ERROR"))
+  .print();
+env.execute();` },
+    { q:"12. Flink 滑动窗口平均值（Scala）<br><small>从 socket 读整数，每 10 秒统计过去 30 秒内的平均值</small>",
+      tp: false,
+      a:`val env=StreamExecutionEnvironment.getExecutionEnvironment
+env.socketTextStream("localhost",9999)
+  .map(x=>(1,x.toInt)).keyBy(0)
+  .window(SlidingProcessingTimeWindows.of(Time.seconds(30),Time.seconds(10)))
+  .apply((k,w,vals,out)=>{
+    val s=vals.map(_._2); out.collect(k,s.sum/s.size)
+  }).print()
+env.execute()` },
+    { q:"13. MaxMapper 填空<br><small>求一组整数最大值的 Map 函数，键为常量</small>",
+      tp: `public static class MaxMapper extends Mapper&lt;LongWritable, Text, IntWritable, IntWritable&gt; {
+    public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+        int num = Integer.parseInt(value.toString());
+        // 填空：输出键值对，键为常量，值为当前数字
+        ___                                   _ ;
+    }
+}`,
+      a:`// 填空：输出键值对，键为常量，值为当前数字
+context.write(new IntWritable(1), new IntWritable(num));` },
+    { q:"14. MapReduce 数据去重<br><small>输入两个文件，输出所有不重复的行</small>",
+      tp: false,
+      a:`static class DM extends Mapper&lt;Object,Text,Text,NullWritable&gt;{
+  public void map(Object k,Text v,Context c){ c.write(v,NullWritable.get()); }
+}
+static class DR extends Reducer&lt;Text,NullWritable,Text,NullWritable&gt;{
+  public void reduce(Text k,Iterable&lt;NullWritable&gt; vs,Context c){ c.write(k,NullWritable.get()); }
+}
+job.setMapperClass(DM.class); job.setReducerClass(DR.class);
+job.setOutputKeyClass(Text.class); job.setOutputValueClass(NullWritable.class);` },
+    { q:"15. Spark SQL 分组聚合<br><small>读取 JSON，按部门分组统计平均工资</small>",
+      tp: false,
+      a:`val spark=SparkSession.builder().appName("GA").getOrCreate()
+spark.read.json(args(0))
+  .groupBy("dept")
+  .avg("salary")
+  .show()` },
+    { q:"16. MapReduce 倒排索引<br><small>输入多个文档，输出每个单词及其出现的文档列表</small>",
+      tp: false,
+      a:`static class IM extends Mapper&lt;Object,Text,Text,Text&gt;{
+  public void map(Object k,Text v,Context c){
+    String fn=((FileSplit)c.getInputSplit()).getPath().getName();
+    for(String w:v.toString().split(" ")) c.write(new Text(w),new Text(fn));
+  }
+}
+static class IR extends Reducer&lt;Text,Text,Text,Text&gt;{
+  public void reduce(Text k,Iterable&lt;Text&gt; vs,Context c){
+    Set&lt;String&gt; s=new HashSet&lt;&gt;(); for(Text v:vs) s.add(v.toString());
+    c.write(k,new Text(String.join(",",s)));
+  }
+}` }
+  ],
+  comp: [
+    { q:"1. HDFS 写数据过程简述", a:"Client → NameNode 创建文件 → NN 返回 DN 列表 → Client 分块流水线写入 DN → DN 间副本复制 → ACK 确认 → 关闭" },
+    { q:"2. Region 三层定位过程与 ZooKeeper 作用", a:"Client → ZooKeeper（获取 Root 表位置）→ Root 表（获取 Meta 表位置）→ Meta 表（获取 Region 所在 RegionServer）→ 直接访问。<br><br>ZooKeeper 作用：存储 Root 表地址、监控 RegionServer 心跳、HMaster 选举" },
+    { q:"3. 电商推荐系统方案设计", a:"采集层（Flume/Kafka）→ 存储层（HDFS/HBase）→ 批处理（Spark MLlib 离线模型）→ 实时处理（Flink 实时特征）→ 推荐算法（协同过滤 / 矩阵分解）→ 结果（Redis 缓存）→ 展示层（API）" },
+    { q:"4. Hive vs Impala — 50TB + 每日100GB 复杂 SQL 分析", a:"推荐 Hive。Hive 适合大规模批处理、复杂 ETL、容错性强；Impala 适合低延迟交互查询但内存受限、高并发差。方案：Hive 做离线 ETL，Impala 做即席查询" },
+    { q:"5. 交通流量实时分析与预测系统设计", a:"采集（传感器 / Kafka）→ 实时（Flink 窗口聚合 + ML 预测）→ 存储（HBase 时序 + Redis 缓存）→ 离线（Spark SQL 历史分析）→ 可视化（ECharts 地图热力图）。<br><br>选 Flink 理由：真正的流处理、毫秒级延迟、Exactly-Once 语义、CEP 复杂事件处理" },
+    { q:"6. 点击流实时监测 + 每日离线聚合", a:"实时链路：Flume → Kafka → Flink → HBase（实时展示）。<br>离线链路：Kafka → HDFS → Spark SQL / Hive → MySQL（报表）。<br>数据流向：用户点击 → Nginx → Flume → Kafka → 分流到实时和离线链路" },
+    { q:"7. MySQL + HBase 混合使用场景", a:"MySQL：订单事务（ACID 强一致、Join、索引）。<br>HBase：用户行为日志（海量数据、高并发读写、水平扩展、稀疏列）。<br>各自优势互补" },
+    { q:"8. 医疗大数据安全与隐私保护", a:"技术措施：数据加密（TDE + 列加密）、访问控制（RBAC + ACL）、审计日志、脱敏脱标识、差分隐私。<br>管理措施：等保三级、数据分级、最小权限原则、匿名化处理、合规审计" },
+    { q:"9. 智慧城市可视化应用场景与图表类型", a:"① 交通流量 → 热力图 / 流图<br>② 环境监测（PM2.5、温度）→ 折线图 / 散点图<br>③ 公共安全 → 地理分布图 / 柱状图<br>④ 能源消耗 → 仪表盘 / 面积图" },
+    { q:"10. 电商个性化推荐系统方案", a:"采集（埋点 → Kafka）→ 存储（HDFS 海量 + HBase 实时）→ 批处理（Spark MLlib 训练 ALS/协同过滤）→ 实时（Flink 更新用户特征 + 实时召回）→ 算法（CF + CB + 深度学习排序）→ 结果（Redis）→ 展示（API）。<br><br>选型理由：Spark 离线训练，Flink 实时特征 + 实时计算" }
+  ]
+};
 
-        // 创建粒子
-        const particles = [];
-        const particleCount = 80;
+function renderKList(id, items) {
+  const ul = document.getElementById(id);
+  items.forEach(d => {
+    const li = document.createElement('li');
+    li.className = 'k-item';
+    li.innerHTML = '<span class="k-num">'+d.n.charAt(0)+'</span><span class="k-text"><strong>'+d.n+'</strong>：'+d.t+'</span>';
+    ul.appendChild(li);
+  });
+}
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
-                this.color = body.classList.contains('light-theme') ?
-                    `rgba(0, 0, 0, ${Math.random() * 0.1})` :
-                    `rgba(255, 255, 255, ${Math.random() * 0.1})`;
-            }
+function renderCodeList(id, items) {
+  const container = document.getElementById(id);
+  items.forEach(d => {
+    const num = d.q.match(/^\d+/)?.[0]||'?';
+    const hasTpl = d.tp && d.tp.length > 0;
+    const tplHTML = hasTpl
+      ? '<div class="q-template"><div class="tpl-label">原标题代码（填空）</div><pre><code class="language-java">' + d.tp + '</code></pre></div>'
+      : '';
+    const ansLabel = hasTpl ? '<div class="ans-label">答案</div>' : '';
+    const div = document.createElement('div');
+    div.className = 'q-item';
+    div.innerHTML =
+      '<div class="q-header">' +
+        '<span class="q-num">'+num+'</span>' +
+        '<span class="q-text">'+d.q+' <span class="tag tag-code">代码</span></span>' +
+        '<span class="q-toggle">+</span>' +
+      '</div>' +
+      tplHTML +
+      '<div class="q-answer"><div class="q-answer-inner">' +
+        ansLabel +
+        '<pre><code class="language-java">' + d.a + '</code></pre>' +
+      '</div></div>';
+    div.addEventListener('click', () => {
+      div.classList.toggle('open');
+      if (div.classList.contains('open')) {
+        div.querySelectorAll('pre code').forEach(b => hljs.highlightElement(b));
+      }
+    });
+    container.appendChild(div);
+  });
+}
 
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
+function renderToggleList(id, items) {
+  const container = document.getElementById(id);
+  items.forEach(d => {
+    const div = document.createElement('div');
+    div.className = 'q-item';
+    div.innerHTML =
+      '<div class="q-header">' +
+        '<span class="q-text"><span class="tag tag-fill">填空</span> '+d.q+'</span>' +
+        '<span class="q-toggle">+</span>' +
+      '</div>' +
+      '<div class="q-answer"><div class="q-answer-inner">'+d.a+'</div></div>';
+    div.addEventListener('click', () => div.classList.toggle('open'));
+    container.appendChild(div);
+  });
+}
 
-                // 边界检查
-                if (this.x > canvas.width) this.x = 0;
-                else if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                else if (this.y < 0) this.y = canvas.height;
-            }
+function renderCompList(id, items) {
+  const container = document.getElementById(id);
+  items.forEach(d => {
+    const div = document.createElement('div');
+    div.className = 'comp-q';
+    div.innerHTML = '<div class="q-label">'+d.q+'<span class="q-toggle">+</span></div><div class="q-answer">'+d.a+'</div>';
+    div.addEventListener('click', () => div.classList.toggle('open'));
+    container.appendChild(div);
+  });
+}
 
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+renderKList('mcqList', DATA.mcq);
+renderKList('tfList', DATA.tf);
+renderToggleList('fillList', DATA.fill);
+renderCodeList('codeList', DATA.code);
+renderCompList('compList', DATA.comp);
 
-                // 绘制连线
-                particles.forEach(p => {
-                    const dx = this.x - p.x;
-                    const dy = this.y - p.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progress.style.width = (window.scrollY / h * 100) + '%';
+});
 
-                    if (distance < 100) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = body.classList.contains('light-theme') ?
-                            `rgba(0, 0, 0, ${0.05 * (1 - distance / 100)})` :
-                            `rgba(255, 255, 255, ${0.05 * (1 - distance / 100)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(this.x, this.y);
-                        ctx.lineTo(p.x, p.y);
-                        ctx.stroke();
-                    }
-                });
-            }
-        }
-
-        // 初始化粒子
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
-
-        // 动画循环
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        // 更改主题时更新粒子颜色
-        let observer = new MutationObserver(() => {
-            particles.forEach(particle => {
-                particle.color = body.classList.contains('light-theme') ?
-                    `rgba(0, 0, 0, ${Math.random() * 0.1})` :
-                    `rgba(255, 255, 255, ${Math.random() * 0.1})`;
-            });
-        });
-
-        observer.observe(body, { attributes: true, attributeFilter: ['class'] });
-
-        // 主题切换功能
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-
-        // 检查本地存储的主题设置
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        if (currentTheme === 'light') {
-            body.classList.add('light-theme');
-            themeToggle.textContent = '☀️';
-        }
-
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('light-theme');
-
-            if (body.classList.contains('light-theme')) {
-                localStorage.setItem('theme', 'light');
-                themeToggle.textContent = '☀️';
-            } else {
-                localStorage.setItem('theme', 'dark');
-                themeToggle.textContent = '🌙';
-            }
-        });
-
-        // 导航栏平滑滚动
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        // 复制邮箱功能
-        document.querySelectorAll('.contact-copy').forEach(button => {
-            button.addEventListener('click', function() {
-                const text = this.getAttribute('data-text');
-
-                // 临时创建文本区域进行复制
-                const textArea = document.createElement('textarea');
-                textArea.value = text;
-                document.body.appendChild(textArea);
-                textArea.select();
-
-                try {
-                    const successful = document.execCommand('copy');
-                    if (successful) {
-                        const originalText = this.textContent;
-                        this.textContent = '已复制!';
-                        this.disabled = true;
-                        this.style.background = 'linear-gradient(90deg, #2ecc71, #27ae60)';
-
-                        // 3秒后恢复原状
-                        setTimeout(() => {
-                            this.textContent = originalText;
-                            this.disabled = false;
-                            this.style.background = 'linear-gradient(90deg, var(--primary), var(--secondary))';
-                        }, 3000);
-                    }
-                } catch (err) {
-                    console.log('复制失败:', err);
-                }
-
-                document.body.removeChild(textArea);
-            });
-        });
-
-        // 技能进度条动画 - 滚动到技能区域时触发
-        const skillObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // 触发技能进度条动画
-                    document.querySelectorAll('.skill-progress').forEach(bar => {
-                        const value = bar.getAttribute('data-value');
-                        bar.style.width = value + '%';
-                    });
-
-                    document.querySelectorAll('.skill-value').forEach(value => {
-                        value.style.opacity = '1';
-                    });
-                }
-            });
-        }, { threshold: 0.3 });
-
-        skillObserver.observe(document.getElementById('skills'));
-
-        // 提交表单功能（模拟）
-        document.querySelector('.submit-btn').addEventListener('click', function(e) {
-            e.preventDefault();
-            const inputs = document.querySelectorAll('.form-input');
-            let allFilled = true;
-
-            inputs.forEach(input => {
-                if (!input.value.trim()) {
-                    allFilled = false;
-                    input.style.borderColor = 'var(--warning)';
-                } else {
-                    input.style.borderColor = '';
-                }
-            });
-
-            if (allFilled) {
-                this.textContent = '发送中...';
-                this.disabled = true;
-
-                // 模拟发送
-                setTimeout(() => {
-                    this.textContent = '已发送！';
-                    this.style.background = 'linear-gradient(90deg, var(--success), #27ae60)';
-
-                    inputs.forEach(input => {
-                        input.value = '';
-                        input.style.borderColor = '';
-                    });
-
-                    // 5秒后恢复
-                    setTimeout(() => {
-                        this.textContent = '发送消息';
-                        this.disabled = false;
-                        this.style.background = 'linear-gradient(90deg, var(--primary), var(--secondary))';
-                    }, 5000);
-                }, 1500);
-            } else {
-                alert('请填写所有字段');
-            }
-        });
-    </script>
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav a');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
 </body>
 </html>

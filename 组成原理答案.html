@@ -1,0 +1,455 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>计算机组成原理 题库详解</title>
+<style>
+:root{--bg:#F6F3EE;--surface:#fff;--text:#1E1C18;--dim:#7A746E;--border:#E5DFD7;--accent:#1B4965;--accent-l:#EDF2F6;--orange:#C8644A;--orange-l:#FBF0EC;--calc-bg:#EDEAE2;--shadow:0 1px 2px rgba(0,0,0,.04),0 1px 4px rgba(0,0,0,.06);--header-bg:rgba(246,243,238,.88);--radius:8px}
+[data-theme=dark]{--bg:#16161a;--surface:#222226;--text:#e4e0dc;--dim:#9a9590;--border:#3a3835;--accent:#6ba3c9;--accent-l:#1a2a36;--orange:#d4876e;--orange-l:#3d2218;--calc-bg:#2a2826;--shadow:0 1px 2px rgba(0,0,0,.25),0 1px 8px rgba(0,0,0,.4);--header-bg:rgba(22,22,26,.92)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);padding:0;line-height:1.7;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+
+/* Header */
+.header{position:sticky;top:0;z-index:100;background:var(--header-bg);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+.header-inner{max-width:760px;margin:0 auto;padding:10px 14px 6px}
+.header-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.header h1{font-size:1.15rem;font-weight:700;color:var(--accent);white-space:nowrap}
+.ctrl-btn{display:inline-flex;align-items:center;justify-content:center;gap:3px;border:1px solid var(--border);background:var(--surface);color:var(--dim);font-size:.7rem;font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap;line-height:1.4;flex-shrink:0}
+.ctrl-btn:hover{color:var(--text);border-color:var(--dim)}
+.section-nav{overflow-x:auto;white-space:nowrap;display:flex;gap:4px;padding-bottom:4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.section-nav::-webkit-scrollbar{display:none}
+.section-nav a{display:inline-flex;padding:3px 10px;font-size:.72rem;font-weight:600;border-radius:12px;color:var(--dim);text-decoration:none;transition:all .15s;flex-shrink:0}
+.section-nav a:hover{color:var(--text);background:rgba(0,0,0,.03)}
+[data-theme=dark] .section-nav a:hover{background:rgba(255,255,255,.04)}
+.section-nav a.active{color:var(--accent);background:var(--accent-l)}
+
+/* Content */
+.body-inner{max-width:760px;margin:0 auto;padding:1rem 14px 3rem}
+h1{font-size:1.5rem;margin-bottom:0.25rem;color:var(--accent)}
+.sub{font-size:0.82rem;color:var(--dim);margin-bottom:1.2rem;border-bottom:2px solid var(--border);padding-bottom:0.75rem}
+
+.q{border-bottom:1px solid var(--border);padding:.9rem 0}
+.q:first-of-type{border-top:1px solid var(--border)}
+.qhead{display:flex;align-items:flex-start;gap:.6rem;margin-bottom:.3rem;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:background .1s;padding:2px 4px;margin:-2px -4px;border-radius:6px}
+.qhead:hover{background:rgba(0,0,0,.02)}
+[data-theme=dark] .qhead:hover{background:rgba(255,255,255,.03)}
+.n{display:inline-flex;align-items:center;justify-content:center;min-width:1.6rem;height:1.6rem;border-radius:50%;background:var(--accent);color:#fff;font-size:.68rem;font-weight:600;flex-shrink:0;margin-top:.1rem}
+.qtext{font-size:.9rem;font-weight:500;flex:1;line-height:1.6}
+.ans{display:inline-block;background:var(--orange-l);border-left:3px solid var(--orange);padding:.3rem .75rem;margin:.35rem 0 .35rem 2.2rem;font-size:.85rem;color:var(--orange);font-weight:600;border-radius:0 4px 4px 0}
+.ans .v{color:var(--accent);font-weight:700}
+.calc{font-size:.82rem;color:var(--dim);background:var(--calc-bg);padding:.6rem .8rem;border-radius:var(--radius);margin:.35rem 0 0 2.2rem;line-height:1.65;overflow-x:auto;transition:background .25s}
+.calc .hl{color:var(--orange);font-weight:600}
+.calc .blue{color:var(--accent);font-weight:600}
+.calc .step{display:block;margin-top:.35rem;padding-top:.35rem;border-top:1px dashed var(--border);font-weight:600;color:var(--accent);font-size:.78rem}
+.calc .step:first-child{border-top:none;margin-top:0;padding-top:0}
+.calc .step .fold{display:inline-flex;align-items:center;justify-content:center;width:1.1rem;height:1.1rem;font-size:.6rem;border-radius:3px;background:var(--accent);color:#fff;cursor:pointer;margin-right:4px;transition:transform .2s}
+.calc .step .fold.open{transform:rotate(90deg)}
+.tip{font-size:.78rem;color:var(--dim);margin:.25rem 0 0 2.2rem;padding:.4rem .6rem;background:var(--accent-l);border-radius:4px;border-left:3px solid var(--accent);transition:background .25s}
+.section-title{margin:1.5rem 0 .4rem;font-weight:700;color:var(--accent);font-size:1rem;border-bottom:2px solid var(--accent);padding-bottom:.3rem;scroll-margin-top:60px}
+
+/* Mobile */
+@media(max-width:480px){
+  .header h1{font-size:1rem}
+  .body-inner{padding:.8rem 10px 2rem}
+  .q{padding:.7rem 0}
+  .qtext{font-size:.85rem}
+  .ans,.calc{margin-left:1.6rem}
+  .calc{padding:.5rem .6rem;font-size:.78rem}
+  .section-nav a{padding:2px 8px;font-size:.68rem}
+}
+
+/* Print */
+@media print{
+  .header{position:static;backdrop-filter:none;background:var(--bg)!important}
+  .ctrl-btn,.section-nav{display:none!important}
+  body{background:#fff!important;color:#000!important;padding:0!important}
+  .q{break-inside:avoid}
+  .calc{max-height:none!important}
+}
+</style></head><body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <h1>计算机组成原理</h1>
+      <button class="ctrl-btn" id="themeBtn" onclick="toggleTheme()" title="切换主题">🌙</button>
+    </div>
+    <div class="section-nav" id="sectionNav">
+      <a href="#sec1">一、选择题</a>
+      <a href="#sec2">二、计算题</a>
+      <a href="#sec3">三、综合分析</a>
+    </div>
+  </div>
+</div>
+
+<div class="body-inner">
+
+<div class="sub">题库详解 · 含完整解题流程</div>
+
+<!-- 选择题 1-20 -->
+<div class="section-title" id="sec1">一、选择题（1-20）</div>
+
+<div class="q"><div class="qhead"><span class="n">1</span><span class="qtext">计算机硬件能直接执行的只能是（ ）。<br>A.符号语言 &nbsp; B.机器语言 &nbsp; C.汇编语言 &nbsp; D.高级语言</span></div>
+<div class="ans"><span class="v">B</span>. 机器语言</div>
+<div class="calc"><span class="step">解题思路</span>CPU 只能识别和执行二进制机器码（0/1序列）。汇编语言需经汇编器转换为机器码，高级语言需编译/解释，符号语言不是标准术语。</div></div>
+
+<div class="q"><div class="qhead"><span class="n">2</span><span class="qtext">运算器的核心部件是（ ）。<br>A.数据总线 &nbsp; B.数据选择器 &nbsp; C.累加寄存器 &nbsp; D.算术逻辑运算部件</span></div>
+<div class="ans"><span class="v">D</span>. 算术逻辑运算部件（ALU）</div>
+<div class="calc"><span class="step">解题思路</span>运算器 = ALU + 寄存器 + 数据通路，核心是完成算术/逻辑运算的 ALU。数据总线是传输通道，累加器是暂存器。</div></div>
+
+<div class="q"><div class="qhead"><span class="n">3</span><span class="qtext">下列数中最大的数是（ ）。<br>A. (1000101)<sub>2</sub> &nbsp; B. (01101000)<sub>BCD</sub> &nbsp; C. (65)<sub>8</sub> &nbsp; D. (61)<sub>16</sub></span></div>
+<div class="ans"><span class="v">D</span>. (61)<sub>16</sub> = 97</div>
+<div class="calc"><span class="step">解题思路：全部转为十进制比较</span>
+A. (1000101)<sub>2</sub> = 1×2<sup>6</sup>+0+0+0+1×2<sup>2</sup>+0+1 = 64+4+1 = <span class="hl">69</span>
+B. (01101000)<sub>BCD</sub>：BCD 每4位表示一位十进制数 → 0110=6, 1000=8 → <span class="hl">68</span>
+C. (65)<sub>8</sub> = 6×8<sup>1</sup>+5 = 48+5 = <span class="hl">53</span>
+D. (61)<sub>16</sub> = 6×16+1 = 96+1 = <span class="hl">97</span> ← <span class="blue">最大</span>
+</div></div>
+
+<div class="q"><div class="qhead"><span class="n">4</span><span class="qtext">在一个 8 位二进制数的机器中，补码表示数的范围从（ ）到 +127。<br>A.-256 &nbsp; B.-128 &nbsp; C.-127 &nbsp; D.-255</span></div>
+<div class="ans"><span class="v">B</span>. -128</div>
+<div class="calc"><span class="step">解题思路</span>n位补码表示范围：<span class="hl">-2<sup>n-1</sup> ~ +2<sup>n-1</sup>-1</span><br>
+8位补码：-2<sup>7</sup> ~ +2<sup>7</sup>-1 = <span class="blue">-128 ~ +127</span><br>
+10000000（-128）到 01111111（+127）</div></div>
+
+<div class="q"><div class="qhead"><span class="n">5</span><span class="qtext">在定点二进制运算器中，减法运算一般通过（ ）来实现。<br>A.原码运算的二进制减法器 &nbsp; B.补码运算的二进制加法器<br>C.原码运算的十进制加法器 &nbsp; D.补码运算的二进制减法器</span></div>
+<div class="ans"><span class="v">B</span>. 补码运算的二进制加法器</div>
+<div class="calc"><span class="step">解题思路</span>a - b = a + (-b)。将减数取补码后与被减数相加，即用<span class="hl">加法器</span>实现减法。统一用补码使加减法共用同一套电路。</div></div>
+
+<div class="q"><div class="qhead"><span class="n">6</span><span class="qtext">变形补码加法，双符号位为（ ）时表示发生了正溢出。<br>A.00 &nbsp; B.01 &nbsp; C.10 &nbsp; D.11</span></div>
+<div class="ans"><span class="v">B</span>. 01</div>
+<div class="calc"><span class="step">解题思路</span>变形补码（双符号位）判断溢出规则：<br>
+<span class="hl">00</span> = 正数，无溢出 &nbsp; <span class="hl">11</span> = 负数，无溢出<br>
+<span class="hl">01</span> = <span class="blue">正溢出</span>（两个正数相加，结果超出正数范围）<br>
+<span class="hl">10</span> = 负溢出（两个负数相加，结果超出负数范围）</div></div>
+
+<div class="q"><div class="qhead"><span class="n">7</span><span class="qtext">将 -33 以补码形式存入 16 位寄存器中，则寄存器内容为（ ）。<br>A.00DFH &nbsp; B.DDDFH &nbsp; C.FFDFH &nbsp; D.00FDH</span></div>
+<div class="ans"><span class="v">C</span>. FFDFH</div>
+<div class="calc"><span class="step">解题思路：负数的补码 = 正数取反 + 1</span>
+① 33 的二进制（16位）= 0000 0000 0010 0001 = <span class="blue">0021H</span>
+② 取反 → 1111 1111 1101 1110 = <span class="blue">FFDEH</span>
+③ +1 → 1111 1111 1101 1111 = <span class="hl">FFDFH</span>
+<div class="step">速算技巧</div>从低位开始找第一个1，之前的位保持不变，之后（高位）全部取反。33=...0010 0001，第一个1在第0位，高位取反得...1101 1111 = FFDFH</div></div>
+
+<div class="q"><div class="qhead"><span class="n">8</span><span class="qtext">只能发现奇数个错误，无纠错能力的校验码是（ ）。<br>A.CRC 码 &nbsp; B.海明码 &nbsp; C.奇偶校验码 &nbsp; D.以上都不是</span></div>
+<div class="ans"><span class="v">C</span>. 奇偶校验码</div>
+<div class="calc"><span class="step">解题思路</span>
+- <span class="hl">奇偶校验码</span>：添加1位校验位使1的总数为奇/偶，只能检测奇数个错误，<span class="blue">无法纠错</span>
+- CRC码：循环冗余校验，可检测多位错误，常用于网络传输
+- 海明码：可检测并纠正一位错误</div></div>
+
+<div class="q"><div class="qhead"><span class="n">9</span><span class="qtext">存储器主要用来存放（ ）。<br>A.程序 &nbsp; B.数据 &nbsp; C.微程序 &nbsp; D.程序和数据</span></div>
+<div class="ans"><span class="v">D</span>. 程序和数据</div>
+<div class="calc"><span class="step">解题思路</span>存储器存储两类信息：<span class="hl">程序</span>（指令序列）和<span class="hl">数据</span>（操作数/中间结果）。微程序是控制器中的概念，不是存储器的主要存储对象。</div></div>
+
+<div class="q"><div class="qhead"><span class="n">10</span><span class="qtext">双端口存储器能进行高速读/写操作，是因为采用了（ ）。<br>A.高速芯片 &nbsp; B.新型器件 &nbsp; C.两套相互独立的读写电路 &nbsp; D.流水技术</span></div>
+<div class="ans"><span class="v">C</span>. 两套相互独立的读写电路</div>
+<div class="calc"><span class="step">解题思路</span>双端口 RAM 有两套<span class="hl">独立</span>的地址线、数据线和读写控制电路，可同时访问不同存储单元，实现并行读写。跟芯片速度无关，是<span class="blue">结构设计</span>的改进。</div></div>
+
+<div class="q"><div class="qhead"><span class="n">11</span><span class="qtext">下列存储器中，不能与 CPU 直接交换信息的是（ ）。<br>A.只读存储器 &nbsp; B.随机存储器 &nbsp; C.缓存 &nbsp; D.辅助存储器</span></div>
+<div class="ans"><span class="v">D</span>. 辅助存储器</div>
+<div class="calc"><span class="step">解题思路</span>CPU 只能通过<span class="hl">地址总线</span>直接访问主存（RAM/ROM）和 Cache。辅助存储器（磁盘、U盘等）通过 I/O 接口与 CPU 交换数据，不能直接寻址。<br>
+内存层次：CPU → Cache → 主存(RAM/ROM) → 辅存(磁盘)</div></div>
+
+<div class="q"><div class="qhead"><span class="n">12</span><span class="qtext">某 SRAM 芯片，容量为 16K×8 位，则其地址线有（ ）根。<br>A.14 &nbsp; B.16K &nbsp; C.16 &nbsp; D.8</span></div>
+<div class="ans"><span class="v">A</span>. 14</div>
+<div class="calc"><span class="step">解题思路</span>16K = 16 × 1024 = 16384 = <span class="hl">2<sup>14</sup></span><br>
+地址线根数 n 满足 2<sup>n</sup> = 存储单元数。<br>
+2<sup>14</sup> = 16384 = 16K，所以 n = <span class="blue">14</span> 根地址线。<br>
+×8 位表示每个存储单元 8 位（1字节），数据线 8 根。</div></div>
+
+<div class="q"><div class="qhead"><span class="n">13</span><span class="qtext">采用指令 Cache 与数据 Cache 分离的主要目的是（ ）。<br>A.降低 Cache 的损失 &nbsp; B.提高 Cache 的命中率<br>C.降低 CPU 平均访存时间 &nbsp; D.减少指令流水线资源冲突</span></div>
+<div class="ans"><span class="v">D</span>. 减少指令流水线资源冲突</div>
+<div class="calc"><span class="step">解题思路</span>现代 CPU 使用流水线技术，取指和访存可能同时发生。若 Cache 合一，则取指令和读数据争抢同一端口 → 结构冲突。<br>
+分离后<span class="hl">指令 Cache</span> 和 <span class="hl">数据 Cache</span> 各有独立端口，可并行访问，<span class="blue">减少资源冲突</span>。</div></div>
+
+<div class="q"><div class="qhead"><span class="n">14</span><span class="qtext">以下寻址方式中，速度最快的是（ ）。<br>A.立即数寻址 &nbsp; B.寄存器间接寻址 &nbsp; C.直接寻址 &nbsp; D.寄存器寻址</span></div>
+<div class="ans"><span class="v">A</span>. 立即数寻址方式</div>
+<div class="calc"><span class="step">解题思路：访问次数越少速度越快</span>
+A. <span class="hl">立即数寻址</span>：操作数就在指令中，<span class="blue">0次访存</span> → 最快<br>
+B. 寄存器寻址：操作数在寄存器，0次访存（但需先读取寄存器编号，略慢于立即）<br>
+C. 寄存器间接寻址：先读寄存器得到地址，再访存 → 1次访存<br>
+D. 直接寻址：地址在指令中，访存取操作数 → 1次访存</div></div>
+
+<div class="q"><div class="qhead"><span class="n">15</span><span class="qtext">单地址指令中为了完成两个数的算术运算，除地址码指明的一个操作数外，另一个常需采用（ ）。<br>A.堆栈寻址 &nbsp; B.立即寻址 &nbsp; C.隐含寻址 &nbsp; D.间接寻址</span></div>
+<div class="ans"><span class="v">C</span>. 隐含寻址方式</div>
+<div class="calc"><span class="step">解题思路</span>单地址指令只有<span class="hl">一个</span>地址码字段。两个操作数怎么来？<br>
+一个由地址码指出，另一个默认在<span class="blue">累加器（ACC）</span>中——这就是<span class="hl">隐含寻址</span>。<br>
+运算结果也存回累加器。早期 CPU 常用此方式，如指令 <code>ADD X</code> 表示 ACC = ACC + M[X]。</div></div>
+
+<div class="q"><div class="qhead"><span class="n">16</span><span class="qtext">用 2K×4 位的 RAM 芯片，设计 16K×8 位的 RAM 存储器，以下说法正确的是（ ）。<br>A.16片, 字扩展8, 位扩展2 &nbsp; B.16片, 字扩展4, 位扩展4<br>C.8片, 字扩展4, 位扩展2 &nbsp; D.8片, 字扩展2, 位扩展4</span></div>
+<div class="ans"><span class="v">A</span>. 16片, 字扩展8, 位扩展2</div>
+<div class="calc"><span class="step">解题思路：芯片扩展公式</span>
+① 总片数 = (目标容量)/(单片容量) = (16K×8)/(2K×4) = <span class="hl">8×2 = 16片</span>
+② <span class="blue">字扩展</span>（地址范围扩展）：16K/2K = 8 倍（地址线增加3根）
+③ <span class="blue">位扩展</span>（数据宽度扩展）：8/4 = 2 倍
+<div class="step">记忆方法</div>字扩展 → 增加地址线，扩大寻址范围；位扩展 → 增加数据线，加宽数据宽度</div></div>
+
+<div class="q"><div class="qhead"><span class="n">17</span><span class="qtext">主存 1MB，字长 1B，块大小 16B，Cache 64KB，全相联映射。地址 B0010<sub>16</sub> 相应的（ ）。<br>A.标记=(1011 0000 0000 00)<sub>2</sub>, 字字=(01 0000)<sub>2</sub><br>B.标记=(1011 0000 0000 0001)<sub>2</sub>, 字=(0000)<sub>2</sub><br>C.标记=(1011 0000 0000)<sub>2</sub>, 字=(0001 0000)<sub>2</sub><br>D.标记=(1011 0000 0000 0001 00)<sub>2</sub>, 字=(00)<sub>2</sub></span></div>
+<div class="ans"><span class="v">B</span>. 标记=(1011 0000 0000 0001)<sub>2</sub>, 字=(0000)<sub>2</sub></div>
+<div class="calc"><span class="step">解题思路：全相联映射地址划分</span>
+主存 1MB = <span class="hl">2<sup>20</sup></span>B，所以地址共 <span class="blue">20 位</span>
+块大小 16B = <span class="hl">2<sup>4</sup></span>B，所以<span class="blue">块内地址（字地址）占 4 位</span>
+全相联映射：地址 = <span class="hl">标记 + 块内地址</span>
+标记位数 = 20 - 4 = <span class="blue">16 位</span>
+<div class="step">对 B0010<sub>16</sub> 进行拆分</div>
+B0010H = <span class="hl">1011 0000 0000 0001 0000</span><sub>2</sub>（20位）
+标记（高16位）= <span class="blue">1011 0000 0000 0001</span><sub>2</sub>
+字地址（低4位）= <span class="blue">0000</span><sub>2</sub>
+<div class="step">常见错误</div>选项A错在标记只用了14位；C错在标记仅12位；D错在标记18位、字地址仅2位。</div></div>
+
+<div class="q"><div class="qhead"><span class="n">18</span><span class="qtext">指令字格式如图（其中 M 表示寻址方式，R 表示寄存器）。以下说法不正确的是（ ）。<br>A.单字长指令 &nbsp; B.二地址指令 &nbsp; C.可指定32种操作 &nbsp; D.最多8个寄存器</span></div>
+<div class="ans"><span class="v">图缺失</span>，给出通用分析方法：</div>
+<div class="calc"><span class="step">解题方法（举一反三）</span>
+拿到指令格式图后，四步判断：
+① <span class="hl">单/双字长</span>：指令总位数 = 字长？是则单字长，否则多字长
+② <span class="hl">几地址</span>：数一数地址码（寻址方式M+寄存器R）的组数
+③ <span class="hl">操作种类</span>：操作码位数 n → 最多 <span class="blue">2<sup>n</sup></span> 种
+④ <span class="hl">寄存器数量</span>：寄存器编号位数 m → 最多 <span class="blue">2<sup>m</sup></span> 个
+<div class="step">示例</div>若格式为 [OP(5) | M1(2) | R1(3) | M2(2) | R2(3)]，总长15位（单字长），有2个地址（二地址），操作码5位→32种操作，寄存器3位→8个，则全都正确，选"以上都对"。</div></div>
+
+<div class="q"><div class="qhead"><span class="n">19</span><span class="qtext">某机指令系统有 90 条机器指令，每条机器指令由 5 条微指令组成，其中取指的微指令是所有机器指令公用的，求控存微指令总数。</span></div>
+<div class="ans"><span class="v">A</span>. 361</div>
+<div class="calc"><span class="step">解题思路</span>
+每条指令 5 条微指令：第1条 = 取指（公用），后4条 = 执行（独立）<br>
+总数 = <span class="hl">公用取指</span> + <span class="blue">每条指令特有的微指令 × 指令数</span><br>
+= 1 + 90 × 4 = 1 + 360 = <span class="hl">361</span></div></div>
+
+<div class="q"><div class="qhead"><span class="n">20</span><span class="qtext">状态寄存器用来存放（ ）。<br>A.算术运算结果 &nbsp; B.逻辑运算结果 &nbsp; C.运算类型 &nbsp; D.算术、逻辑运算及测试指令的结果状态</span></div>
+<div class="ans"><span class="v">D</span>. 算术、逻辑运算及测试指令的结果状态</div>
+<div class="calc"><span class="step">解题思路</span>状态寄存器（PSW/标志寄存器）存储<span class="hl">条件码标志</span>，如：<br>
+- ZF（零标志）&nbsp; - CF（进位/借位）&nbsp; - SF（符号标志）<br>
+- OF（溢出标志）&nbsp; - PF（奇偶标志）<br>
+这些标志由算术运算、逻辑运算、测试指令的执行结果自动设置。</div></div>
+
+<!-- 计算题 21-25 -->
+<div class="section-title" id="sec2">二、计算题（21-25）</div>
+
+<div class="q"><div class="qhead"><span class="n">21</span><span class="qtext">将 (21.8125)<sub>10</sub> 转换成 IEEE754 标准的 32 位浮点数存储格式，写出二进制结果和十六进制结果。</span></div>
+<div class="ans"><span class="v">二进制：0 10000011 01011101000000000000000</span> &nbsp; <span class="v">十六进制：41AE8000H</span></div>
+<div class="calc">
+<span class="step">第1步：将十进制转为二进制</span>
+整数部分 21：21 ÷ 2 = 10余1, 10÷2=5余0, 5÷2=2余1, 2÷2=1余0, 1÷2=0余1 → 从下往上 = <span class="hl">10101</span>
+小数部分 0.8125：0.8125×2=<span class="hl">1</span>.625, 0.625×2=<span class="hl">1</span>.25, 0.25×2=<span class="hl">0</span>.5, 0.5×2=<span class="hl">1</span>.0 → <span class="hl">1101</span>
+合并：21.8125 = <span class="blue">10101.1101</span>
+
+<span class="step">第2步：规格化（写成 1.xxxx × 2<sup>n</sup> 形式）</span>
+10101.1101 = <span class="hl">1.01011101 × 2<sup>4</sup></span>
+小数点左移了4位，指数 = <span class="blue">4</span>
+
+<span class="step">第3步：填充 IEEE754 各字段（32位）</span>
+① <span class="blue">符号位 S</span>（1位）：正数 → <span class="hl">0</span>
+② <span class="blue">阶码 E</span>（8位）= 指数 + 127（偏移量）= 4 + 127 = 131
+   131 = 128+2+1 = <span class="hl">10000011</span>
+③ <span class="blue">尾数 M</span>（23位）= 规格化后小数点后的部分，低位补0
+   01011101 → <span class="hl">01011101000000000000000</span>
+
+<span class="step">第4步：拼接结果</span>
+<span class="hl">0 | 10000011 | 01011101000000000000000</span>
+每4位一组转16进制：0100 0001 1010 1110 1000 0000 0000 0000
+= <span class="blue">41AE8000H</span>
+
+<div class="step">举一反三 · 公式</div>
+IEEE754 单精度 = <span class="hl">(-1)<sup>S</sup> × 1.M × 2<sup>E-127</sup></span><br>
+S=符号位(1位)，E=阶码(8位，移127码)，M=尾数(23位，隐含1.)</div></div>
+
+<div class="q"><div class="qhead"><span class="n">22</span><span class="qtext">已知 x=+11011，y=-10101，用变形补码计算 x+y，同时指出是否有溢出。</span></div>
+<div class="ans"><span class="v">x + y = +00110，无溢出</span></div>
+<div class="calc">
+<span class="step">第1步：写出 x 和 y 的变形补码 (双符号位)</span>
+x = +11011 → 变形补码 = <span class="hl">00, 011011</span>（双符号位为正）
+y = -10101，先求 +10101 = 010101
+  取反 = 101010，+1 = 101011 → 变形补码 = <span class="hl">11, 101011</span>（双符号位为负）
+
+<span class="step">第2步：变形补码相加（逐位相加，进位保留）</span>
+  00, 011011
++ 11, 101011
+────────────
+<span class="hl">00, 000110</span>（最高位进位丢弃）
+
+<span class="step">第3步：判断溢出</span>
+双符号位 = <span class="hl">00</span> → 一致 → <span class="blue">无溢出</span>
+结果为正数，去掉双符号位 = +00110
+
+<div class="step">举一反三 · 溢出判断规则</div>
+双符号位 <span class="hl">00</span> → 正数，无溢出<br>
+双符号位 <span class="hl">01</span> → 正溢出（两个正数相加超过正数范围）<br>
+双符号位 <span class="hl">10</span> → 负溢出（两个负数相加超过负数范围）<br>
+双符号位 <span class="hl">11</span> → 负数，无溢出</div></div>
+
+<div class="q"><div class="qhead"><span class="n">23</span><span class="qtext">假设有一个具有 24 位地址和 8 位字长的存储器，求：<br>(1) 该存储器能存储多少字节的信息？<br>(2) 若存储器由 4M×1 位的 RAM 芯片组成，需要多少片？</span></div>
+<div class="ans">(1) <span class="v">16MB</span> &nbsp;&nbsp; (2) <span class="v">32 片</span></div>
+<div class="calc">
+<span class="step">(1) 计算总容量</span>
+24位地址 → 2<sup>24</sup> 个存储单元
+8位字长 → 每个单元 1 字节
+总容量 = <span class="hl">2<sup>24</sup> × 1B = 16MB</span>（2<sup>24</sup> = 16M）
+
+<span class="step">(2) 计算所需芯片数</span>
+目标容量 = 16M × 8位
+每片容量 = 4M × 1位
+<span class="hl">所需片数 = (16M × 8) / (4M × 1) = 4 × 8 = 32 片</span>
+其中：字扩展 = 16M/4M = <span class="blue">4</span>，位扩展 = 8/1 = <span class="blue">8</span>
+
+<div class="step">举一反三 · 芯片扩展</div>
+字扩展（扩大地址范围）：所需倍数 = 目标存储单元数 / 单芯片存储单元数<br>
+位扩展（扩大数据宽度）：所需倍数 = 目标数据位数 / 单芯片数据位数<br>
+总片数 = 字扩展倍数 × 位扩展倍数</div></div>
+
+<div class="q"><div class="qhead"><span class="n">24</span><span class="qtext">CPU 执行程序时，Cache 完成存取 1900 次，主存完成 100 次，Cache 周期 50ns，主存周期 250ns，求 Cache 命中率和平均访问时间。</span></div>
+<div class="ans">命中率 = <span class="v">0.95</span> &nbsp;&nbsp; 平均访问时间 = <span class="v">60 ns</span></div>
+<div class="calc">
+<span class="step">第1步：计算命中率</span>
+命中率 H = Cache命中次数 / 总访问次数
+= 1900 / (1900 + 100) = 1900 / 2000 = <span class="hl">0.95</span> = 95%
+
+<span class="step">第2步：计算平均访问时间（公式 T<sub>avg</sub> = H × T<sub>c</sub> + (1-H) × T<sub>m</sub>）</span>
+T<sub>avg</sub> = 0.95 × 50 + 0.05 × 250
+= 47.5 + 12.5 = <span class="hl">60 ns</span>
+
+<div class="step">举一反三 · Cache 系统公式</div>
+命中率 H = Cache命中次数 / (Cache命中 + 主存访问)<br>
+平均访问时间 T<sub>avg</sub> = H × T<sub>c</sub> + (1-H) × T<sub>m</sub><br>
+性能提升倍数 = T<sub>m</sub> / T<sub>avg</sub><br>
+注：若主存访问时也访问 Cache（同时访问），用 T<sub>avg</sub> = T<sub>c</sub> + (1-H) × T<sub>m</sub></div></div>
+
+<div class="q"><div class="qhead"><span class="n">25</span><span class="qtext">某指令流水线有取指(IF)、译码(ID)、执行(EX)、写回(WB)四个过程，每级 100ns，20 条指令连续输入，计算吞吐率和加速比。</span></div>
+<div class="ans">吞吐率 ≈ <span class="v">8.7×10<sup>6</sup> 条/秒</span> &nbsp;&nbsp; 加速比 ≈ <span class="v">3.48</span></div>
+<div class="calc">
+<span class="step">第1步：计算流水线总时间</span>
+流水线有 k=4 级，执行 n=20 条指令
+总时间 = (k + n - 1) × 时钟周期 = (4 + 20 - 1) × 100 = <span class="hl">2300 ns</span>
+
+<span class="step">第2步：计算吞吐率（Throughput）</span>
+吞吐率 = 指令数 / 总时间 = 20 / (2300 × 10<sup>-9</sup>)
+= 20 / 2.3 × 10<sup>-6</sup> ≈ <span class="hl">8.7 × 10<sup>6</sup> 条/秒</span>
+
+<span class="step">第3步：计算加速比（Speedup）</span>
+非流水线总时间 = n × k × 时钟周期 = 20 × 4 × 100 = <span class="hl">8000 ns</span>
+加速比 = 非流水线时间 / 流水线时间 = 8000 / 2300 ≈ <span class="hl">3.48</span>
+
+<div class="step">举一反三 · 流水线公式</div>
+k级流水线，n条指令，时钟周期T：<br>
+① 总时间 T<sub>total</sub> = (k + n - 1) × T<br>
+② 吞吐率 TP = n / T<sub>total</sub>（理想最大吞吐率 = 1/T）<br>
+③ 加速比 S = (n × k × T) / ((k + n - 1) × T) ≈ k（n→∞时）<br>
+④ 流水线效率 E = (n × k × T) / (k × T<sub>total</sub>) = n / (k + n - 1)
+≈ 1（n → ∞）</div></div>
+
+<!-- 综合分析题 26-27 -->
+<div class="section-title" id="sec3">三、综合分析题（26-27）</div>
+
+<div class="q"><div class="qhead"><span class="n">26</span><span class="qtext">分析以下电路图，回答问题：<br>
+（1）该存储系统总容量是多少？<br>
+（2）每块芯片的容量是多少？<br>
+（3）写入数据 3A4BH 到存储器 21H 地址中，如何操作？<br><br>
+<b>电路图硬件信息</b><br>
+地址部分：addr 为 8 位地址输入，MAR 是 8 位地址寄存器，addrclock 为 MAR 锁存时钟，MARreset 复位信号；地址线 A 同时接入两块存储芯片。<br>
+存储芯片：两块完全相同存储芯片，分别标注高位、低位；每块芯片 8 位数据输入 D、8 位输出，共享 memclock 读写时钟、reset 复位信号、sel/ld/clr 控制引脚。<br>
+数据通路：inputdata 为 16 位并行输入数据（高 8 位送高位芯片、低 8 位送低位芯片）；R/W 读写控制信号线，低电平写、高电平读；两块芯片读出数据经三态门合并为 16 位送入 MDR。<br>
+输出部分：MDR 为 16 位数据寄存器，dataclock 为 MDR 锁存时钟，MDRreset 复位，最终输出 outdata。</span></div>
+<div class="ans">(1) <span class="v">512 字节</span> &nbsp; (2) <span class="v">256 字节</span></div>
+<div class="calc">
+<span class="step">(1) 存储系统总容量</span>
+8 位地址 → 2<sup>8</sup> = <span class="hl">256</span> 个存储单元<br>
+每单元数据宽度：高位 8 位 + 低位 8 位 = 16bit = 2B<br>
+总容量 = 256 × 2B = <span class="blue">512 字节</span>
+
+<span class="step">(2) 单块芯片容量</span>
+每块芯片 8 位数据，地址线同样 8 根<br>
+单片容量 = 256 × 8bit = <span class="blue">256 字节</span>
+
+<span class="step">(3) 写入 3A4BH 到地址 21H — 完整操作</span>
+① <b>数据拆分</b>：3A4BH → 高 8 位 <span class="hl">3AH</span> 送高位芯片，低 8 位 <span class="hl">4BH</span> 送低位芯片<br>
+② <b>送地址</b>：地址 <span class="hl">21H</span> 放到 addr 总线，addrclock 时钟上升沿锁进 MAR；MAR 输出地址 A 同时送到两块芯片，选中 21H 单元<br>
+③ <b>送数据</b>：inputdata 总线送入 16 位数据 3A4B，高位 3A 进高位芯片 D 端，低位 4B 进低位芯片 D 端<br>
+④ <b>写模式</b>：R/W 控制线置<span class="hl">低电平</span>，切换为写入模式<br>
+⑤ <b>触发写入</b>：memclock 时钟上升沿，两块芯片同时把各自 8 位数据存入 21H 单元<br>
+⑥ <b>完成</b>：撤销 R/W 写信号；如需校验，切换为读模式，数据经三态门送入 MDR，dataclock 锁存，outdata 输出验证
+</div></div>
+
+<div class="q"><div class="qhead"><span class="n">27</span><span class="qtext">单总线数据通路如下图所示，数据通路中的部件通过总线方式连接。请完成以下指令的执行周期的控制信号序列。<br><br>
+<b>部件说明</b><br>
+全局：单条内总线，所有寄存器、ALU、MAR、MDR、PC、IR 均挂载内总线。<br>
+通用寄存器：R0/R1/R2，配套 Rx_out（输出到总线）、Rx_in（总线写入寄存器）。<br>
+PC：PC<sub>out</sub> 输出地址、PC<sub>in</sub> 写入 PC；ALU 支持 +1 自增运算用于 PC 更新。<br>
+IR：IR<sub>in</sub> 总线存指令、IR<sub>out</sub> 输出立即数/地址到总线。<br>
+存储：MAR 接收总线地址接内存 ABus；MDR 双向对接内存 DBus，配套 MDR<sub>in</sub>/MDR<sub>out</sub>；内存 MEM 拥有读 R、写 W。<br>
+ALU：X 暂存器（X<sub>in</sub>）、B 输入端；运算控制 +1/ADD/SUB；结果存入 Z 暂存器，Z<sub>out</sub> 输出到内总线。<br><br>
+（1）LOAD R0，12#　　功能：将地址 12 的数据传送给 R0<br>
+（2）ADD R1，R0　　　功能：(R1)+(R0) → R1<br>
+（3）STORE R1，(R2)　功能：R1 的内容存入 (R2) 地址的存储单元</span></div>
+<div class="ans">详见下方解题流程</div>
+<div class="calc">
+<span class="step">通用前置 — 取指周期（所有指令共用）</span>
+PC<sub>out</sub> → 内总线 → MAR<sub>in</sub>（PC 送地址到 MAR）<br>
+R（内存读，指令送 MDR）→ MDR<sub>out</sub> → 内总线 → IR<sub>in</sub>（指令存入 IR）<br>
++1（PC 自增）→ Z<sub>out</sub> → 内总线 → PC<sub>in</sub>（更新 PC，指向下一条）
+<hr style="margin:6px 0;border:none;border-top:1px dashed #D5CFC5">
+
+<span class="step">(1) LOAD R0，12# — 执行周期</span>
+IR<sub>out</sub>（IR 把立即数 12 送内总线）→ MAR<sub>in</sub>（地址 12 送 MAR → ABus）<br>
+R（内存读，MEM[12] 数据送 MDR）→ MDR<sub>out</sub>（数据上内总线）→ <span class="blue">R0<sub>in</sub></span>（存入 R0）
+
+<span class="step">(2) ADD R1，R0 — 执行周期</span>
+R1<sub>out</sub>（R1 数据送上内总线）→ <span class="hl">X<sub>in</sub></span>（存入 ALU 输入 X）<br>
+R0<sub>out</sub>（R0 数据送上内总线）→ ALU 的 B 输入端<br>
+<b>ADD</b>（ALU 执行 X+B，结果存入 Z）→ Z<sub>out</sub>（结果上内总线）→ <span class="blue">R1<sub>in</sub></span>（写入 R1，覆盖原值）
+
+<span class="step">(3) STORE R1，(R2) — 执行周期</span>
+R2<sub>out</sub>（R2 存放的内存地址上内总线）→ MAR<sub>in</sub>（地址送 MAR → ABus）<br>
+R1<sub>out</sub>（R1 待存数据上内总线）→ <span class="hl">MDR<sub>in</sub></span>（数据存入 MDR）<br>
+<b>W</b>（内存写信号生效，MDR 数据写入 MAR 指向的单元）→ 操作完成
+</div></div>
+
+
+</div><!-- /body-inner -->
+
+<script>
+// ═══ Theme ═══
+let isDark = localStorage.getItem("zcTheme")==="dark";
+function applyTheme(dark){
+  document.documentElement.setAttribute("data-theme",dark?"dark":"");
+  const btn = document.getElementById("themeBtn");
+  if(btn) btn.textContent = dark?"☀️":"🌙";
+  localStorage.setItem("zcTheme",dark?"dark":"light");
+}
+function toggleTheme(){ isDark=!isDark; applyTheme(isDark); }
+applyTheme(isDark);
+
+// ═══ Section nav active highlight ═══
+const navLinks = document.querySelectorAll(".section-nav a");
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      navLinks.forEach(a=>a.classList.remove("active"));
+      const id = entry.target.id;
+      navLinks.forEach(a=>{ if(a.getAttribute("href")==="#"+id) a.classList.add("active"); });
+    }
+  });
+},{rootMargin:"-80px 0px -60% 0px"});
+document.querySelectorAll(".section-title").forEach(el=>observer.observe(el));
+
+// ═══ click calc to fold/unfold (toggle) ═══
+// each .q's .calc can be collapsed by clicking the .qhead
+document.querySelectorAll(".q").forEach(q=>{
+  const head = q.querySelector(".qhead");
+  const calc = q.querySelector(".calc");
+  if(!calc) return;
+  head.style.cursor = "pointer";
+  head.addEventListener("click",()=>{
+    const isHidden = calc.classList.toggle("folded");
+    if(isHidden){
+      calc.style.maxHeight = "0";
+      calc.style.overflow = "hidden";
+      calc.style.padding = "0 .8rem";
+    } else {
+      calc.style.maxHeight = calc.scrollHeight + 40 + "px";
+      calc.style.padding = ".6rem .8rem";
+    }
+  });
+  // start expanded
+  calc.style.transition = "max-height .3s ease, padding .3s ease, opacity .25s";
+  calc.style.maxHeight = calc.scrollHeight + 40 + "px";
+});
+</script>
+</body></html>

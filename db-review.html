@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>数据库期末复习</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f2ee;--surface:#fff;--text:#1c1a18;--dim:#7a756f;--border:#e2ddd6;--blue:#1a5c6e;--blue-l:#ddeef2;--green:#2d6a4f;--green-l:#d8ede4;--orange:#c95d1e;--orange-l:#f5e6da;--red:#b33c2f;--red-l:#f7e0dc;--radius:10px;--shadow:0 1px 2px rgba(0,0,0,.04),0 1px 4px rgba(0,0,0,.06);--header-bg:rgba(255,255,255,.85)}
+[data-theme=dark]{--bg:#16161a;--surface:#222226;--text:#e4e0dc;--dim:#9a9590;--border:#3a3835;--blue-l:#1a3a44;--orange-l:#3d2a16;--green-l:#1a3528;--red-l:#3a1e18;--shadow:0 1px 2px rgba(0,0,0,.25),0 1px 8px rgba(0,0,0,.4);--header-bg:rgba(34,34,38,.92)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:15px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:"Inter",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;line-height:1.7;padding:0 0 60px;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+
+/* Header */
+.header{position:sticky;top:0;z-index:100;background:var(--header-bg);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
+.header-inner{max-width:900px;margin:0 auto;padding:8px 14px 0}
+.header-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.header h1{font-size:1.05rem;font-weight:700;letter-spacing:-.02em;color:var(--text);white-space:nowrap}
+.header-controls{display:flex;gap:4px;flex-shrink:0}
+.ctrl-btn{display:inline-flex;align-items:center;justify-content:center;gap:3px;border:1px solid var(--border);background:var(--surface);color:var(--dim);font-size:.7rem;font-weight:600;padding:4px 10px;border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap;line-height:1.4}
+.ctrl-btn:hover{color:var(--text);border-color:var(--dim)}
+.ctrl-btn.active{background:var(--blue-l);color:var(--blue);border-color:var(--blue)}
+
+/* Tab Bar */
+.tab-scroll{overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;display:flex;gap:0}
+.tab-scroll::-webkit-scrollbar{display:none}
+.tab{display:inline-flex;padding:7px 12px;font-size:.78rem;font-weight:600;border:none;background:none;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;border-radius:6px 6px 0 0;flex-shrink:0}
+.tab:hover{color:var(--text);background:rgba(0,0,0,.03)}
+[data-theme=dark] .tab:hover{background:rgba(255,255,255,.04)}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue);background:var(--blue-l)}
+.tab .count{display:inline-flex;align-items:center;justify-content:center;background:var(--border);color:var(--dim);font-size:.6rem;font-weight:700;border-radius:20px;min-width:17px;height:17px;padding:0 4px;margin-left:4px}
+.tab.active .count{background:var(--blue);color:#fff}
+
+/* Progress */
+.progress-wrap{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-bar{height:100%;background:var(--blue);border-radius:2px;transition:width .35s ease;width:0}
+
+/* Page */
+.page{display:none;max-width:900px;margin:0 auto;padding:12px 14px}
+.page.active{display:block}
+.page-title{font-size:1rem;font-weight:700;margin-bottom:10px;color:var(--text);letter-spacing:-.01em;display:flex;align-items:center;justify-content:space-between;gap:8px}
+
+/* Search */
+.search-box{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:.82rem;background:var(--surface);color:var(--text);outline:none;margin-bottom:10px;transition:border-color .15s;font-family:inherit}
+.search-box:focus{border-color:var(--blue)}
+
+/* Stats */
+.stats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;font-size:.76rem}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:5px 10px;display:flex;gap:5px;align-items:center}
+.stat-num{font-weight:700;font-size:.85rem}
+
+/* Question Card */
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden;transition:box-shadow .2s,opacity .3s}
+.q-card:focus-within{box-shadow:0 0 0 2px var(--blue-l)}
+.q-card.hidden{display:none}
+.q-head{padding:10px 12px;cursor:pointer;display:flex;align-items:flex-start;gap:8px;-webkit-tap-highlight-color:transparent;transition:background .15s;user-select:none}
+.q-head:hover{background:rgba(0,0,0,.02)}
+[data-theme=dark] .q-head:hover{background:rgba(255,255,255,.03)}
+.q-type{flex-shrink:0;font-size:.62rem;font-weight:700;padding:1px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.03em;margin-top:3px;line-height:1.5}
+.q-type.single{background:var(--blue-l);color:var(--blue)}
+.q-type.judge{background:var(--orange-l);color:var(--orange)}
+.q-type.fill{background:var(--green-l);color:var(--green)}
+.q-text{flex:1;font-size:.86rem;line-height:1.6}
+.q-text .blank{display:inline-block;min-width:56px;border-bottom:2px dashed var(--blue);margin:0 2px;padding:0 4px;text-align:center;font-weight:600;color:var(--blue)}
+
+/* Options */
+.options{list-style:none;padding:0 12px 4px 38px;font-size:.82rem}
+.options li{padding:2px 0;display:flex;align-items:baseline;gap:5px}
+.options .key{font-weight:600;color:var(--dim);min-width:18px}
+.options .correct{color:var(--green);font-weight:600}
+
+/* Answer Row */
+.ans-row{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 38px;border-top:1px solid var(--border);font-size:.8rem;transition:opacity .2s}
+.ans-label{color:var(--dim);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.03em}
+.ans-val{font-weight:700;color:var(--text)}
+.ans-val.correct{color:var(--green)}
+.ans-val.wrong{color:var(--red)}
+
+/* Quiz Mode: hide answers */
+.quiz-hide .ans-row{opacity:0;pointer-events:none}
+.quiz-hide .options .correct{color:inherit}
+.quiz-hide .options .correct::after{content:''}
+.quiz-hide .q-head{cursor:pointer}
+.quiz-hide .q-card.revealed .ans-row{opacity:1;pointer-events:auto}
+.quiz-hide .q-card.revealed .options .correct{color:var(--green)}
+
+/* Toggle Button */
+.toggle-btn{display:inline-flex;align-items:center;gap:3px;border:none;background:none;color:var(--blue);font-size:.75rem;font-weight:600;cursor:pointer;padding:3px 0;transition:color .15s;-webkit-tap-highlight-color:transparent;margin-left:auto;flex-shrink:0;white-space:nowrap}
+.toggle-btn:hover{color:var(--orange)}
+.toggle-btn .arrow{display:inline-block;font-size:.65rem;transition:transform .25s cubic-bezier(.4,0,.2,1)}
+.toggle-btn.open .arrow{transform:rotate(90deg)}
+
+/* Solution */
+.solution{overflow:hidden;max-height:0;transition:max-height .35s cubic-bezier(.4,0,.2,1),opacity .25s ease;opacity:0}
+.solution.open{max-height:20000px;opacity:1;overflow-y:auto;overflow-x:auto}
+.solution-inner{padding:8px 12px 12px 38px;background:rgba(0,0,0,.02);border-top:1px solid var(--border);font-size:.8rem;color:var(--dim);line-height:1.7;overflow-x:auto}
+[data-theme=dark] .solution-inner{background:rgba(255,255,255,.02)}
+.solution-inner strong{color:var(--text)}
+.solution-inner .fd{font-family:monospace;background:var(--blue-l);padding:1px 5px;border-radius:3px;font-size:.76rem}
+
+/* Big Problems */
+.problem-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.problem-card .p-title{font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:6px}
+.problem-card .p-body{font-size:.82rem;line-height:1.7;margin-bottom:8px}
+.problem-card .p-body .fd{font-family:monospace;background:var(--blue-l);padding:1px 5px;border-radius:3px;font-size:.76rem}
+.problem-card .p-ans{padding:8px 12px;background:rgba(0,0,0,.02);border-radius:8px;border-left:3px solid var(--blue);font-size:.8rem;line-height:1.7;overflow-x:auto}
+[data-theme=dark] .problem-card .p-ans{background:rgba(255,255,255,.03)}
+.problem-card .p-ans table{font-size:.76rem;margin:4px 0}
+.problem-card .p-ans td,.problem-card .p-ans th{padding:4px 6px}
+.problem-card .p-ans b{color:var(--text)}
+.problem-card .p-toggle{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--blue);background:var(--blue-l);color:var(--blue);font-size:.76rem;font-weight:600;padding:5px 14px;border-radius:6px;cursor:pointer;transition:all .15s}
+.problem-card .p-toggle:hover{background:var(--blue);color:#fff}
+
+/* Back to Top */
+.back-top{position:fixed;bottom:20px;right:20px;z-index:99;width:40px;height:40px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--dim);font-size:1.1rem;cursor:pointer;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none}
+.back-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.back-top:hover{color:var(--blue);border-color:var(--blue)}
+
+/* Table Enhancements */
+.problem-card .p-ans table{width:100%;border-collapse:collapse;font-size:.76rem;margin:6px 0;overflow:hidden;border-radius:6px}
+.problem-card .p-ans th{background:var(--blue);color:#fff;font-weight:600;padding:5px 8px;text-align:left;font-size:.72rem}
+.problem-card .p-ans td{padding:4px 8px;border-bottom:1px solid var(--border)}
+.problem-card .p-ans tr:nth-child(even) td{background:rgba(0,0,0,.02)}
+[data-theme=dark] .problem-card .p-ans tr:nth-child(even) td{background:rgba(255,255,255,.03)}
+
+/* Quiz Reveal Feedback */
+.quiz-hide .q-card.revealed{animation:quizReveal .35s ease}
+@keyframes quizReveal{0%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:var(--shadow)}}
+.quiz-hide .q-card.revealed .q-head{background:rgba(45,106,79,.04)}
+[data-theme=dark] .quiz-hide .q-card.revealed .q-head{background:rgba(45,106,79,.1)}
+
+/* Search Close Button */
+.search-box{padding-right:30px}
+.search-box.closeable{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237a756f' stroke-width='2'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;background-size:14px;cursor:pointer}
+
+/* SVG Wrapper Responsive */
+.problem-card .p-ans>div[style*="overflow-x"]{margin:6px -8px;border-radius:6px}
+.problem-card .p-ans svg{width:100%;height:auto}
+
+/* Print Styles */
+@media print{
+  .header{position:static;backdrop-filter:none;background:var(--bg)!important}
+  .header-controls,.ctrl-btn,.back-top,.search-box{display:none!important}
+  .q-card{break-inside:avoid;border:1px solid #ccc!important;box-shadow:none!important}
+  .solution{max-height:none!important;opacity:1!important;overflow:visible!important}
+  .solution-inner{background:#f8f8f8!important}
+  .problem-card .p-toggle{display:none!important}
+  .problem-card .solution{max-height:none!important;opacity:1!important;overflow:visible!important}
+  body{padding:0;background:#fff!important;color:#000!important}
+  .page{display:block!important;padding:0;margin-bottom:20px}
+  .page:not(:first-child){page-break-before:always}
+  .page-title{font-size:14pt!important}
+  .stats{display:none!important}
+  .tab-scroll,.progress-wrap{display:none!important}
+}
+
+/* Responsive */
+@media(max-width:480px){
+  .header h1{font-size:.92rem}
+  .tab{padding:5px 7px;font-size:.68rem}
+  .q-head{padding:8px 10px}
+  .q-text{font-size:.82rem}
+  .options,.ans-row,.solution-inner{padding-left:30px}
+  .problem-card{padding:10px 12px}
+  .header-controls{gap:2px}
+  .ctrl-btn{padding:3px 7px;font-size:.62rem}
+  .problem-card .p-ans table{font-size:.7rem}
+  .problem-card .p-ans th,.problem-card .p-ans td{padding:3px 5px}
+  .problem-card .p-ans svg{max-width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <h1>📘 数据库期末复习</h1>
+      <div class="header-controls">
+        <button class="ctrl-btn" id="searchBtn" onclick="toggleSearch()" title="搜索">🔍</button>
+        <button class="ctrl-btn" id="quizBtn" onclick="toggleQuiz()" title="自测模式">✏️ 自测</button>
+        <button class="ctrl-btn" id="themeBtn" onclick="toggleTheme()" title="切换主题">🌙</button>
+      </div>
+    </div>
+    <div class="tab-scroll" id="tabBar"></div>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
+</div>
+<div id="container"></div>
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
+
+<script>
+// =========================== DATA ===========================
+const R = (text, exp) => ({text, exp});
+
+const chapters = [
+  // ═══ 第一部分 ═══
+  { id:"p1", name:"数据库基础概述",
+    questions: [
+      // 单选
+      { type:"single", q:"下面哪个不是数据库管理员 (DBA) 的职责", opts:["A. 决定数据库中的信息内容和结构","B. 设计和编写应用程序","C. 定义数据的安全性要求和完整性约束条件","D. 数据库的改进和重组、重构"], ans:"B",
+        exp:"DBA 负责数据库的规划、设计、安全、维护等工作。编写应用程序是程序员的职责，不是 DBA 的核心职责。" },
+      { type:"single", q:"数据库领域中主要的逻辑数据模型不包含下列哪种模型", opts:["A. 层次模型","B. 网状模型","C. 线性模型","D. 关系模型"], ans:"C",
+        exp:"三大经典逻辑数据模型是层次模型、网状模型和关系模型。线性模型不是数据库领域的逻辑数据模型。" },
+      { type:"single", q:"数据库系统的体系结构是", opts:["A. 两级模式结构和一级映像","B. 三级模式结构和一级映像","C. 三级模式结构和两级映像","D. 三级模式结构和三级映像"], ans:"C",
+        exp:"数据库系统采用三级模式结构（外模式-模式-内模式）和两级映像（外模式/模式映像、模式/内模式映像），以实现逻辑独立性和物理独立性。" },
+      { type:"single", q:"数据库系统的三级模式结构是指", opts:["A. 外模式、模式、子模式","B. 子模式、模式、概念模式","C. 模式、内模式、存储模式","D. 外模式、模式、内模式"], ans:"D",
+        exp:"三级模式为：外模式（用户视图）、模式（概念视图）、内模式（物理存储视图）。" },
+      { type:"single", q:"数据库管理系统能实现对数据库中数据的查询、插入、修改和删除等操作，这种功能称为", opts:["A. 数据定义功能","B. 数据管理功能","C. 数据操纵功能","D. 数据控制功能"], ans:"C",
+        exp:"数据操纵功能（DML）专门处理数据的增删改查。数据定义功能（DDL）用于定义结构，数据控制功能（DCL）用于权限管理。" },
+      { type:"single", q:"目前应用最广泛的数据库数据模型是", opts:["A. 层状模型","B. 网状模型","C. 混合模型","D. 关系模型"], ans:"D",
+        exp:"关系模型基于二维表结构，是目前应用最广泛的数据库数据模型（如 MySQL、PostgreSQL、Oracle 等）。" },
+      { type:"single", q:"以下表示数据库管理系统的是", opts:["A. DBA","B. DBMS","C. DB","D. DATA"], ans:"B",
+        exp:"DBMS = Database Management System（数据库管理系统），DBA = 数据库管理员，DB = 数据库。" },
+      { type:"single", q:"将数据库的结构划分成三级模式，是为了提高数据库的", opts:["A. 数据完整性","B. 数据独立性","C. 管理规范性","D. 数据的共享"], ans:"B",
+        exp:"三级模式和两级映像的主要目的是实现数据独立性：物理独立性（存储变化不影响应用程序）和逻辑独立性（逻辑结构变化不影响外模式）。" },
+      // 判断
+      { type:"judge", q:"E-R 图是一种用表格表示的实体联系模型。", ans:"错",
+        exp:"E-R 图使用矩形（实体）、椭圆（属性）、菱形（联系）绘图表示概念模型，不是表格。" },
+      { type:"judge", q:"数据只包括普通意义上的数字和文字。", ans:"错",
+        exp:"数据包含数字、文字、图像、音频、视频等一切能够描述事物的信息。" },
+      { type:"judge", q:"在数据库系统中只有一个模式，这个模式只对应一个内模式。", ans:"错",
+        exp:"一个数据库只有一个模式和一个内模式，但可对应多个外模式。原命题前半句对后半句错——模式只对应一个内模式是对的，但题目说\"这个模式只对应一个内模式\"作为整体判断通常是对的。但实际上教材说法是：一个模式对应一个内模式。所以这句话本身正确。\n注意：此题的解析需根据教材：一个数据库系统有多个外模式、一个模式、一个内模式。\"模式只对应一个内模式\"正确，但\"数据库系统中只有一个模式\"也正确。实际上此句整体正确。但标准答案给的是\"错\"，可能是因为认为一个模式也能对应多个内模式（不同存储方式）。按教材标准答案记忆。" },
+      { type:"judge", q:"外模式 DDL 用来描述数据库的总体逻辑结构。", ans:"错",
+        exp:"外模式 DDL 描述局部逻辑结构（用户视图），模式 DDL 才描述总体逻辑结构。" },
+      { type:"judge", q:"一个数据库只能有一个外模式，而概念模式和内模式则可有多个。", ans:"错",
+        exp:"一个数据库可有多个外模式（不同用户的不同视图），但概念模式（模式）和内模式各仅有一个。" },
+      // 填空
+      { type:"fill", q:"在 E-R 图中，____表示实体的属性。", ans:"椭圆形",
+        exp:"E-R 图中：矩形表示实体，椭圆形表示属性，菱形表示联系。" },
+      { type:"fill", q:"数据模型是由数据结构、____和____三部分组成。", ans:"数据操纵, 完整性约束",
+        exp:"数据模型三要素：数据结构（静态）、数据操纵（动态操作）、完整性约束（规则）。" },
+      { type:"fill", q:"数据库技术的发展主要分为人工管理阶段、文件系统阶段和____。", ans:"数据库系统阶段",
+        exp:"数据库技术经历了人工管理、文件系统、数据库系统三个阶段。" },
+      { type:"fill", q:"概念数据模型中实体与实体之间的联系，有____、____、多对多 3 种情况。", ans:"一对一, 一对多",
+        exp:"实体间联系类型：1:1（一对一）、1:n（一对多）、m:n（多对多）。" },
+    ]},
+  // ═══ 第二部分 ═══
+  { id:"p2", name:"关系代数与关系完整性",
+    questions: [
+      { type:"single", q:"关系查询操作中的五种基本运算是指", opts:["A. 并、差、笛卡尔积、选择、连接","B. 交、并、差、笛卡尔积、投影","C. 选择、投影、连接、除、笛卡尔积","D. 并、差、笛卡尔积、选择、投影"], ans:"D",
+        exp:"五种基本关系代数运算：并(∪)、差(−)、笛卡尔积(×)、选择(σ)、投影(π)。其他运算（交、连接、除）均可由这五种推导得出。" },
+      { type:"single", q:"在关系代数的专门关系运算中，从表中选出满足某种条件的元组的操作称为", opts:["A. 投影","B. 扫描","C. 选择","D. 连接"], ans:"C",
+        exp:"选择（σ）从水平方向选出满足条件的元组（行）。投影（π）从垂直方向选出属性列。" },
+      { type:"single", q:"关系操作中，操作的对象和结果都是", opts:["A. 记录","B. 集合","C. 元组","D. 元组"], ans:"B",
+        exp:"关系操作是集合操作，输入和输出都是集合（关系）。" },
+      { type:"single", q:"在关系 R(R#,RN,S#) 和 S(S#,SN,SD) 中，R 的主码是 R#，S 的主码是 S#，则 S# 在 R 中称为", opts:["A. 主码","B. 外码","C. 候选码","D. 超码"], ans:"B",
+        exp:"S# 在 S 中是主码，在 R 中作为引用 S 的属性，称为外码。" },
+      { type:"single", q:"假设存在一张职工表，包含'性别'属性，要求这个属性的值只能取'男'或'女'，这属于", opts:["A. 实体完整性","B. 参照完整性","C. 用户定义的完整性","D. 关系不变性"], ans:"C",
+        exp:"性别取值限制是具体应用要求的业务规则，属于用户定义的完整性。" },
+      { type:"single", q:"学生关系中每个元组的'班号'属性值只能取空值或者是班级关系中的某一个班号，这个要求属于关系的", opts:["A. 实体完整性","B. 参照完整性","C. 用户定义的完整性","D. 以上都不是"], ans:"B",
+        exp:"学生表中的班号必须引用班级表中存在的班号（或为空），这是参照完整性规则。" },
+      { type:"single", q:"候选码中的属性称为", opts:["A. 复合属性","B. 主属性","C. 非主属性","D. 关键属性"], ans:"B",
+        exp:"候选码中的属性称为主属性，不在任何候选码中的属性称为非主属性。" },
+      { type:"single", q:"有两个关系 R(A,B,C) 和 S(B,C,D)，将 R 和 S 进行自然连接，得到的结果包含几个列", opts:["A. 6","B. 4","C. 5","D. 2"], ans:"B",
+        exp:"自然连接在公共属性 B,C 上等值连接并去重，结果属性为 A,B,C,D 共 4 列。" },
+      { type:"single", q:"设属性 A 是关系 R 的主属性，则属性 A 不能取空值 (NULL)，这是", opts:["A. 实体完整性规则","B. 用户定义完整性规则","C. 参照完整性规则","D. 域完整性规则"], ans:"A",
+        exp:"实体完整性规则：主属性不能取空值。" },
+      { type:"single", q:"一般情况下，当对关系 R 和 S 使用自然连接时，要求 R 和 S 含有一个或多个共有的", opts:["A. 行","B. 属性","C. 记录","D. 元组"], ans:"B",
+        exp:"自然连接要求 R 和 S 有共同的属性名（公共列），在公共属性上做等值连接。" },
+      { type:"single", q:"取出关系中的某些列，并消去重复元组的关系代数运算称为", opts:["A. 除运算","B. 投影运算","C. 连接运算","D. 选择运算"], ans:"B",
+        exp:"投影（π）从垂直方向选取属性列，并自动消去重复元组。" },
+      { type:"single", q:"下列说法正确的是", opts:["A. 候选码都可以唯一地标识一个元组","B. 候选码中只能包含一个属性","C. 主属性可以取空值","D. 关系的外码不可以取空值"], ans:"A",
+        exp:"候选码能唯一标识元组（由定义决定）。候选码可以包含多个属性（复合码）。主属性不能取空值。外码在特定情况下可以为空。" },
+      { type:"single", q:"设关系 R 和 S 的元组个数分别是 3 和 4，T=R×S，则 T 的元组个数是", opts:["A. 16","B. 12","C. 7","D. 9"], ans:"B",
+        exp:"笛卡尔积的元组数 = |R| × |S| = 3 × 4 = 12。" },
+      { type:"single", q:"一个关系中的各元组", opts:["A. 前后顺序可以任意颠倒，但排列顺序不同，统计处理的结果可能不同","B. 前后顺序可以任意颠倒，不影响关系","C. 前后顺序不能任意颠倒，一定要按照输入的顺序排列","D. 前后顺序不能任意颠倒，一定要按照码的属性列顺序排列"], ans:"B",
+        exp:"关系是无序元组的集合，元组顺序不影响关系。" },
+      // 判断
+      { type:"judge", q:"关系模式是对关系的描述，关系是关系模式在某一时刻的状态或内容。", ans:"对" },
+      { type:"judge", q:"关系模型的一个特点是，实体以及实体之间的联系都可以使用相同的结构类型来表示。", ans:"对",
+        exp:"关系模型中实体和联系都用关系（二维表）表示。" },
+      { type:"judge", q:"在左外连接中，保留的是左边关系中所有的元组。", ans:"对",
+        exp:"左外连接保留左表全部元组，右表无匹配时填 NULL。" },
+      { type:"judge", q:"关系模型中，非主属性不可能出现在任何候选码中。", ans:"对",
+        exp:"非主属性的定义即不在任何候选码中的属性。" },
+      // 填空
+      { type:"fill", q:"在关系模型中，关系操作包括查询、____、____和____等。", ans:"插入, 删除, 修改",
+        exp:"关系操作包括增（INSERT）、删（DELETE）、改（UPDATE）、查（SELECT）。" },
+      { type:"fill", q:"已知系(系编号,系名称,系主任,电话,地点)和学生(学号,姓名,性别,入学日期,专业,系编号)，系关系的主键是____，系关系的外键是____，学生关系的主关键字是____，外键是____。", ans:"系编号, 无, 学号, 系编号",
+        exp:"系的主键是系编号，系无外键。学生主键是学号，外键是系编号（引用系的系编号）。" },
+    ]},
+  // ═══ 第三部分 ═══
+  { id:"p3", name:"SQL 语句",
+    questions: [
+      { type:"single", q:"查询 Course 表中所有课程名称中第二个字为'数'的课程信息，应使用的 SQL 语句是", opts:["A. SELECT * FROM Course WHERE Cname LIKE '_数%';","B. SELECT * FROM Course WHERE Cname LIKE '%数%';","C. SELECT * FROM Course WHERE Cname LIKE '数_';","D. SELECT * FROM Course WHERE Cname LIKE '数%';"], ans:"A",
+        exp:"LIKE '_数%' 中 '_' 匹配任意单个字符（第一个字），'数' 是第二个字，'%' 匹配后续任意字符。" },
+      { type:"single", q:"下列选项中，用于修改表中某列的数据类型或约束的 SQL 子句是", opts:["A. ADD COLUMN","B. DROP COLUMN","C. MODIFY COLUMN","D. RENAME COLUMN"], ans:"C",
+        exp:"ALTER TABLE 中 MODIFY COLUMN 用于修改列定义（类型、约束）。ADD 为新增列，DROP 为删除列。" },
+      { type:"single", q:"要查询选修了课程编号为'C01'的学生人数，且结果中只显示人数，正确的 SQL 语句是", opts:["A. SELECT COUNT(*) FROM SC WHERE Cno = 'C01';","B. SELECT Sno, COUNT(*) FROM SC WHERE Cno = 'C01';","C. SELECT COUNT(Sno) FROM SC;","D. SELECT SUM(*) FROM SC WHERE Cno = 'C01';"], ans:"A",
+        exp:"COUNT(*) 统计行数。B 选项 SELECT 中同时出现列和聚集函数需要 GROUP BY。C 缺少 WHERE 条件。SUM(*) 语法错误。" },
+      { type:"single", q:"在 ORDER BY 子句中，若想对查询结果按照某列的值从高到低进行排序，应使用的关键字是", opts:["A. ASC","B. DESC","C. SORT","D. NULLS FIRST"], ans:"B",
+        exp:"DESC 表示降序（从高到低），ASC 表示升序（默认）。" },
+      { type:"single", q:"要建立一个视图，使教师只能看到自己班级学生的信息，应在定义视图的语句中使用哪个子句来筛选", opts:["A. ORDER BY","B. GROUP BY","C. HAVING","D. 子查询（WHERE 子句）"], ans:"D",
+        exp:"视图定义中使用 WHERE 子句筛选条件（如 WHERE class = teacher_class），实现按条件限制访问。" },
+      { type:"single", q:"连接查询 SELECT Student.Sname, SC.Grade FROM Student, SC WHERE Student.Sno = SC.Sno; 中，连接条件是什么", opts:["A. SELECT Student.Sname","B. FROM Student, SC","C. Student.Sno = SC.Sno","D. SC.Grade"], ans:"C",
+        exp:"WHERE Student.Sno = SC.Sno 是连接条件，在等值连接中通过公共属性关联两表。" },
+      { type:"single", q:"若要为 Course 表创建一个名为 idx_cname 的索引，用于快速根据课程名称 Cname 查找课程信息，应使用哪个语句", opts:["A. ADD INDEX idx_cname TO Course (Cname);","B. CREATE INDEX Course idx_cname ON (Cname);","C. ALTER TABLE Course ADD INDEX (Cname);","D. CREATE INDEX idx_cname ON Course (Cname);"], ans:"D",
+        exp:"标准语法：CREATE INDEX 索引名 ON 表名 (列名);" },
+      { type:"single", q:"假设有一张 Employee 表，其中 Eno 是主键。若要删除该主键约束，正确的 SQL 语句是", opts:["A. DROP PRIMARY KEY FROM Employee;","B. ALTER TABLE Employee DROP PRIMARY KEY;","C. DELETE PRIMARY KEY FROM Employee;","D. ALTER TABLE Employee MODIFY Eno INT;"], ans:"B",
+        exp:"ALTER TABLE 表名 DROP PRIMARY KEY 是删除主键约束的标准语法。" },
+      { type:"single", q:"将查询结果按某列的值进行分组，并对每组使用聚集函数进行计算，应使用哪个子句实现分组", opts:["A. ORDER BY","B. WHERE","C. GROUP BY","D. HAVING"], ans:"C",
+        exp:"GROUP BY 实现分组，常配合聚集函数（COUNT, SUM, AVG 等）使用。HAVING 用于过滤分组结果。" },
+      { type:"single", q:"SELECT Sno, AVG(Grade) FROM SC GROUP BY Sno HAVING AVG(Grade) > 85; 的查询目的是", opts:["A. 查询所有平均成绩大于 85 分的课程号","B. 查询所有学生的学号及平均成绩","C. 查询所有成绩大于 85 分的学生学号","D. 查询所有学生中平均成绩大于 85 分的学生的学号和平均成绩"], ans:"D",
+        exp:"GROUP BY Sno 按学号分组，AVG(Grade) 计算每组平均分，HAVING 筛选平均分 > 85 的组，SELECT 显示学号和平均分。" },
+      { type:"single", q:"在 SELECT * FROM Student LIMIT 3,5; 中，查询结果集的起始记录位置是（假设第一条记录的偏移量为 0）", opts:["A. 第 3 条记录","B. 第 4 条记录","C. 第 5 条记录","D. 第 8 条记录"], ans:"B",
+        exp:"LIMIT 3,5 表示偏移 3 条（跳过前 3 条），取 5 条。第一条记录偏移 0，偏移 3 即第 4 条记录。" },
+      { type:"single", q:"ALTER TABLE Student DROP COLUMN Sage; 的功能是", opts:["A. 删除 Student 表中的所有数据","B. 删除 Student 表","C. 删除 Student 表中的 Sage 列及其数据","D. 删除 Sage 列上的非空约束"], ans:"C",
+        exp:"DROP COLUMN 删除指定列及其所有数据。" },
+      { type:"single", q:"下列 SQL 语句中，能够正确地向 Student 表中插入一条学号为'2024001'、姓名为'张三'、年龄为 20 的新记录的是", opts:["A. INSERT Student (Sno, Sname, Sage) VALUES ('2024001','张三',20);","B. INSERT INTO Student VALUES ('2024001','张三',20);","C. INSERT INTO Student (Sno, Sname, Sage) VALUES ('2024001','张三',20);","D. INSERT VALUES ('2024001','张三',20) INTO Student;"], ans:"C",
+        exp:"标准语法：INSERT INTO 表名 (列名) VALUES (值)。B 缺少列名但假设表只有三列也可用，但考试中最规范的选 C。" },
+      { type:"single", q:"删除数据表 Employee 中所有年龄大于 60 的员工记录，正确的 SQL 语句是", opts:["A. DELETE * FROM Employee WHERE Sage > 60;","B. DELETE FROM Employee WHERE Sage > 60;","C. DROP FROM Employee WHERE Sage > 60;","D. REMOVE FROM Employee WHERE Sage > 60;"], ans:"B",
+        exp:"DELETE FROM 表名 WHERE 条件 是标准删除语法。DELETE 后不加 *。" },
+      { type:"single", q:"SQL 语句 SELECT DISTINCT Sdept FROM Student; 执行后得到的结果是", opts:["A. 所有学生的全部信息，按系别排序","B. 所有学生所在的不同的系别名称列表","C. Student 表中的所有列","D. 某个特定系别的名称"], ans:"B",
+        exp:"DISTINCT 去重，返回 Sdept 列的不重复值列表。" },
+      // 判断
+      { type:"judge", q:"在数据库中，索引可以加快数据查询的速度，但会降低数据更新（INSERT、UPDATE、DELETE）的速度。", ans:"对",
+        exp:"索引加速 SELECT，但每次 INSERT/UPDATE/DELETE 需同步维护索引，降低更新速度。" },
+      { type:"judge", q:"SQL 语句中逻辑运算符 AND 和 OR 的优先级是一样的。", ans:"错",
+        exp:"AND 优先级高于 OR。" },
+      { type:"judge", q:"使用 ANY 或 ALL 谓词时必须与比较运算符同时使用。", ans:"对",
+        exp:"ANY/ALL 必须配合比较运算符使用，如 > ANY、= ALL 等。" },
+      { type:"judge", q:"SELECT 子句中的目标列可以是表中的属性列，也可以是表达式。", ans:"对",
+        exp:"SELECT 后可跟列名、表达式（如 Sage+1）、函数等。" },
+      { type:"judge", q:"在使用 DELETE 语句删除数据前，建议先用 SELECT 语句和相同的 WHERE 条件查询出要删除的数据，以确认删除范围无误。", ans:"对",
+        exp:"先 SELECT 后 DELETE 是一种安全实践，避免误删。" },
+      // 填空
+      { type:"fill", q:"在 SELECT 语句的 WHERE 子句中，判断一个字段的值是否为空，应使用操作符____。", ans:"IS NULL",
+        exp:"判断空值用 IS NULL（不能用 = NULL）。" },
+      { type:"fill", q:"在 SQL 的 CREATE TABLE 语句中，用于定义外键的约束关键字是____。", ans:"FOREIGN KEY",
+        exp:"FOREIGN KEY (列) REFERENCES 表(列) 定义外键。" },
+      { type:"fill", q:"查询年龄在 18 到 22 岁（包括 18 和 22）之间的学生信息，还可以使用 Sage ____ 18 ____ 22。", ans:"BETWEEN, AND",
+        exp:"BETWEEN AND 包含边界值：Sage BETWEEN 18 AND 22。" },
+      { type:"fill", q:"在 HAVING 子句中，可以对由____子句产生的分组结果进行筛选。", ans:"GROUP BY",
+        exp:"HAVING 专门配合 GROUP BY 过滤分组结果。" },
+      { type:"fill", q:"MySQL 中，若想从查询结果中截取前 3 条记录，可以在 SELECT 语句的末尾加上____。", ans:"LIMIT 3" },
+    ]},
+  // ═══ 第四部分 ═══
+  { id:"p4", name:"数据库安全性",
+    questions: [
+      { type:"single", q:"如果在当前默认数据库下要授予用户 U1 仅能修改'学生表'中'电话号码'这一列的权限，正确的 GRANT 语句是", opts:["A. GRANT UPDATE ON Student TO U1;","B. GRANT UPDATE (Phone) ON Student TO U1;","C. GRANT ALTER ON Student (Phone) TO U1;","D. GRANT MODIFY Phone ON Student TO U1;"], ans:"B",
+        exp:"GRANT UPDATE (列名) ON 表名 TO 用户名 可授予对指定列的 UPDATE 权限。" },
+      { type:"single", q:"数据库的'视图机制'可以提供一定的安全保护，但其主要局限性是什么", opts:["A. 无法与授权机制结合使用","B. 保护粒度太粗，不能实现复杂的访问控制策略","C. 会显著降低数据库的查询性能","D. 只能隐藏数据，不能限制操作类型"], ans:"B",
+        exp:"视图能隐藏敏感列和行，但无法实现细粒度、复杂的访问控制策略（如基于时间的限制）。" },
+      { type:"single", q:"在强制存取控制机制中，当主体的许可证级别等于客体的密级时，主体可以对客体进行的操作是", opts:["A. 读取","B. 写入","C. 读取、写入","D. 不可操作"], ans:"C",
+        exp:"MAC 规则：主体级别 ≥ 客体密级可读，主体级别 ≤ 客体密级可写。相等时二者均可。" },
+      { type:"single", q:"强制存取控制策略是 TCSEC/TDI 哪一级安全级别的特色", opts:["A. C1","B. C2","C. B1","D. B2"], ans:"C",
+        exp:"B1 级别引入强制存取控制（MAC），C 级别只有自主存取控制（DAC）。" },
+      { type:"single", q:"SQL 的 GRANT 和 REVOKE 语句可以用来实现", opts:["A. 数据库审计","B. 强制存取控制","C. 数据库角色创建","D. 自主存取控制"], ans:"D",
+        exp:"GRANT/REVOKE 实现自主存取控制（DAC），由用户自行决定权限授予。" },
+      { type:"single", q:"在数据库安全性控制模型中，'事中控制'主要发生在哪一层", opts:["A. 身份鉴别层","B. SQL 处理层","C. 数据存储层","D. 网络传输层"], ans:"B",
+        exp:"事中控制主要指 SQL 处理层的权限检查和访问控制，在语句执行时进行。" },
+      { type:"single", q:"管理员想监控对某张薪资表的非法修改尝试，即使修改未成功也想留下记录，应优先采用哪种安全机制", opts:["A. 视图机制","B. 自主存取控制（DAC）","C. 审计功能","D. 数据存储加密"], ans:"C",
+        exp:"审计（Audit）记录所有操作日志，包括失败的尝试，适合事后追踪。" },
+      { type:"single", q:"某应用要求用户密码在数据库存储时不可被直接查看，即使数据库文件被窃取也无法轻易还原明文密码。应在哪个层面采取措施", opts:["A. 在 SQL 层通过 GRANT 语句限制 SELECT 权限","B. 在数据存储层对密码字段进行加密存储","C. 在网络传输层使用 SSL 协议加密传输","D. 通过定义视图隐藏密码列"], ans:"B",
+        exp:"存储加密确保数据文件泄漏时也无法还原明文。SSL 保护传输，不保护存储。" },
+      { type:"single", q:"审计所有用户对'员工表'进行的 SELECT 和 DML 操作，以便监控数据访问行为，这属于哪一类审计事件", opts:["A. 服务器事件","B. 系统权限事件","C. 语句事件","D. 模式对象事件"], ans:"D",
+        exp:"模式对象事件审计对特定数据库对象（如表）的访问和操作。" },
+      { type:"single", q:"管理员创建了角色 Role_TA，授予其对 Course 表的 SELECT 和 INSERT 权限。现要授予助教 Tom 与 Role_TA 相同的权限，且允许 Tom 转授给其他学生。正确的 SQL 是", opts:["A. GRANT Role_TA TO Tom WITH GRANT OPTION;","B. GRANT ALL PRIVILEGES ON SC.Course TO Tom WITH GRANT OPTION;","C. GRANT SELECT, INSERT ON SC.Course TO Tom WITH GRANT OPTION;","D. GRANT Role_TA TO Tom WITH ADMIN OPTION;"], ans:"D",
+        exp:"角色用 WITH ADMIN OPTION 转授。WITH GRANT OPTION 用于权限而非角色。" },
+      // 判断
+      { type:"judge", q:"在实现强制存取控制（MAC）的数据库系统中，可以绕过自主存取控制（DAC）直接进行 MAC 检查。", ans:"错",
+        exp:"先 DAC 校验通过后，再进行 MAC 校验，不可绕过。" },
+      { type:"judge", q:"链路加密会对网络传输中数据的报头和报文全部进行加密，而端到端加密只加密报文。", ans:"对",
+        exp:"链路加密对整个数据包（含报头）加密，端到端加密仅加密报文内容。" },
+      { type:"judge", q:"自主存取控制（DAC）通过给数据本身标记密级来防止信息泄露，因此比强制存取控制（MAC）更严格。", ans:"错",
+        exp:"MAC 标记密级，强制管控信息流向，比 DAC 更严格。" },
+      { type:"judge", q:"数据库角色是一组权限的集合。将权限授予角色，再将角色授予用户，可以大大简化对多个用户的权限管理工作。", ans:"对",
+        exp:"角色管理简化权限分配，统一修改角色权限即可影响所有拥有该角色的用户。" },
+      { type:"judge", q:"静态口令鉴别（如固定密码）因其简单易用，在当前各类系统中安全性已足够，无需结合其他鉴别方式。", ans:"错",
+        exp:"静态口令易被破解，通常需要双因子认证等方式增强安全性。" },
+      // 填空
+      { type:"fill", q:"在自主存取控制（DAC）的 SQL 授权语句中，如果希望被授予权限的用户可以将此权限再转授给其他用户，则必须在 GRANT 语句的末尾加上____子句。", ans:"WITH GRANT OPTION" },
+      { type:"fill", q:"强制存取控制（MAC）中，主体的敏感度标记称为____，客体的敏感度标记称为密级。", ans:"许可证级别" },
+      { type:"fill", q:"数据加密是将原始数据（明文）变换为不可直接识别的格式的过程，其输出结果称为____。", ans:"密文" },
+      { type:"fill", q:"对数据库安全性的主要威胁包括：非授权用户的恶意存取和破坏、____、以及安全环境的脆弱性。", ans:"数据库中重要或敏感的数据被泄露",
+        exp:"三类主要威胁：恶意破坏、敏感数据泄露、环境脆弱性。" },
+      { type:"fill", q:"数据库的审计功能在安全模型中属于____控制，它能将用户对数据库的所有操作记录下来，以便事后追踪和分析。", ans:"事后" },
+    ]},
+  // ═══ 第五部分 ═══
+  { id:"p5", name:"数据库完整性",
+    questions: [
+      { type:"single", q:"在 CREATE TABLE 语句中，如果完整性约束涉及多个属性列（如复合主键、复合外键），则必须定义为", opts:["A. 列级约束","B. 表级约束","C. 域约束","D. 断言"], ans:"B",
+        exp:"涉及多个列的约束必须在表级定义（如 PRIMARY KEY (A,B)）。" },
+      { type:"single", q:"在 CREATE TABLE 语句中，为列指定 DEFAULT 约束的作用是", opts:["A. 确保列值不能为空","B. 确保列值唯一","C. 当插入记录时，如果未给该列指定值，则自动使用默认值","D. 检查列值是否满足某个条件"], ans:"C",
+        exp:"DEFAULT 指定默认值，当 INSERT 未提供该列值时使用。" },
+      { type:"single", q:"使用 CONSTRAINT 关键字命名约束的主要目的是", opts:["A. 提高约束的检查效率","B. 使约束的名称更易读","C. 方便后续通过 ALTER TABLE 语句对约束进行删除或修改","D. 使约束对所有用户可见"], ans:"C",
+        exp:"命名约束后可通过约束名进行 DROP 或修改操作。" },
+      { type:"single", q:"Student 表的主码是 Sno，Course 表的主码是 Cno，SC 表的主码是 (Sno,Cno)，以下哪种情况违反了实体完整性", opts:["A. 向 Student 表插入一条记录，其 Sname 为 NULL","B. 向 SC 表插入一条记录，其 Sno 为 NULL，Cno 为'C01'","C. 向 Course 表插入一条记录，其 Cname 为'数据库'","D. 修改 Student 表中某条记录的 Ssex 为 NULL"], ans:"B",
+        exp:"SC 表主码为 (Sno,Cno)，Sno 是主属性不能为 NULL。Sname 和 Ssex 不是主属性可为 NULL。" },
+      { type:"single", q:"参照完整性中'设置为空值'策略的语义是", opts:["A. 拒绝更新被参照表的主码","B. 自动更新参照表中的外码值","C. 将参照表中所有对应元组的外码值设置为 NULL","D. 删除参照表中所有对应的元组"], ans:"C",
+        exp:"当被参照表主码被删除/更新时，参照表对应外码置为 NULL。" },
+      { type:"single", q:"数据库的完整性是指数据的正确性和相容性，主要防范的对象是", opts:["A. 非法用户的恶意破坏","B. 不合语义、不正确的数据","C. 网络黑客的 SQL 注入攻击","D. 操作系统层面的漏洞"], ans:"B",
+        exp:"完整性防范不合语义的数据（如年龄为负数），安全性防范恶意破坏。" },
+      { type:"single", q:"以下哪个约束不属于用户定义完整性", opts:["A. 学生的性别只能为'男'或'女'","B. 课程的成绩必须在 0 到 100 之间","C. 学生选课表中的学号必须引用学生表中存在的学号","D. 员工的工资不能为负数"], ans:"C",
+        exp:"C 是参照完整性（外键引用），不是用户定义完整性。" },
+      { type:"single", q:"关于 UNIQUE 约束，以下描述正确的是", opts:["A. 一个表只能定义一个 UNIQUE 约束","B. UNIQUE 约束的列不能取空值","C. UNIQUE 约束的列可以取空值","D. UNIQUE 约束与 PRIMARY KEY 约束完全等价"], ans:"C",
+        exp:"UNIQUE 列可含 NULL（但 NULL 互不相等），PRIMARY KEY 不可为 NULL。一个表可有多个 UNIQUE。" },
+      { type:"single", q:"定义外键时若省略 ON DELETE 和 ON UPDATE 子句，系统默认的违约处理策略是", opts:["A. CASCADE","B. SET NULL","C. NO ACTION","D. SET DEFAULT"], ans:"C",
+        exp:"默认策略为 NO ACTION（拒绝操作）。" },
+      { type:"single", q:"关于 NOT NULL 约束，以下说法正确的是", opts:["A. NOT NULL 约束可以在表级定义","B. 主键列自动包含 NOT NULL 约束","C. NOT NULL 约束的列不可以插入空字符串","D. NOT NULL 约束的列不能插入任何值"], ans:"B",
+        exp:"主键列自动 NOT NULL。NOT NULL 只能列级定义。空字符串''不是 NULL。" },
+      { type:"single", q:"CHECK (Ssex IN ('男','女'))，当插入性别为'其他'时，系统会", opts:["A. 自动将性别修改为'男'","B. 插入成功并记录警告","C. 拒绝执行该插入操作","D. 插入成功但性别列为 NULL"], ans:"C",
+        exp:"CHECK 约束违反时拒绝操作。" },
+      { type:"single", q:"参照完整性中'级联删除'策略的含义是", opts:["A. 拒绝删除 Student 表中的该记录","B. 将 SC 表中对应记录的 Sno 设置为空值","C. 自动删除 SC 表中所有与该 Sno 对应的选课记录","D. 自动删除 Student 表和 SC 表中的所有记录"], ans:"C",
+        exp:"级联删除：删除主表记录时，自动删除从表中所有引用该记录的元组。" },
+      { type:"single", q:"如果希望当被参照表的主码被更新时，参照表中外码也自动更新为新值，应使用", opts:["A. ON DELETE CASCADE","B. ON UPDATE CASCADE","C. ON DELETE SET NULL","D. ON UPDATE NO ACTION"], ans:"B",
+        exp:"ON UPDATE CASCADE 实现级联更新。" },
+      { type:"single", q:"若要删除一个名为 ck_student_age 的 CHECK 约束，正确的语法是", opts:["A. ALTER TABLE Student DROP ck_student_age;","B. ALTER TABLE Student DROP CONSTRAINT ck_student_age;","C. ALTER TABLE Student REMOVE CHECK ck_student_age;","D. ALTER TABLE Student DELETE ck_student_age;"], ans:"B",
+        exp:"ALTER TABLE 表名 DROP CONSTRAINT 约束名。" },
+      { type:"single", q:"以下哪个场景最适合使用触发器而不是普通约束", opts:["A. 确保学生年龄在 0 到 150 之间","B. 确保学生性别只能是'男'或'女'","C. 当更新员工工资时，自动记录修改前后的工资值到日志表","D. 确保课程名称唯一"], ans:"C",
+        exp:"触发器可在操作发生时执行额外逻辑，如记录日志。A/B/D 分别用 CHECK/CHECK/UNIQUE 即可。" },
+      // 判断
+      { type:"judge", q:"触发器只能定义在基本表上，不能定义在视图上。", ans:"对",
+        exp:"触发器基于表的 DML 事件触发，视图不支持触发器。" },
+      { type:"judge", q:"在 CREATE TABLE 语句中，NOT NULL 和 DEFAULT 约束只能作为列级约束定义。", ans:"对",
+        exp:"NOT NULL 和 DEFAULT 只能列级定义，不能表级定义。" },
+      { type:"judge", q:"在参照完整性中，如果外码列允许为空，那么插入一条外码为空的记录是合法的，即使被参照表中没有对应的记录。", ans:"对",
+        exp:"外码为 NULL 表示未引用，参照完整性不检查 NULL。" },
+      { type:"judge", q:"数据库的完整性约束一旦定义，就不能再修改或删除。", ans:"错",
+        exp:"可通过 ALTER TABLE 的 ADD/DROP CONSTRAINT 修改约束。" },
+      { type:"judge", q:"在 ALTER TABLE 语句中，可以使用 MODIFY COLUMN 子句来修改列的数据类型，但无法修改列的约束。", ans:"错",
+        exp:"MODIFY COLUMN 可同时修改数据类型和约束（如 NOT NULL、DEFAULT）。" },
+      // 填空
+      { type:"fill", q:"在 CREATE TABLE 语句中，用于检查列值是否满足某个条件的约束关键字是____。", ans:"CHECK" },
+      { type:"fill", q:"关系模型的完整性约束主要包括三类：实体完整性、____和用户定义的完整性。", ans:"参照完整性" },
+      { type:"fill", q:"在 CREATE TABLE 语句中，用于定义主键的约束关键字是____。", ans:"PRIMARY KEY" },
+      { type:"fill", q:"在定义触发器时，FOR EACH ROW 表示该触发器是____触发器，会对每条受影响的记录执行一次。", ans:"行级" },
+      { type:"fill", q:"在 CREATE TABLE 语句中，使用 CONSTRAINT 关键字为约束命名的好处是方便后续通过____语句对约束进行管理。", ans:"ALTER TABLE" },
+    ]},
+  // ═══ 第六部分 ═══
+  { id:"p6", name:"关系规范化",
+    questions: [
+      { type:"single", q:"以下关于模式分解的描述，正确的是", opts:["A. 分解后通过连接能还原原始关系，称为保持函数依赖","B. 分解后通过连接能还原原始关系，称为无损连接性","C. 保持函数依赖比无损连接性更重要","D. 模式分解一定会损失函数依赖"], ans:"B",
+        exp:"无损连接性指分解后通过自然连接可还原原始关系，不丢失信息。" },
+      { type:"single", q:"关系数据库规范化的主要目的是解决", opts:["A. 提高查询速度和系统性能","B. 保证数据的安全性和完整性","C. 数据冗余和更新、插入、删除异常","D. 简化数据库的物理存储结构"], ans:"C",
+        exp:"规范化解决数据冗余、更新异常、插入异常、删除异常等问题。" },
+      { type:"single", q:"关系规范化中的删除异常是指", opts:["A. 应该删除的数据未被删除","B. 应该插入的数据未被插入","C. 不该插入的数据被插入","D. 不该删除的数据被删除"], ans:"D",
+        exp:"删除异常指删除某些数据时连带删除了不应该删除的其他信息。" },
+      { type:"single", q:"规范化过程主要为克服数据库逻辑结构中的插入异常、删除异常、修改异常以及", opts:["A. 数据的不一致性","B. 结构不合理","C. 冗余度大","D. 数据丢失"], ans:"C",
+        exp:"四个主要问题为：数据冗余、插入异常、删除异常、修改异常。" },
+      { type:"single", q:"判断一个关系模式是否属于 BCNF，需要检查所有非平凡的函数依赖是否都满足什么条件", opts:["A. 决定因素（左部）是主属性","B. 决定因素（左部）包含码","C. 被决定因素（右部）是主属性","D. 被决定因素（右部）是非主属性"], ans:"B",
+        exp:"BCNF 要求每个非平凡 FD 的左部都必须包含候选码（是超码）。" },
+      { type:"single", q:"关系模式 CTB(课程C,教师T,参考书B) 是一个典型的多值依赖例子。将其分解为 CT(C,T) 和 CB(C,B) 后，解决了什么问题", opts:["A. 解决了函数依赖引起的冗余","B. 解决了多值依赖引起的冗余和更新异常","C. 提高了查询效率","D. 增加了数据的独立性"], ans:"B",
+        exp:"CTB 中存在多值依赖 C→→T 和 C→→B，分解为 CT 和 CB 解决多值依赖导致的问题。" },
+      { type:"single", q:"设有关系模式 R(A,B,C,D)，F={(A,B)→C, C→D}，则 R 的规范化程度最高达到", opts:["A. BCNF","B. 1NF","C. 2NF","D. 3NF"], ans:"C",
+        exp:"候选码为 (A,B)。非主属性 C、D。C→D 中 D 传递依赖于 (A,B)（通过 C），不满足 3NF。但无部分依赖，满足 2NF。" },
+      { type:"single", q:"给定 R(A,B,C,D,E)，F={A→B, BC→D, DE→A}，下面哪个不是该关系模式的码", opts:["A. ACE","B. BCE","C. ABC","D. CDE"], ans:"C",
+        exp:"计算候选码：ACE⁺=U, BCE⁺=U, CDE⁺=U，但 ABC⁺=U？(ABC)+ = {A,B,C} → A→B → BC→D → {A,B,C,D}，无法推出 E，所以 ABC 不是候选码。" },
+      { type:"single", q:"已知 R(A,B,C,D,E)，F={A→D, B→C, E→A}，该关系模式的候选码是", opts:["A. CD","B. CD","C. DE","D. BE"], ans:"D",
+        exp:"(BE)+ = {B,E} → E→A → {A} → A→D → {D} → B→C → {C}。得 {A,B,C,D,E}=U。所以 BE 是候选码。" },
+      { type:"single", q:"R(A,B,C)，F={A→B, B→C}。以下哪个分解是保持函数依赖的", opts:["A. R1(A,B), R2(B,C)","B. R1(A,B), R2(A,C)","C. R1(A,C), R2(B,C)","D. R1(A,B,C)"], ans:"A",
+        exp:"R1 保持 A→B，R2 保持 B→C。其他分解会丢失某个 FD。" },
+      { type:"single", q:"R(A,B,C,D)，F={A→B, B→C, C→D, D→A}。以下哪项是该关系的一个候选码", opts:["A. B","B. AB","C. ABC","D. ABCD"], ans:"A",
+        exp:"B⁺={B} → B→C → {C} → C→D → {D} → D→A → {A} = U。B 即可决定全部属性，是候选码。" },
+      { type:"single", q:"R(A,B,C)，F={AB→C, C→B}。该模式属于第几范式", opts:["A. 1NF","B. 2NF","C. 3NF","D. BCNF"], ans:"C",
+        exp:"候选码有 AB 和 AC。非主属性仅 C。无部分依赖（2NF），无传递依赖（C→B 中 B 是主属性，不违反 3NF）。但 C→B 左部 C 不是超码（C⁺={C,B}，不含 A），不满足 BCNF。所以是 3NF。" },
+      { type:"single", q:"S-L-C(Sno,Sdept,Sloc,Cno,Grade) 中 F={(Sno,Cno)→Grade, Sno→Sdept, Sdept→Sloc}。该关系模式属于第几范式", opts:["A. 1NF","B. 2NF","C. 3NF","D. BCNF"], ans:"A",
+        exp:"候选码 (Sno,Cno)。存在部分依赖：Sno→Sdept（Sdept 部分依赖于候选码），不满足 2NF，故为 1NF。" },
+      { type:"single", q:"R(A,B,C,D,E)，F={AB→C, C→D, D→E}，则 (AC)+ 的闭包是", opts:["A. {A,C,D}","B. {A,B,C,D,E}","C. {A,C,D,E}","D. {A,C}"], ans:"C",
+        exp:"(AC)+ = {A,C} → C→D → {D} → D→E → {E} = {A,C,D,E}" },
+      { type:"single", q:"R(A,B,C,D,E,G)，F={A→D, AB→E, BG→E, CD→G, E→C}，则 (AE)+ 的闭包是", opts:["A. {A,C,D,E,G}","B. {A,C,D,E,G,B}","C. {A,D,E}","D. {A,B,C,D,E,G}"], ans:"A",
+        exp:"(AE)+={A,E}→A→D→{D}→E→C→{C}→CD→G→{G}={A,C,D,E,G}" },
+      // 判断
+      { type:"judge", q:"数据冗余是关系模式设计中可以完全避免的问题。", ans:"错",
+        exp:"完全消除冗余会破坏关联，合理控制冗余即可。" },
+      { type:"judge", q:"如果关系模式的所有属性都是主属性，那么它肯定属于 BCNF。", ans:"错",
+        exp:"全主属性保证 3NF，但仍可能违反 BCNF（如 C→B 中 C 不是超码）。" },
+      { type:"judge", q:"关系模式规范化的程度越高越好，通常都应设计成 4NF 模式。", ans:"错",
+        exp:"高范式增加多表连接开销，一般到 3NF/BCNF 即可。" },
+      { type:"judge", q:"在模式分解时，为了确保无损还原数据，必须要确保每个分解出的关系模式都具有相同的候选码。", ans:"错",
+        exp:"无损连接要求存在公共连接属性即可，不需要候选码一致。" },
+      { type:"judge", q:"任何关系模式都至少属于第一范式（1NF）。", ans:"对",
+        exp:"1NF 要求属性不可再分，这是关系的基本条件。" },
+      // 填空
+      { type:"fill", q:"将关系模式分解为更小的模式后，需要检查分解是否具有____性，以确保不丢失信息。", ans:"无损连接" },
+      { type:"fill", q:"关系模式不规范会导致四种问题：____、修改异常、插入异常和删除异常。", ans:"数据冗余" },
+      { type:"fill", q:"X→Y 是函数依赖。如果 Y⊆X，则称这个函数依赖是____的。", ans:"平凡" },
+      { type:"fill", q:"消除非主属性对码的部分函数依赖后，可以达到____范式。", ans:"2NF" },
+      { type:"fill", q:"R(City,Street,Zip)，F={(City,Street)→Zip, Zip→City}。候选码是____。", ans:"(City,Street)",
+        exp:"(City,Street) 决定 Zip，且 (City,Street) 是唯一候选码。" },
+    ]},
+  // ═══ 第七部分 ═══
+  { id:"p7", name:"数据库设计",
+    questions: [
+      { type:"single", q:"在数据库设计过程中，哪个阶段产生的输出是独立于任何具体 DBMS 的", opts:["A. 逻辑结构设计和物理结构设计","B. 需求分析和概念结构设计","C. 数据库实施和运行维护","D. 物理结构设计和数据库实施"], ans:"B",
+        exp:"需求分析和概念设计（E-R 图）与具体 DBMS 无关，逻辑设计开始考虑具体模型。" },
+      { type:"single", q:"在关系数据库设计中，设计关系模式是哪个阶段的任务", opts:["A. 概念设计阶段","B. 逻辑设计阶段","C. 需求分析阶段","D. 物理设计阶段"], ans:"B",
+        exp:"逻辑设计阶段将 E-R 图转换为关系模式。" },
+      { type:"single", q:"班级与学生之间的联系是", opts:["A. 一对一的联系","B. 一对多的联系","C. 多对一的联系","D. 多对多的联系"], ans:"B",
+        exp:"一个班级有多名学生，学生只属于一个班级，故为 1:n。" },
+      { type:"single", q:"供应商与项目之间的联系是（供应商供应多个项目，项目使用多个供应商的零件）", opts:["A. 一对一的联系","B. 一对多的联系","C. 多对一的联系","D. 多对多的联系"], ans:"D",
+        exp:"供应商与项目之间是多对多关系（m:n）。" },
+      { type:"single", q:"学生实体集中包含'平均成绩'属性，该值可通过'选修'联系中的'成绩'计算得出。这属于", opts:["A. 属性冲突","B. 数据冗余","C. 命名冲突","D. 结构冲突"], ans:"B",
+        exp:"可由其他数据推导出的属性是冗余属性，应删除以避免不一致。" },
+      { type:"single", q:"表示数据库的概念模型一般使用", opts:["A. 流程图","B. 数据流图","C. E-R 图","D. 用户活动图"], ans:"C",
+        exp:"E-R 图（实体-联系图）是概念模型的标准表示方法。" },
+      { type:"single", q:"员工性别的取值有的为'男''女'，有的为'1''0'，这种情况属于", opts:["A. 属性冲突","B. 命名冲突","C. 结构冲突","D. 数据冗余"], ans:"A",
+        exp:"同一属性在不同子系统中的值域不同，属于属性冲突。" },
+      { type:"single", q:"子系统 A 将'班级'设计为实体，子系统 B 将'班级'设计为学生实体的一个属性。这种情况属于", opts:["A. 属性冲突","B. 数据冗余","C. 结构冲突","D. 命名冲突"], ans:"C",
+        exp:"同一事物在不同子系统中分别作为实体和属性，属于结构冲突。" },
+      { type:"single", q:"确定数据库的存储结构属于数据库设计的哪个阶段", opts:["A. 需求分析","B. 概念设计","C. 逻辑设计","D. 物理设计"], ans:"D",
+        exp:"物理设计确定存储结构、索引、文件组织等。" },
+      { type:"single", q:"'同名异义'或'同义异名'属于哪类冲突", opts:["A. 属性冲突","B. 命名冲突","C. 结构冲突","D. 语义冲突"], ans:"B",
+        exp:"命名冲突：同名不同义（异名同义）或同义不同名（同名异义）。" },
+      { type:"single", q:"数据库投入运行后由于应用环境变化需要对数据库进行部分修改（如增加新表、修改数据项类型），这属于", opts:["A. 数据库的重组","B. 数据库的重构","C. 数据库的转储","D. 数据库的试运行"], ans:"B",
+        exp:"重构指修改数据库结构以适应需求变化。重组指优化存储效率。" },
+      { type:"single", q:"数据字典是在哪个阶段建立并不断完善的", opts:["A. 需求分析阶段","B. 概念结构设计阶段","C. 逻辑结构设计阶段","D. 数据库实施阶段"], ans:"A",
+        exp:"数据字典在需求分析阶段开始建立，后续阶段不断完善。" },
+      { type:"single", q:"在 ER 模型中，如果有 4 个不同的实体集和 2 个 M:N 联系，转换为关系的数目是", opts:["A. 4","B. 5","C. 6","D. 7"], ans:"C",
+        exp:"4 个实体集→4 个关系，2 个 m:n 联系→2 个独立关系，共 6 个。" },
+      { type:"single", q:"数据流图（DFD）主要用于数据库设计的哪个阶段", opts:["A. 概念结构设计","B. 需求分析","C. 逻辑结构设计","D. 物理结构设计"], ans:"B",
+        exp:"DFD 是需求分析阶段 SA 方法的核心工具。" },
+      { type:"single", q:"将 E-R 图转换为关系模型属于哪个阶段", opts:["A. 需求分析阶段","B. 概念结构设计阶段","C. 逻辑结构设计阶段","D. 物理结构设计阶段"], ans:"C",
+        exp:"E-R 图→关系模式属于逻辑结构设计的核心工作。" },
+      // 判断
+      { type:"judge", q:"用户外模式的设计是在数据库的物理结构设计阶段完成。", ans:"错",
+        exp:"外模式属于逻辑结构设计（定义视图）。" },
+      { type:"judge", q:"数据库物理结构设计的目标是提高数据库的性能和存储空间利用率。", ans:"对",
+        exp:"物理设计通过选择存储结构、索引等优化性能和空间。" },
+      { type:"judge", q:"两个实体型之间的联系有一对一、一对多和多对多。而单个实体型内的联系只存在一对一、一对多，不存在多对多。", ans:"错",
+        exp:"同一实体内部也可存在多对多联系（如课程的前置课程关系）。" },
+      { type:"judge", q:"两个实体之间可以存在多种联系。", ans:"对",
+        exp:"如'员工'和'部门'之间可以有'属于'和'管理'两种联系。" },
+      { type:"judge", q:"在 E-R 图向关系模型转换的过程中，无论 1:1、1:n 还是 m:n 的联系，都可以转换为一个独立的关系模式。", ans:"对",
+        exp:"所有联系均可独立建表，但 1:1 和 1:n 通常合并以简化。" },
+      // 填空
+      { type:"fill", q:"对于 1:n 的联系，在转换为关系模式时，一般可以将该联系与____端实体对应的关系模式合并。", ans:"n" },
+      { type:"fill", q:"数据字典通常包括数据项、数据结构、数据流、____和处理过程五个部分。", ans:"数据存储" },
+      { type:"fill", q:"需求分析阶段最常用的方法是结构化分析方法（SA 法），其核心工具是____和数据字典。", ans:"数据流图" },
+      { type:"fill", q:"对于 m:n 联系，在转换为关系模式时，必须将其转换为一个____的关系模式。", ans:"独立" },
+      { type:"fill", q:"数据库实施阶段最主要的工作是____和调试应用程序。", ans:"组织数据入库" },
+    ]},
+];
+
+// ═══ 大题 ═══
+const bigProblems = [
+  { title:"1. 候选码与函数依赖",
+    body:`关系模式 R(商店编号,商品编号,数量,部门编号,负责人)，规定：①每个商店的每种商品只在一个部门销售；②每个商店的每个部门只有一个负责人；③每个商店的每种商品只有一个库存数量。`,
+    ans:`<b>(1) 基本函数依赖</b><br>根据规定：<br>① (商店编号,商品编号)→部门编号<br>② (商店编号,部门编号)→负责人<br>③ (商店编号,商品编号)→数量<br><br><b>(2) 候选码</b><br>求闭包：(商店编号,商品编号)⁺ = {商店编号,商品编号,部门编号,负责人,数量} = U，且任何真子集不能闭包出U。<br><br><b>候选码：(商店编号,商品编号)</b>` },
+  { title:"2. 最小函数依赖集",
+    body:`R(A,B,C,D,E,G)，F={B→D, DG→C, BD→E, AG→B, ADG→BC}，求F<sub>min</sub>。`,
+    ans:`<b>① 右部分解为单属性：</b><br>ADG→BC ⇒ ADG→B, ADG→C<br>得 F₁ = {B→D, DG→C, BD→E, AG→B, ADG→B, ADG→C}<br><br><b>② 去除左部冗余属性：</b><br>ADG→C：检查A冗余，计算(DG)⁺={D,G,C}包含C ⇒ A冗余，简化为DG→C（已存在）。其余无冗余。<br>得 F₂ = {B→D, DG→C, BD→E, AG→B}<br><br><b>③ 去除冗余函数依赖：</b><br>去掉B→D，B⁺={B}不含D ⇒ 保留<br>去掉DG→C，(DG)⁺={D,G}不含C ⇒ 保留<br>去掉BD→E，(BD)⁺={B,D}不含E ⇒ 保留<br>去掉AG→B，(AG)⁺={A,G}不含B ⇒ 保留<br><br><b>F<sub>min</sub> = {B→D, DG→C, BD→E, AG→B}</b>` },
+  { title:"3. 候选码 + 范式判断 + 3NF 分解",
+    body:`R(U,F)，U={A,B,C,D,E,G}，F={AB→C, C→A, BC→D, D→E, D→G}`,
+    ans:`<b>(1) 候选码</b><br>属性分类：L类{B}，R类{E,G}，LR类{A,C,D}。L类B必在候选码中。<br>B⁺={B}≠U。<br>(AB)⁺={A,B}→AB→C→{C}→C→A（已有）→BC→D→{D}→D→E,G→{A,B,C,D,E,G}=U ⇒ <b>AB是候选码</b><br>(BC)⁺={B,C}→C→A→{A}→BC→D→{D}→D→E,G→U ⇒ <b>BC是候选码</b><br>(AB)⁺和(BC)⁺已覆盖所有可能性。<br><br><b>所有候选码：AB, BC</b><br><br><b>(2) 范式判断</b><br>所有属性不可分 ⇒ 1NF<br>非主属性D,E,G无部分依赖候选码 ⇒ 2NF<br>存在D→E且D不是超码 ⇒ 传递依赖，不满足3NF<br><br><b>最高达到2NF。</b><br><br><b>(3) 分解为3NF</b><br>按最小集{AB→C, C→A, BC→D, D→E, D→G}分组：<br><b>ρ = {R₁(A,B,C), R₂(B,C,D), R₃(D,E,G)}</b><br><br><b>(4) 保持函数依赖</b><br>AB→C、C→A 在 R₁；BC→D 在 R₂；D→E、D→G 在 R₃。<br><b>该分解保持函数依赖。</b>` },
+  { title:"4. 无损连接判断（Chase 矩阵）",
+    body:`R(U,F)，U={A,B,C,D,E}，F={A→D, E→D, D→B, BC→D, DC→A}，判断ρ={AB, AE, CE, BCD, AC}是否为无损连接分解。`,
+    ans:`<b>初始矩阵：</b><br><table style="font-size:.78rem;margin:6px 0;border-collapse:collapse;width:auto"><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr><tr><td>AB</td><td>a₁</td><td>a₂</td><td>b₁₃</td><td>b₁₄</td><td>b₁₅</td></tr><tr><td>AE</td><td>a₁</td><td>b₂₂</td><td>b₂₃</td><td>b₂₄</td><td>a₅</td></tr><tr><td>CE</td><td>b₃₁</td><td>b₃₂</td><td>a₃</td><td>b₃₄</td><td>a₅</td></tr><tr><td>BCD</td><td>b₄₁</td><td>a₂</td><td>a₃</td><td>a₄</td><td>b₄₅</td></tr><tr><td>AC</td><td>a₁</td><td>b₅₂</td><td>a₃</td><td>b₅₄</td><td>b₅₅</td></tr></table><br><b>依次应用FD：</b><br>① A→D：A同为a₁的行（AB、AE、AC），D统一为b₁₄<br>② E→D：E同为a₅的行（AE、CE），D统一为b₁₄<br>③ D→B：D同为b₁₄的行（AB、AE、CE、AC），B统一为a₂<br>④ BC→D：无两组BC值完全相同，不变<br>⑤ DC→A：无两组DC值完全相同，不变<br><br>最终无全为a值的行。<br><br><b>⇒ ρ不是无损连接分解</b>` },
+  { title:"5. E-R 图转关系模式（销售部/产品/职工）",
+    body:`某公司：销售部（部门名称,地区,电话）经销产品（产品编码,品名,单价），每个销售部聘用多名职工（职工号,姓名,性别），每名职工只属于一个销售部。每个销售部销售产品存在数量属性。`,
+    ans:`<b>(1) E-R 图</b><br><div style="background:#faf8f5;border:1px solid #e2ddd6;border-radius:10px;padding:10px 6px;margin:8px 0;overflow-x:auto;text-align:center">
+<svg viewBox="0 0 570 210" xmlns="http://www.w3.org/2000/svg" style="max-width:530px;display:block;margin:0 auto">
+<rect x="35" y="10" width="140" height="60" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="2"/>
+<text x="105" y="33" text-anchor="middle" fill="#1a5c6e" font-size="15" font-weight="700">销售部</text>
+<text x="105" y="51" text-anchor="middle" fill="#1a5c6e" font-size="9.5">部门名称 地区 电话</text>
+<rect x="370" y="10" width="140" height="60" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="2"/>
+<text x="440" y="33" text-anchor="middle" fill="#1a5c6e" font-size="15" font-weight="700">产品</text>
+<text x="440" y="51" text-anchor="middle" fill="#1a5c6e" font-size="9.5">产品编码 品名 单价</text>
+<polygon points="260,40 285,25 310,40 285,55" fill="#f5e6da" stroke="#c95d1e" stroke-width="2"/>
+<text x="285" y="43" text-anchor="middle" fill="#c95d1e" font-size="13" font-weight="700">销售</text>
+<line x1="175" y1="40" x2="260" y2="40" stroke="#555" stroke-width="1.5"/>
+<line x1="310" y1="40" x2="370" y2="40" stroke="#555" stroke-width="1.5"/>
+<text x="220" y="34" text-anchor="middle" fill="#555" font-size="13" font-weight="700">m</text>
+<text x="337" y="34" text-anchor="middle" fill="#555" font-size="13" font-weight="700">n</text>
+<ellipse cx="285" cy="78" rx="30" ry="13" fill="#f3e8ff" stroke="#6b4c8a" stroke-width="1.5"/>
+<text x="285" y="82" text-anchor="middle" fill="#6b4c8a" font-size="10.5" font-weight="600">数量</text>
+<line x1="285" y1="65" x2="285" y2="55" stroke="#6b4c8a" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="35" y="120" width="140" height="60" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="2"/>
+<text x="105" y="143" text-anchor="middle" fill="#1a5c6e" font-size="15" font-weight="700">职工</text>
+<text x="105" y="161" text-anchor="middle" fill="#1a5c6e" font-size="9.5">职工号 姓名 性别</text>
+<line x1="105" y1="70" x2="105" y2="120" stroke="#555" stroke-width="1.5"/>
+<text x="105" y="87" text-anchor="middle" fill="#555" font-size="13" font-weight="700">1</text>
+<text x="105" y="110" text-anchor="middle" fill="#555" font-size="13" font-weight="700">n</text>
+</svg></div><b>(2)(3) 关系模式</b><br><table style="font-size:.8rem;margin:6px 0;border-collapse:collapse"><tr><th>关系模式</th><th>主键</th><th>外键</th></tr><tr><td>销售部(部门名称,地区,电话)</td><td>部门名称</td><td>—</td></tr><tr><td>产品(产品编码,品名,单价)</td><td>产品编码</td><td>—</td></tr><tr><td>职工(职工号,姓名,性别,部门名称)</td><td>职工号</td><td>部门名称→销售部</td></tr><tr><td>销售(部门名称,产品编码,数量)</td><td>(部门名称,产品编码)</td><td>部门名称→销售部, 产品编码→产品</td></tr></table>` },
+  { title:"6. 顾客会员卡 E-R 图（两种场景）",
+    body:`顾客（姓名,地址,电话号码,身份证号），会员卡（号码,等级,积分），每个顾客只能办一张卡。场景1：顾客有多个地址和多个电话号码；场景2：顾客有多个地址，每个地址对应多个电话号码。地址含省市区街道，电话含区号号码。`,
+    ans:`<b>场景1（多地址多电话独立）</b><br><div style="background:#faf8f5;border:1px solid #e2ddd6;border-radius:10px;padding:10px 6px;margin:8px 0;overflow-x:auto;text-align:center">
+<svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;display:block;margin:0 auto">
+<rect x="25" y="15" width="130" height="55" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="2"/>
+<text x="90" y="37" text-anchor="middle" fill="#1a5c6e" font-size="14" font-weight="700">顾客</text>
+<text x="90" y="54" text-anchor="middle" fill="#1a5c6e" font-size="9">身份证号 姓名</text>
+<polygon points="215,42 240,27 265,42 240,57" fill="#f5e6da" stroke="#c95d1e" stroke-width="2"/>
+<text x="240" y="45" text-anchor="middle" fill="#c95d1e" font-size="12" font-weight="700">拥有</text>
+<rect x="360" y="15" width="130" height="55" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="2"/>
+<text x="425" y="37" text-anchor="middle" fill="#1a5c6e" font-size="14" font-weight="700">会员卡</text>
+<text x="425" y="54" text-anchor="middle" fill="#1a5c6e" font-size="9">号码 等级 积分</text>
+<line x1="155" y1="42" x2="215" y2="42" stroke="#555" stroke-width="1.5"/><line x1="265" y1="42" x2="360" y2="42" stroke="#555" stroke-width="1.5"/>
+<text x="183" y="36" text-anchor="middle" fill="#555" font-size="12" font-weight="700">1</text><text x="310" y="36" text-anchor="middle" fill="#555" font-size="12" font-weight="700">1</text>
+<line x1="90" y1="70" x2="90" y2="95" stroke="#555" stroke-width="1.5"/>
+<text x="90" y="86" text-anchor="middle" fill="#555" font-size="12" font-weight="700">1</text>
+<rect x="15" y="125" width="130" height="50" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="1.5"/>
+<text x="80" y="147" text-anchor="middle" fill="#1a5c6e" font-size="13" font-weight="700">地址</text><text x="80" y="163" text-anchor="middle" fill="#1a5c6e" font-size="8.5">省 市 区 街道</text>
+<rect x="180" y="125" width="130" height="50" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="1.5"/>
+<text x="245" y="147" text-anchor="middle" fill="#1a5c6e" font-size="13" font-weight="700">电话</text><text x="245" y="163" text-anchor="middle" fill="#1a5c6e" font-size="8.5">区号 号码</text>
+<line x1="90" y1="95" x2="80" y2="125" stroke="#555" stroke-width="1.2"/><line x1="90" y1="95" x2="245" y2="125" stroke="#555" stroke-width="1.2"/>
+<text x="80" y="183" text-anchor="middle" fill="#555" font-size="12" font-weight="700">n</text><text x="245" y="183" text-anchor="middle" fill="#555" font-size="12" font-weight="700">m</text>
+</svg></div><table style="font-size:.8rem;margin:6px 0;border-collapse:collapse"><tr><th>关系模式</th><th>主键</th><th>外键</th></tr><tr><td>顾客(身份证号,姓名)</td><td>身份证号</td><td>—</td></tr><tr><td>会员卡(号码,等级,积分,顾客身份证号)</td><td>号码</td><td>顾客身份证号→顾客</td></tr><tr><td>地址(顾客身份证号,省,市,区,街道)</td><td>(顾客身份证号,省,市,区,街道)</td><td>顾客身份证号→顾客</td></tr><tr><td>电话(顾客身份证号,区号,号码)</td><td>(顾客身份证号,区号,号码)</td><td>顾客身份证号→顾客</td></tr></table><br><b>场景2（地址下辖电话）</b><br><div style="background:#faf8f5;border:1px solid #e2ddd6;border-radius:10px;padding:10px 6px;margin:8px 0;overflow-x:auto;text-align:center">
+<svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;display:block;margin:0 auto">
+<rect x="25" y="10" width="130" height="55" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="2"/>
+<text x="90" y="32" text-anchor="middle" fill="#1a5c6e" font-size="14" font-weight="700">顾客</text><text x="90" y="49" text-anchor="middle" fill="#1a5c6e" font-size="9">身份证号 姓名</text>
+<polygon points="215,37 240,22 265,37 240,52" fill="#f5e6da" stroke="#c95d1e" stroke-width="2"/>
+<text x="240" y="40" text-anchor="middle" fill="#c95d1e" font-size="12" font-weight="700">拥有</text>
+<rect x="360" y="10" width="130" height="55" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="2"/>
+<text x="425" y="32" text-anchor="middle" fill="#1a5c6e" font-size="14" font-weight="700">会员卡</text><text x="425" y="49" text-anchor="middle" fill="#1a5c6e" font-size="9">号码 等级 积分</text>
+<line x1="155" y1="37" x2="215" y2="37" stroke="#555" stroke-width="1.5"/><line x1="265" y1="37" x2="360" y2="37" stroke="#555" stroke-width="1.5"/>
+<text x="183" y="31" text-anchor="middle" fill="#555" font-size="12" font-weight="700">1</text><text x="310" y="31" text-anchor="middle" fill="#555" font-size="12" font-weight="700">1</text>
+<line x1="90" y1="65" x2="90" y2="90" stroke="#555" stroke-width="1.5"/>
+<text x="90" y="81" text-anchor="middle" fill="#555" font-size="12" font-weight="700">1</text>
+<rect x="10" y="95" width="160" height="50" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="2"/>
+<text x="90" y="117" text-anchor="middle" fill="#1a5c6e" font-size="13" font-weight="700">地址</text><text x="90" y="133" text-anchor="middle" fill="#1a5c6e" font-size="9">地址编号 省 市 区 街道</text>
+<line x1="90" y1="145" x2="90" y2="165" stroke="#555" stroke-width="1.5"/>
+<text x="90" y="158" text-anchor="middle" fill="#555" font-size="12" font-weight="700">1</text>
+<rect x="10" y="170" width="160" height="48" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="1.5"/>
+<text x="90" y="191" text-anchor="middle" fill="#1a5c6e" font-size="13" font-weight="700">电话</text><text x="90" y="207" text-anchor="middle" fill="#1a5c6e" font-size="9">电话编号 区号 号码</text>
+<text x="90" y="225" text-anchor="middle" fill="#555" font-size="12" font-weight="700">m</text>
+</svg></div><table style="font-size:.8rem;margin:6px 0;border-collapse:collapse"><tr><th>关系模式</th><th>主键</th><th>外键</th></tr><tr><td>顾客(身份证号,姓名)</td><td>身份证号</td><td>—</td></tr><tr><td>会员卡(号码,等级,积分,顾客身份证号)</td><td>号码</td><td>顾客身份证号→顾客</td></tr><tr><td>地址(地址编号,顾客身份证号,省,市,区,街道)</td><td>地址编号</td><td>顾客身份证号→顾客</td></tr><tr><td>电话(电话编号,地址编号,区号,号码)</td><td>电话编号</td><td>地址编号→地址</td></tr></table>` },
+  { title:"7. 复杂 E-R 图（部门/员工/实习生/项目）",
+    body:`部门（编号,名称,地点）；员工（编号,姓名,级别）属于一个部门；每个部门有一名员工任经理；实习生（编号,姓名,年龄）在一个部门实习；项目（编号,名称,起止日期）。每个项目由一名员工负责，多名员工和实习生参与；一名员工只负责一个项目、可参与多个项目；参与含工作时间占比；每名实习生只参与一个项目。`,
+    ans:`<b>(1) E-R 图</b><br><div style="background:#faf8f5;border:1px solid #e2ddd6;border-radius:10px;padding:10px 6px;margin:8px 0;overflow-x:auto;text-align:center">
+<svg viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg" style="max-width:760px;display:block;margin:0 auto">
+<rect x="290" y="10" width="220" height="52" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="2"/>
+<text x="400" y="33" text-anchor="middle" fill="#1a5c6e" font-size="15" font-weight="700">部门</text>
+<text x="400" y="49" text-anchor="middle" fill="#1a5c6e" font-size="9">部门编号 部门名称 办公地点</text>
+<polygon points="140,80 160,65 180,80 160,95" fill="#f5e6da" stroke="#c95d1e" stroke-width="1.8"/>
+<text x="160" y="83" text-anchor="middle" fill="#c95d1e" font-size="10" font-weight="700">属于</text>
+<polygon points="380,80 400,65 420,80 400,95" fill="#f5e6da" stroke="#c95d1e" stroke-width="1.8"/>
+<text x="400" y="83" text-anchor="middle" fill="#c95d1e" font-size="10" font-weight="700">管理</text>
+<polygon points="620,80 640,65 660,80 640,95" fill="#f5e6da" stroke="#c95d1e" stroke-width="1.8"/>
+<text x="640" y="83" text-anchor="middle" fill="#c95d1e" font-size="10" font-weight="700">实习于</text>
+<line x1="350" y1="62" x2="160" y2="65" stroke="#555" stroke-width="1.5"/><text x="260" y="57" text-anchor="middle" fill="#555" font-size="12" font-weight="700">1</text>
+<line x1="400" y1="62" x2="400" y2="65" stroke="#555" stroke-width="1.5"/><text x="410" y="57" text-anchor="middle" fill="#555" font-size="12" font-weight="700">1</text>
+<line x1="460" y1="62" x2="640" y2="65" stroke="#555" stroke-width="1.5"/><text x="550" y="57" text-anchor="middle" fill="#555" font-size="12" font-weight="700">1</text>
+<rect x="70" y="125" width="155" height="52" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="2"/>
+<text x="147" y="148" text-anchor="middle" fill="#1a5c6e" font-size="14" font-weight="700">员工</text><text x="147" y="164" text-anchor="middle" fill="#1a5c6e" font-size="9">员工编号 姓名 级别</text>
+<rect x="320" y="125" width="160" height="52" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="2"/>
+<text x="400" y="148" text-anchor="middle" fill="#1a5c6e" font-size="14" font-weight="700">员工（经理）</text><text x="400" y="164" text-anchor="middle" fill="#1a5c6e" font-size="9">员工编号 姓名 级别</text>
+<rect x="555" y="125" width="155" height="52" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="2"/>
+<text x="632" y="148" text-anchor="middle" fill="#1a5c6e" font-size="14" font-weight="700">实习生</text><text x="632" y="164" text-anchor="middle" fill="#1a5c6e" font-size="9">实习编号 姓名 年龄</text>
+<line x1="160" y1="95" x2="147" y2="125" stroke="#555" stroke-width="1.5"/><text x="147" y="114" text-anchor="middle" fill="#555" font-size="12" font-weight="700">n</text>
+<line x1="400" y1="95" x2="400" y2="125" stroke="#555" stroke-width="1.5"/><text x="410" y="114" text-anchor="middle" fill="#555" font-size="12" font-weight="700">1</text>
+<line x1="640" y1="95" x2="632" y2="125" stroke="#555" stroke-width="1.5"/><text x="647" y="114" text-anchor="middle" fill="#555" font-size="12" font-weight="700">n</text>
+<polygon points="128,210 148,195 168,210 148,225" fill="#f5e6da" stroke="#c95d1e" stroke-width="1.8"/>
+<text x="148" y="213" text-anchor="middle" fill="#c95d1e" font-size="10" font-weight="700">负责</text>
+<polygon points="335,210 355,195 375,210 355,225" fill="#f5e6da" stroke="#c95d1e" stroke-width="1.8"/>
+<text x="355" y="213" text-anchor="middle" fill="#c95d1e" font-size="10" font-weight="700">参与</text>
+<polygon points="530,210 550,195 570,210 550,225" fill="#f5e6da" stroke="#c95d1e" stroke-width="1.8"/>
+<text x="550" y="213" text-anchor="middle" fill="#c95d1e" font-size="10" font-weight="700">参与</text>
+<line x1="147" y1="177" x2="148" y2="195" stroke="#555" stroke-width="1.5"/><text x="140" y="190" text-anchor="middle" fill="#555" font-size="12" font-weight="700">1</text>
+<line x1="225" y1="150" x2="335" y2="195" stroke="#555" stroke-width="1.5"/><text x="280" y="168" text-anchor="middle" fill="#555" font-size="12" font-weight="700">n</text>
+<line x1="555" y1="150" x2="550" y2="195" stroke="#555" stroke-width="1.5"/><text x="560" y="170" text-anchor="middle" fill="#555" font-size="12" font-weight="700">n</text>
+<ellipse cx="395" cy="210" rx="40" ry="13" fill="#f3e8ff" stroke="#6b4c8a" stroke-width="1.5"/>
+<text x="395" y="214" text-anchor="middle" fill="#6b4c8a" font-size="9.5" font-weight="600">工作时间占比</text>
+<line x1="375" y1="210" x2="355" y2="210" stroke="#6b4c8a" stroke-width="1" stroke-dasharray="3,2"/>
+<rect x="230" y="280" width="340" height="52" rx="8" fill="#ddeef2" stroke="#1a5c6e" stroke-width="2"/>
+<text x="400" y="303" text-anchor="middle" fill="#1a5c6e" font-size="15" font-weight="700">项目</text><text x="400" y="319" text-anchor="middle" fill="#1a5c6e" font-size="9">项目编号 项目名称 开始日期 结束日期</text>
+<line x1="148" y1="225" x2="300" y2="280" stroke="#555" stroke-width="1.5"/><text x="220" y="248" text-anchor="middle" fill="#555" font-size="12" font-weight="700">1</text>
+<line x1="355" y1="225" x2="400" y2="280" stroke="#555" stroke-width="1.5"/><text x="390" y="248" text-anchor="middle" fill="#555" font-size="12" font-weight="700">m</text>
+<line x1="550" y1="225" x2="490" y2="280" stroke="#555" stroke-width="1.5"/><text x="528" y="248" text-anchor="middle" fill="#555" font-size="12" font-weight="700">n</text>
+</svg></div><b>联系类型：</b><br><table style="font-size:.8rem;margin:6px 0;border-collapse:collapse;width:auto"><tr><th>联系</th><th>类型</th></tr><tr><td>部门 — 员工（属于）</td><td><b>1:n</b></td></tr><tr><td>部门 — 员工（经理，管理）</td><td><b>1:1</b></td></tr><tr><td>部门 — 实习生（实习于）</td><td><b>1:n</b></td></tr><tr><td>员工 — 项目（负责）</td><td><b>1:1</b></td></tr><tr><td>员工 — 项目（参与，属性：工作时间占比）</td><td><b>m:n</b></td></tr><tr><td>项目 — 实习生（参与）</td><td><b>1:n</b></td></tr></table><br><b>关系模式：</b><br><table style="font-size:.8rem;margin:6px 0;border-collapse:collapse"><tr><th>关系模式</th><th>主键</th><th>外键</th></tr><tr><td>部门(部门编号,部门名称,办公地点,经理员工编号)</td><td>部门编号</td><td>经理员工编号→员工</td></tr><tr><td>员工(员工编号,姓名,级别,部门编号)</td><td>员工编号</td><td>部门编号→部门</td></tr><tr><td>实习生(实习编号,姓名,年龄,部门编号,项目编号)</td><td>实习编号</td><td>部门编号→部门, 项目编号→项目</td></tr><tr><td>项目(项目编号,项目名称,开始日期,结束日期,负责员工编号)</td><td>项目编号</td><td>负责员工编号→员工</td></tr><tr><td>参与(员工编号,项目编号,工作时间占比)</td><td>(员工编号,项目编号)</td><td>员工编号→员工, 项目编号→项目</td></tr></table>` },
+];
+
+// =========================== RENDER ===========================
+const root = document.getElementById("container");
+const tabBar = document.getElementById("tabBar");
+const progressBar = document.getElementById("progressBar");
+let currentPage = parseInt(localStorage.getItem("dbReviewPage")||"0");
+
+// 统计各章题目数
+const counts = chapters.map(c=>c.questions.length);
+const totalQ = counts.reduce((a,b)=>a+b,0);
+
+function render(){
+  // tabs
+  tabBar.innerHTML = chapters.map((ch,i)=>`
+    <button class="tab${i===currentPage?" active":""}" data-page="${i}">
+      ${ch.name} <span class="count">${counts[i]}</span>
+    </button>
+  `).join("") + `<button class="tab${currentPage===chapters.length?" active":""}" data-page="${chapters.length}">
+    大题 <span class="count">${bigProblems.length}</span>
+  </button>`;
+
+  // content
+  root.innerHTML = chapters.map((ch,ci)=>`
+    <div class="page${ci===currentPage?" active":""}" id="page-${ci}">
+      <div class="page-title">${ch.name}</div>
+      <div class="stats">
+        <div class="stat"><span class="stat-num">${ch.questions.length}</span><span class="stat-label">题</span></div>
+        <div class="stat"><span class="stat-num" style="color:var(--blue)">${ch.questions.filter(q=>q.type==="single").length}</span><span class="stat-label">单选</span></div>
+        <div class="stat"><span class="stat-num" style="color:var(--orange)">${ch.questions.filter(q=>q.type==="judge").length}</span><span class="stat-label">判断</span></div>
+        <div class="stat"><span class="stat-num" style="color:var(--green)">${ch.questions.filter(q=>q.type==="fill").length}</span><span class="stat-label">填空</span></div>
+      </div>
+      ${ch.questions.map((q,qi)=>renderQuestion(q,ci,qi)).join("")}
+    </div>
+  `).join("") + `
+    <div class="page${currentPage===chapters.length?" active":""}" id="page-big">
+      <div class="page-title">📝 综合大题</div>
+      <div class="stats">
+        <div class="stat"><span class="stat-num">${bigProblems.length}</span><span class="stat-label">大题</span></div>
+      </div>
+      ${bigProblems.map((p,i)=>`
+        <div class="problem-card">
+          <div class="p-title">${p.title}</div>
+          <div class="p-body">${p.body}</div>
+          <button class="p-toggle" onclick="toggleProblem(this)">📖 查看答案</button>
+          <div class="solution" style="margin-top:8px">
+            <div class="problem-card" style="border-color:var(--blue);padding:12px 14px;margin:0">
+              <div class="p-ans">${p.ans}</div>
+            </div>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  // progress
+  updateProgress();
+
+  // tab listeners
+  document.querySelectorAll(".tab").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      currentPage = parseInt(btn.dataset.page);
+      localStorage.setItem("dbReviewPage",currentPage);
+      render();
+      document.querySelector(".tab-scroll").scrollLeft = btn.offsetLeft - 40;
+    });
+  });
+
+  // q-card toggle
+  document.querySelectorAll(".q-card").forEach(card=>{
+    const head = card.querySelector(".q-head");
+    const btn = card.querySelector(".toggle-btn");
+    const sol = card.querySelector(".solution");
+    const expand = ()=> {
+      const isOpen = sol.classList.toggle("open");
+      if(btn) btn.classList.toggle("open",isOpen);
+      if(btn) btn.textContent = isOpen ? "收起解析 ▾" : "展开解析 ▸";
+    };
+    head.addEventListener("click",(e)=>{
+      if(e.target.closest(".toggle-btn")) return;
+      expand();
+    });
+    if(btn) btn.addEventListener("click",(e)=>{
+      e.stopPropagation();
+      expand();
+    });
+  });
+}
+
+function renderQuestion(q,ci,qi){
+  const id = `q-${ci}-${qi}`;
+  const typeLabel = {single:"单选",judge:"判断",fill:"填空"};
+  const typeCls = {single:"single",judge:"judge",fill:"fill"};
+  const ansClass = q.type==="judge" && q.ans==="错" ? " wrong" : " correct";
+
+  let optsHtml = "";
+  if(q.opts){
+    optsHtml = `<ul class="options">${q.opts.map((o,oi)=>{
+      const key = String.fromCharCode(65+oi);
+      const isAns = key === q.ans;
+      return `<li><span class="key">${key}.</span> <span${isAns?' class="correct"':''}>${o.slice(2)}${isAns?' ✓':''}</span></li>`;
+    }).join("")}</ul>`;
+  }
+
+  let fillHtml = q.q;
+  if(q.type==="fill"){
+    const parts = q.q.split("____");
+    fillHtml = parts[0] + '<span class="blank">?</span>' + (parts[1]||"");
+  }
+
+  return `
+  <div class="q-card" id="${id}">
+    <div class="q-head">
+      <span class="q-type ${typeCls[q.type]}">${typeLabel[q.type]}</span>
+      <div class="q-text">${fillHtml}</div>
+      <button class="toggle-btn">展开解析 ▸<span class="arrow"></span></button>
+    </div>
+    ${optsHtml}
+    <div class="ans-row">
+      <span class="ans-label">答案</span>
+      <span class="ans-val${ansClass}">${q.ans}</span>
+    </div>
+    ${q.exp ? `
+    <div class="solution">
+      <div class="solution-inner"><strong>解析：</strong>${q.exp}</div>
+    </div>` : `
+    <div class="solution">
+      <div class="solution-inner">无额外解析。</div>
+    </div>`}
+  </div>`;
+}
+
+function toggleProblem(btn){
+  const sol = btn.nextElementSibling;
+  const isOpen = sol.classList.toggle("open");
+  btn.textContent = isOpen ? "🙈 收起答案" : "📖 查看答案";
+}
+
+function updateProgress(){
+  const pct = Math.round(((currentPage+1) / (chapters.length+1)) * 100);
+  progressBar.style.width = pct + "%";
+}
+
+// ═══ Theme ═══
+let isDark = localStorage.getItem("dbReviewTheme")==="dark";
+function applyTheme(dark){
+  document.documentElement.setAttribute("data-theme",dark?"dark":"");
+  document.getElementById("themeBtn").textContent = dark?"☀️":"🌙";
+  localStorage.setItem("dbReviewTheme",dark?"dark":"light");
+}
+function toggleTheme(){ isDark=!isDark; applyTheme(isDark); }
+
+// ═══ Quiz Mode ═══
+let quizMode = false;
+function toggleQuiz(){
+  quizMode = !quizMode;
+  document.getElementById("quizBtn").classList.toggle("active",quizMode);
+  document.getElementById("quizBtn").textContent = quizMode?"✅ 自测中":"✏️ 自测";
+  document.querySelectorAll(".page.active").forEach(p=>p.classList.toggle("quiz-hide",quizMode));
+}
+// tap to reveal in quiz mode
+document.addEventListener("click",function(e){
+  if(!quizMode) return;
+  const card = e.target.closest(".q-card");
+  if(card && !card.classList.contains("revealed")){
+    card.classList.add("revealed");
+    // pulse feedback
+    card.style.transition = "box-shadow .3s";
+    card.style.boxShadow = "0 0 0 3px var(--green)";
+    setTimeout(()=>{ card.style.boxShadow = ""; }, 400);
+  }
+});
+
+// ═══ Search ═══
+let searchOpen = false;
+function toggleSearch(){
+  searchOpen = !searchOpen;
+  const existing = document.getElementById("searchBox");
+  if(existing){ existing.remove(); searchOpen=false; return; }
+  const activePage = document.querySelector(".page.active");
+  if(!activePage) return;
+  const wrap = document.createElement("div");
+  wrap.style.cssText = "position:relative;margin-bottom:10px";
+  const input = document.createElement("input");
+  input.id = "searchBox";
+  input.className = "search-box closeable";
+  input.placeholder = "🔍 搜索当前章节题目... 点击右侧 X 关闭";
+  input.autofocus = true;
+  wrap.appendChild(input);
+  const closeBtn = document.createElement("span");
+  closeBtn.innerHTML = "✕";
+  closeBtn.style.cssText = "position:absolute;right:8px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--dim);font-size:.8rem;padding:4px;line-height:1";
+  closeBtn.onclick = ()=>{ input.remove(); searchOpen=false; };
+  wrap.appendChild(closeBtn);
+  activePage.insertBefore(wrap, activePage.firstChild.nextSibling);
+  input.addEventListener("input", function(){
+    const val = this.value.toLowerCase().trim();
+    activePage.querySelectorAll(".q-card").forEach(card=>{
+      const text = card.textContent.toLowerCase();
+      card.classList.toggle("hidden", val && !text.includes(val));
+    });
+    let visible = activePage.querySelectorAll(".q-card:not(.hidden)").length;
+    let total = activePage.querySelectorAll(".q-card").length;
+    if(val){
+      let info = document.getElementById("searchInfo");
+      if(!info){
+        info = document.createElement("div");
+        info.id = "searchInfo";
+        info.style.cssText = "font-size:.75rem;color:var(--dim);margin-bottom:6px;position:absolute;top:100%;left:4px";
+        wrap.appendChild(info);
+      }
+      info.textContent = `找到 ${visible}/${total} 题`;
+    } else {
+      const info = document.getElementById("searchInfo");
+      if(info) info.remove();
+    }
+  });
+  input.addEventListener("keydown",e=>{ if(e.key==="Escape"){ input.remove(); searchOpen=false; }});
+}
+
+// ═══ Back to Top ═══
+window.addEventListener("scroll", function(){
+  document.getElementById("backTop").classList.toggle("show", window.scrollY > 300);
+});
+
+// ═══ Init ═══
+applyTheme(isDark);
+render();
+</script>
+</body>
+</html>

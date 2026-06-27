@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>中国近代史纲要 · 复习精要</title>
+<title>中国近代史纲要 · 默写复习</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
@@ -23,13 +23,14 @@
   --gold-light: #e8dccc;
   --ink: #3a3228;
   --radius: 8px;
-  --font-serif: 'Noto Serif SC', 'SimSun', 'STSong', serif;
-  --font-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --font-display: 'EB Garamond', 'Noto Serif SC', serif;
+  --font-serif: 'Noto Serif SC','SimSun','STSong',serif;
+  --font-sans: 'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+  --font-display: 'EB Garamond','Noto Serif SC',serif;
   --content: 800px;
   --sidebar: 260px;
+  --fb-bg: #f5efe8;
 }
-html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; overflow-x:hidden; }
 body {
   font-family: var(--font-serif);
   background: var(--page);
@@ -37,322 +38,314 @@ body {
   line-height: 1.8;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
+  overflow-wrap:break-word; word-wrap:break-word;
 }
 
 /* ─── Progress Bar ─── */
-#progress {
-  position: fixed; top: 0; left: 0; z-index: 100;
-  width: 100%; height: 3px; background: transparent;
-  pointer-events: none;
-}
-#progress-bar {
-  height: 100%; width: 0%;
-  background: var(--accent);
-  transition: width 0.1s linear;
-}
+#progress { position:fixed; top:0; left:0; z-index:100; width:100%; height:3px; pointer-events:none; }
+#progress-bar { height:100%; width:0%; background:var(--accent); transition:width .1s linear; }
 
 /* ─── Layout ─── */
-.wrapper { display: flex; min-height: 100vh; }
+.wrapper { display:flex; min-height:100vh; }
 
 /* ─── Sidebar ─── */
 .sidebar {
-  position: fixed; top: 3px; left: 0;
-  width: var(--sidebar); height: calc(100vh - 3px);
-  padding: 2.5rem 1.5rem 2rem;
-  overflow-y: auto;
-  border-right: 1px solid var(--border);
-  background: var(--page);
-  z-index: 50;
+  position:fixed; top:3px; left:0;
+  width:var(--sidebar); height:calc(100vh - 3px);
+  padding:1.2rem 1rem .8rem; overflow-y:auto; overflow-x:hidden;
+  border-right:1px solid var(--border); background:var(--page); z-index:50;
 }
+.sidebar::-webkit-scrollbar { width:4px; }
+.sidebar::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 .sidebar-logo {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--accent);
-  letter-spacing: 0.02em;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid var(--accent-light);
+  font-family:var(--font-display); font-size:1rem; font-weight:600;
+  color:var(--accent); letter-spacing:.02em; margin-bottom:1.25rem;
+  padding-bottom:.6rem; border-bottom:2px solid var(--accent-light);
 }
 .sidebar-logo small {
-  display: block;
-  font-family: var(--font-sans);
-  font-size: 0.65rem;
-  font-weight: 400;
-  color: var(--text-muted);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-top: 0.15rem;
+  display:block; font-family:var(--font-sans); font-size:.65rem;
+  font-weight:400; color:var(--text-muted); letter-spacing:.1em;
+  text-transform:uppercase; margin-top:.15rem;
 }
-.sidebar nav ul { list-style: none; }
-.sidebar nav li { margin-bottom: 0.25rem; }
+.sidebar nav ul { list-style:none; }
+.sidebar nav li { margin-bottom:.25rem; }
 .sidebar nav a {
-  display: flex; align-items: baseline; gap: 0.5rem;
-  padding: 0.4rem 0.75rem;
-  font-family: var(--font-sans);
-  font-size: 0.82rem;
-  color: var(--text-soft);
-  text-decoration: none;
-  border-radius: 4px;
-  transition: all 0.2s;
-  line-height: 1.4;
+  display:flex; align-items:baseline; gap:.35rem;
+  padding:.35rem .6rem; font-family:var(--font-sans); font-size:.78rem;
+  color:var(--text-soft); text-decoration:none; border-radius:4px;
+  transition:all .2s; line-height:1.35; overflow-wrap:break-word;
+  word-break:break-all;
 }
 .sidebar nav a .num {
-  font-family: var(--font-display);
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  min-width: 1.8em;
-  flex-shrink: 0;
+  font-family:var(--font-display); font-size:.7rem;
+  color:var(--text-muted); min-width:1.8em; flex-shrink:0;
 }
-.sidebar nav a:hover {
-  background: var(--surface);
-  color: var(--accent);
-}
-.sidebar nav a.active {
-  background: var(--accent-light);
-  color: var(--accent);
-  font-weight: 600;
-}
+.sidebar nav a:hover { background:var(--surface); color:var(--accent); }
+.sidebar nav a.active { background:var(--accent-light); color:var(--accent); font-weight:600; }
 
 /* ─── Main ─── */
-.main { margin-left: var(--sidebar); flex: 1; min-width: 0; }
+.main { margin-left:var(--sidebar); flex:1; min-width:0; }
 
 /* ─── Hero ─── */
 .hero {
-  position: relative;
-  padding: 6rem 3rem 4rem;
-  max-width: var(--content);
-  margin: 0 auto;
-  text-align: center;
+  position:relative; padding:4rem 3rem 2.5rem;
+  max-width:var(--content); margin:0 auto; text-align:center;
 }
 .hero::after {
-  content: '';
-  position: absolute; bottom: 0; left: 15%; right: 15%;
-  height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent);
+  content:''; position:absolute; bottom:0; left:15%; right:15%;
+  height:1px; background:linear-gradient(90deg,transparent,var(--border),transparent);
 }
 .hero-label {
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  margin-bottom: 1.5rem;
+  font-family:var(--font-sans); font-size:.75rem; font-weight:600;
+  letter-spacing:.2em; color:var(--text-muted); text-transform:uppercase;
+  margin-bottom:1rem;
 }
 .hero h1 {
-  font-family: var(--font-serif);
-  font-size: clamp(2rem, 5vw, 3.2rem);
-  font-weight: 700;
-  line-height: 1.25;
-  color: var(--text);
-  letter-spacing: 0.04em;
+  font-family:var(--font-serif); font-size:clamp(1.6rem,4vw,2.6rem);
+  font-weight:700; line-height:1.25; color:var(--text); letter-spacing:.04em;
 }
 .hero h1 .en {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 0.45em;
-  font-weight: 400;
-  font-style: italic;
-  color: var(--text-muted);
-  letter-spacing: 0.08em;
-  margin-top: 0.4rem;
+  display:block; font-family:var(--font-display); font-size:.45em;
+  font-weight:400; font-style:italic; color:var(--text-muted);
+  letter-spacing:.08em; margin-top:.3rem;
 }
-.hero p {
-  margin-top: 1.2rem;
-  font-size: 0.95rem;
-  color: var(--text-soft);
-  line-height: 1.7;
+
+/* ─── Toolbar ─── */
+.toolbar {
+  display:flex; align-items:center; justify-content:center; gap:.75rem;
+  flex-wrap:wrap; padding:1.25rem 3rem 0;
+  max-width:var(--content); margin:0 auto;
 }
+.mode-btn {
+  font-family:var(--font-sans); font-size:.82rem; font-weight:500;
+  padding:.5rem 1.1rem; border:1px solid var(--border);
+  border-radius:6px; background:var(--card); color:var(--text-soft);
+  cursor:pointer; transition:all .2s; user-select:none;
+}
+.mode-btn:hover { border-color:var(--accent); color:var(--accent); }
+.mode-btn.active {
+  background:var(--accent); color:#fff; border-color:var(--accent);
+}
+.mode-progress {
+  font-family:var(--font-sans); font-size:.75rem;
+  color:var(--text-muted); margin-left:.5rem;
+  min-width:7rem; text-align:center;
+}
+.mode-reset {
+  font-family:var(--font-sans); font-size:.72rem;
+  color:var(--text-muted); cursor:pointer; text-decoration:underline;
+  text-underline-offset:3px; transition:color .2s;
+}
+.mode-reset:hover { color:var(--accent); }
 
 /* ─── Content ─── */
-.content { padding: 1rem 3rem 6rem; max-width: var(--content); margin: 0 auto; }
+.content { padding:.5rem 3rem 5rem; max-width:var(--content); margin:0 auto; }
 
 /* ─── Chapter ─── */
-.chapter {
-  margin-bottom: 4rem;
-  scroll-margin-top: 2rem;
-}
+.chapter { margin-bottom:3.5rem; scroll-margin-top:5rem; }
 .chapter-header {
-  display: flex; align-items: baseline; gap: 1rem;
-  margin-bottom: 2rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 2px solid var(--accent-light);
+  display:flex; align-items:baseline; gap:1rem;
+  margin-bottom:1.5rem; padding-bottom:.6rem;
+  border-bottom:2px solid var(--accent-light);
 }
 .chapter-number {
-  font-family: var(--font-display);
-  font-size: 2.4rem;
-  font-weight: 600;
-  color: var(--accent);
-  line-height: 1;
-  opacity: 0.6;
+  font-family:var(--font-display); font-size:2rem;
+  font-weight:600; color:var(--accent); line-height:1; opacity:.6;
 }
-.chapter-title {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.4;
-}
+.chapter-title { font-size:1.15rem; font-weight:700; color:var(--text); line-height:1.4; }
 
-/* ─── Card Block ─── */
+/* ─── Block ─── */
 .block {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem 1.75rem;
-  margin-bottom: 1.25rem;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:1.25rem 1.5rem;
+  margin-bottom:1rem; position:relative;
+  transition:opacity .3s;
 }
 .block-label {
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
+  font-family:var(--font-sans); font-size:.7rem; font-weight:600;
+  letter-spacing:.1em; color:var(--text-muted); text-transform:uppercase;
+  margin-bottom:.4rem;
+}
+.block-content { position:relative; overflow-wrap:break-word; min-width:0; }
+
+/* ─── Mask Mode ─── */
+body.mask-mode .mask-target {
+  filter:blur(12px); cursor:pointer; user-select:none;
+  transition:filter .4s ease, opacity .4s ease;
+  opacity:.1;
+}
+body.mask-mode .mask-target.revealed {
+  filter:blur(0); opacity:1; cursor:default;
+}
+.mask-hint {
+  display:none; position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  font-family:var(--font-sans); font-size:.8rem;
+  color:var(--text-muted); background:var(--card);
+  padding:.4rem 1rem; border-radius:6px;
+  border:1px solid var(--border); pointer-events:none; z-index:2;
+  white-space:nowrap;
+}
+body.mask-mode .mask-hint { display:block; }
+.mask-target-wrapper { position:relative; }
+body.mask-mode .mask-target.revealed ~ .mask-hint { display:none; }
+
+/* ─── Fill Mode ─── */
+.fb {
+  display:inline; position:relative;
+  transition:all .2s; overflow-wrap:break-word;
+}
+body.fill-mode .fb {
+  display:inline-flex; align-items:baseline;
+  max-width:100%; min-width:0; gap:2px;
+}
+body.fill-mode .fb-inline { cursor:pointer; }
+.fb-text { display:inline; overflow-wrap:break-word; }
+body.fill-mode .fb-text { display:none; }
+.fb-input {
+  display:none; font-family:var(--font-serif); font-size:inherit;
+  line-height:inherit; color:var(--accent); font-weight:600;
+  background:var(--fb-bg); border:none; border-bottom:2px solid var(--border);
+  outline:none; padding:0 .2rem; min-width:3rem; max-width:100%;
+  width:auto; flex:0 1 auto;
+  transition:border-color .2s;
+  vertical-align:baseline; box-sizing:border-box;
+}
+.fb-input:focus { border-bottom-color:var(--accent); }
+.fb-input.correct { border-bottom-color:#3a8a5c; color:#3a8a5c; }
+.fb-input.wrong { border-bottom-color:var(--accent); color:var(--accent); animation:fbShake .3s; }
+.fb-state {
+  display:none; font-size:.6rem; 
+  vertical-align:baseline; flex-shrink:0;
+}
+.fb-state.correct { color:#3a8a5c; }
+body.fill-mode .fb-input { display:block; }
+body.fill-mode .fb-input.correct ~ .fb-state.correct { display:inline; }
+.fb-answer-reveal {
+  display:none; font-size:.58rem; color:var(--text-muted);
+  cursor:pointer; text-decoration:underline;
+  text-underline-offset:2px; white-space:nowrap; flex-shrink:0;
+}
+body.fill-mode .fb-answer-reveal { display:inline; }
+
+@keyframes fbShake {
+  0%,100% { transform:translateX(0); }
+  20% { transform:translateX(-4px); }
+  40% { transform:translateX(4px); }
+  60% { transform:translateX(-3px); }
+  80% { transform:translateX(2px); }
 }
 
-/* ─── Two-column contradiction list ─── */
-.contradictions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin: 0.75rem 0;
-}
+/* ─── Contradictions grid ─── */
+.contradictions { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:.6rem 0; }
 .contradiction-item {
-  background: var(--surface);
-  border-radius: 6px;
-  padding: 1rem 1.25rem;
-  text-align: center;
+  background:var(--surface); border-radius:6px; padding:.7rem .6rem;
+  text-align:center; overflow-wrap:break-word; min-width:0;
 }
-.contradiction-item .icon {
-  font-size: 1.3rem;
-  margin-bottom: 0.25rem;
-  display: block;
-  opacity: 0.5;
-}
-.contradiction-item .main {
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.4;
-}
-.contradiction-item .sub {
-  font-size: 0.8rem;
-  color: var(--text-soft);
-  line-height: 1.4;
-  margin-top: 0.2rem;
-}
+.contradiction-item .icon { font-size:1.2rem; margin-bottom:.2rem; display:block; opacity:.5; }
+.contradiction-item .main { font-weight:600; line-height:1.4; overflow-wrap:break-word; min-width:0; }
+.contradiction-item .sub { font-size:.78rem; color:var(--text-soft); line-height:1.4; margin-top:.15rem; }
 
 /* ─── Key Point ─── */
 .key-point {
-  background: var(--accent-light);
-  border-left: 3px solid var(--accent);
-  padding: 1rem 1.25rem;
-  margin: 0.75rem 0;
-  border-radius: 0 var(--radius) var(--radius) 0;
+  background:var(--accent-light); border-left:3px solid var(--accent);
+  padding:.8rem 1.1rem; margin:.6rem 0;
+  border-radius:0 var(--radius) var(--radius) 0;
+  overflow-wrap:break-word;
 }
-.key-point p { font-size: 0.95rem; color: var(--text); }
+.key-point p { color:var(--text); overflow-wrap:break-word; }
 
-/* ─── List Styles ─── */
-.rich-list { list-style: none; margin: 0.75rem 0; }
+/* ─── Lists ─── */
+.rich-list { list-style:none; margin:.6rem 0; }
 .rich-list li {
-  position: relative;
-  padding: 0.5rem 0 0.5rem 1.5rem;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  border-bottom: 1px solid var(--border);
+  position:relative; padding:.4rem 0 .4rem 1.3rem;
+  line-height:1.6; overflow-wrap:break-word;
+  border-bottom:1px solid var(--border);
 }
-.rich-list li:last-child { border-bottom: none; }
+.rich-list li:last-child { border-bottom:none; }
 .rich-list li::before {
-  content: '';
-  position: absolute; left: 0; top: 1rem;
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  opacity: 0.4;
+  content:''; position:absolute; left:0; top:.9rem;
+  width:5px; height:5px; border-radius:50%; background:var(--accent); opacity:.4;
 }
-.rich-list li strong {
-  color: var(--accent);
-  font-weight: 600;
-}
+.rich-list li strong { color:var(--accent); font-weight:600; }
 
 /* ─── Definition Grid ─── */
-.def-grid {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0.25rem 1rem;
-  margin: 0.75rem 0;
-}
-.def-term {
-  font-weight: 600;
-  color: var(--accent);
-  white-space: nowrap;
-}
-.def-desc { color: var(--text); }
+.def-grid { display:grid; grid-template-columns:auto minmax(0,1fr); gap:.2rem .6rem; margin:.6rem 0; }
+.def-term { font-weight:600; color:var(--accent); white-space:nowrap; }
+.def-desc { color:var(--text); overflow-wrap:break-word; min-width:0; }
 
 /* ─── Exam Callout ─── */
 .exam-callout {
-  background: var(--gold-light);
-  border: 1px solid #d4c5ae;
-  border-radius: var(--radius);
-  padding: 1.25rem 1.5rem;
-  margin: 1rem 0;
+  background:var(--gold-light); border:1px solid #d4c5ae;
+  border-radius:var(--radius); padding:.9rem 1.1rem; margin:.8rem 0;
+  overflow-wrap:break-word;
 }
 .exam-callout-title {
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 0.4rem;
+  font-family:var(--font-sans); font-size:.7rem; font-weight:700;
+  letter-spacing:.15em; text-transform:uppercase; color:var(--gold);
+  margin-bottom:.3rem;
 }
-.exam-callout p { font-size: 0.9rem; color: var(--ink); line-height: 1.7; }
-
-/* ─── Tag Pills ─── */
-.tag {
-  display: inline-block;
-  font-family: var(--font-sans);
-  font-size: 0.68rem;
-  font-weight: 600;
-  padding: 0.15rem 0.65rem;
-  border-radius: 3px;
-  background: var(--accent-light);
-  color: var(--accent);
-  margin-right: 0.25rem;
-}
-.tag-exam { background: var(--gold-light); color: var(--gold); }
-.tag-important { background: #fce8e4; color: var(--accent); }
+.exam-callout p { color:var(--ink); line-height:1.7; }
 
 /* ─── Footer ─── */
 .footer {
-  text-align: center;
-  padding: 3rem 2rem;
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  font-family: var(--font-sans);
-  border-top: 1px solid var(--border);
+  text-align:center; padding:2.5rem 2rem;
+  color:var(--text-muted); font-size:.78rem;
+  font-family:var(--font-sans);
+  border-top:1px solid var(--border);
 }
 
 /* ─── Responsive ─── */
-@media (max-width: 900px) {
-  .sidebar { display: none; }
-  .main { margin-left: 0; }
-  .hero { padding: 3rem 1.5rem 2.5rem; }
-  .content { padding: 0.5rem 1.5rem 4rem; }
-  .contradictions { grid-template-columns: 1fr; }
-  .chapter-number { font-size: 1.8rem; }
+@media (max-width:1020px) {
+  :root { --sidebar:220px; }
 }
-@media (max-width: 480px) {
-  body { font-size: 15px; }
-  .hero h1 { font-size: 1.6rem; }
-  .block { padding: 1rem 1.1rem; }
+@media (max-width:900px) {
+  .sidebar { display:none; }
+  .main { margin-left:0; }
+  .hero { padding:2rem 1.25rem 1.5rem; }
+  .toolbar { padding:.6rem 1.25rem 0; gap:.4rem; }
+  .content { padding:0 1.25rem 3rem; }
+  .contradictions { grid-template-columns:1fr; }
+  .chapter-number { font-size:1.4rem; }
+  .mode-btn { font-size:.74rem; padding:.35rem .7rem; }
+  .block { padding:1rem 1.1rem; }
+  .chapter { margin-bottom:2.5rem; }
+  .chapter-header { gap:.6rem; }
+}
+@media (max-width:600px) {
+  body { font-size:15px; }
+  .hero h1 { font-size:1.3rem; }
+  .hero-label { font-size:.68rem; }
+  .toolbar { gap:.3rem; justify-content:center; }
+  .mode-btn { font-size:.7rem; padding:.3rem .55rem; }
+  .mode-progress { min-width:5rem; font-size:.7rem; }
+  .block { padding:.75rem .85rem; border-radius:6px; }
+  .block-label { font-size:.66rem; }
+  .contradiction-item { padding:.6rem .6rem; }
+  .rich-list li { padding:.35rem 0 .35rem 1.1rem; }
+  .chapter-title { font-size:1rem; }
+  .chapter-number { font-size:1.2rem; }
+  .key-point { padding:.7rem .9rem; }
+  .exam-callout { padding:.8rem .9rem; }
+  .fb-input { min-width:2rem; font-size:.85rem; }
+  .def-grid { grid-template-columns:1fr; gap:.1rem 0; }
+  .def-term::after { content:"："; }
+}
+@media (max-width:400px) {
+  .toolbar { flex-direction:column; align-items:stretch; }
+  .mode-btn { text-align:center; }
+  .mode-progress { min-width:0; text-align:center; }
+  .mode-reset { text-align:center; }
 }
 
 /* ─── Print ─── */
 @media print {
-  .sidebar, #progress { display: none; }
-  .main { margin-left: 0; }
-  .chapter { break-inside: avoid; page-break-inside: avoid; }
+  .sidebar, #progress, .toolbar { display:none; }
+  .main { margin-left:0; }
+  .chapter { break-inside:avoid; }
+  body.mask-mode .mask-target { filter:none !important; opacity:1 !important; }
+  body.fill-mode .fb-text { display:inline !important; }
+  body.fill-mode .fb-input { display:none !important; }
 }
 </style>
 </head>
@@ -365,7 +358,7 @@ body {
 <aside class="sidebar">
   <div class="sidebar-logo">
     近代史纲要
-    <small>复习精要</small>
+    <small>默写复习</small>
   </div>
   <nav>
     <ul>
@@ -384,11 +377,18 @@ body {
 <section class="hero">
   <div class="hero-label">中国近现代史纲要</div>
   <h1>
-    复习精要
-    <span class="en">Modern Chinese History · Study Companion</span>
+    默写复习
+    <span class="en">Dictation · Recitation · Mastery</span>
   </h1>
-  <p>依据教材章节脉络整理的核心考点与知识要点</p>
 </section>
+
+<div class="toolbar" id="toolbar">
+  <button class="mode-btn active" data-mode="browse">📖 浏览</button>
+  <button class="mode-btn" data-mode="mask">🙈 遮罩</button>
+  <button class="mode-btn" data-mode="fill">✍ 填空</button>
+  <span class="mode-progress" id="modeProgress"></span>
+  <span class="mode-reset" id="modeReset">重置</span>
+</div>
 
 <div class="content">
 
@@ -401,34 +401,49 @@ body {
 
   <div class="block">
     <div class="block-label">近代中国的两大主要矛盾</div>
-    <div class="contradictions">
-      <div class="contradiction-item">
-        <span class="icon">⚔</span>
-        <div class="main">帝国主义和中华民族的矛盾</div>
-        <div class="sub">最主要的矛盾</div>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <div class="contradictions">
+          <div class="contradiction-item">
+            <span class="icon">⚔</span>
+            <div class="main"><span class="fb" data-a="帝国主义和中华民族的矛盾">帝国主义和中华民族的矛盾</span></div>
+            <div class="sub">最主要的矛盾</div>
+          </div>
+          <div class="contradiction-item">
+            <span class="icon">⚖</span>
+            <div class="main"><span class="fb" data-a="封建主义和人民大众的矛盾">封建主义和人民大众的矛盾</span></div>
+            <div class="sub">社会内部矛盾</div>
+          </div>
+        </div>
       </div>
-      <div class="contradiction-item">
-        <span class="icon">⚖</span>
-        <div class="main">封建主义和人民大众的矛盾</div>
-        <div class="sub">社会内部矛盾</div>
-      </div>
+      <div class="mask-hint">点击揭开</div>
     </div>
   </div>
 
   <div class="block">
     <div class="block-label">近代中国的两大历史任务</div>
-    <ul class="rich-list">
-      <li><strong>争取民族独立、人民解放</strong> —— 改变被压迫的地位</li>
-      <li><strong>实现国家富强、人民幸福</strong> —— 走向现代化</li>
-    </ul>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <ul class="rich-list">
+          <li><strong><span class="fb" data-a="争取民族独立、人民解放">争取民族独立、人民解放</span></strong> —— 改变被压迫的地位</li>
+          <li><strong><span class="fb" data-a="实现国家富强、人民幸福">实现国家富强、人民幸福</span></strong> —— 走向现代化</li>
+        </ul>
+      </div>
+      <div class="mask-hint">点击揭开</div>
+    </div>
   </div>
 
   <div class="block">
     <div class="block-label">反侵略战争失败的原因</div>
-    <ul class="rich-list">
-      <li><strong>直接原因：</strong>经济技术的落后</li>
-      <li><strong>根本原因：</strong>社会制度的腐败</li>
-    </ul>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <ul class="rich-list">
+          <li><strong>直接原因：</strong><span class="fb" data-a="经济技术的落后">经济技术的落后</span></li>
+          <li><strong>根本原因：</strong><span class="fb" data-a="社会制度的腐败">社会制度的腐败</span></li>
+        </ul>
+      </div>
+      <div class="mask-hint">点击揭开</div>
+    </div>
   </div>
 </section>
 
@@ -439,19 +454,27 @@ body {
     <h2 class="chapter-title">洋务运动</h2>
   </div>
 
-  <div class="exam-callout">
-    <div class="exam-callout-title">材料题重点</div>
-    <p>本考点常以材料分析题形式出现，重点考查洋务运动的客观历史作用与评价。</p>
+  <div class="exam-callout mask-target-wrapper">
+    <div class="mask-target">
+      <div class="exam-callout-title">材料题重点</div>
+      <p>本考点常以材料分析题形式出现，重点考查洋务运动的客观历史作用与评价。</p>
+    </div>
+    <div class="mask-hint">点击揭开</div>
   </div>
 
   <div class="block">
     <div class="block-label">历史作用</div>
-    <ul class="rich-list">
-      <li><strong>客观促进</strong>中国早期工商业、民族资本主义发展</li>
-      <li>开办新式学堂，派遣留学生，是<strong>中国近代教育的开端</strong></li>
-      <li>催生资本主义生产方式，冲击传统<strong>"重本抑末"</strong>观念</li>
-      <li>改变社会风气与价值观念，<strong>工商业者社会地位提升</strong></li>
-    </ul>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <ul class="rich-list">
+          <li><span class="fb" data-a="客观促进中国早期工商业、民族资本主义发展">客观促进中国早期工商业、民族资本主义发展</span></li>
+          <li>开办新式学堂，派遣留学生，是<span class="fb" data-a="中国近代教育的开端">中国近代教育的开端</span></li>
+          <li>催生资本主义生产方式，冲击传统<span class="fb" data-a=""重本抑末"观念">"重本抑末"观念</span></li>
+          <li><span class="fb" data-a="改变社会风气与价值观念，工商业者社会地位提升">改变社会风气与价值观念，工商业者社会地位提升</span></li>
+        </ul>
+      </div>
+      <div class="mask-hint">点击揭开</div>
+    </div>
   </div>
 </section>
 
@@ -463,12 +486,18 @@ body {
   </div>
 
   <div class="block">
-    <ul class="rich-list">
-      <li><strong>推翻清王朝统治</strong>，结束中国两千多年封建君主专制制度</li>
-      <li><strong>极大推动人民思想解放</strong></li>
-      <li><strong>推动中国社会全方位变革</strong></li>
-      <li><strong>一定程度打击帝国主义侵略势力</strong>，推动亚洲民族解放运动高涨</li>
-    </ul>
+    <div class="block-label">历史意义</div>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <ul class="rich-list">
+          <li><span class="fb" data-a="推翻清王朝统治，结束中国两千多年封建君主专制制度">推翻清王朝统治，结束中国两千多年封建君主专制制度</span></li>
+          <li><span class="fb" data-a="极大推动人民思想解放">极大推动人民思想解放</span></li>
+          <li><span class="fb" data-a="推动中国社会全方位变革">推动中国社会全方位变革</span></li>
+          <li><span class="fb" data-a="一定程度打击帝国主义侵略势力，推动亚洲民族解放运动高涨">一定程度打击帝国主义侵略势力</span>，推动亚洲民族解放运动高涨</li>
+        </ul>
+      </div>
+      <div class="mask-hint">点击揭开</div>
+    </div>
   </div>
 </section>
 
@@ -481,36 +510,57 @@ body {
 
   <div class="block">
     <div class="block-label">五四运动的历史特点</div>
-    <ul class="rich-list">
-      <li>拯救民族危亡、捍卫民族主权的<strong>伟大社会革命运动</strong></li>
-      <li>以先进青年为先锋、广大群众参与的<strong>彻底反帝反封建爱国革命运动</strong></li>
-    </ul>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <ul class="rich-list">
+          <li><span class="fb" data-a="拯救民族危亡、捍卫民族主权的伟大社会革命运动">拯救民族危亡、捍卫民族主权的伟大社会革命运动</span></li>
+          <li><span class="fb" data-a="以先进青年为先锋、广大群众参与的彻底反帝反封建爱国革命运动">以先进青年为先锋、广大群众参与的彻底反帝反封建爱国革命运动</span></li>
+        </ul>
+      </div>
+      <div class="mask-hint">点击揭开</div>
+    </div>
   </div>
 
   <div class="block">
     <div class="block-label">五四运动的历史意义</div>
-    <ul class="rich-list">
-      <li><strong>新民主主义革命的开端</strong>，近代民族独立与发展的里程碑</li>
-      <li>孕育伟大<strong>五四爱国精神</strong>，铸就永久奋斗精神传统</li>
-    </ul>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <ul class="rich-list">
+          <li><span class="fb" data-a="新民主主义革命的开端，近代民族独立与发展的里程碑">新民主主义革命的开端，近代民族独立与发展的里程碑</span></li>
+          <li>孕育伟大<span class="fb" data-a="五四爱国精神，铸就永久奋斗精神传统">五四爱国精神，铸就永久奋斗精神传统</span></li>
+        </ul>
+      </div>
+      <div class="mask-hint">点击揭开</div>
+    </div>
   </div>
 
-  <div class="exam-callout">
-    <div class="exam-callout-title">简答 / 材料题</div>
-    <p>中国共产党成立的历史意义常以简答或材料题考查。</p>
+  <div class="exam-callout mask-target-wrapper">
+    <div class="mask-target">
+      <div class="exam-callout-title">简答 / 材料题</div>
+      <p>中国共产党成立的历史意义常以简答或材料题考查。</p>
+    </div>
+    <div class="mask-hint">点击揭开</div>
   </div>
 
   <div class="block">
     <div class="block-label">中国共产党成立的历史意义</div>
-    <ul class="rich-list">
-      <li><strong>开天辟地：</strong>中华民族发展史的伟大事件</li>
-      <li><strong>指明道路：</strong>踏上民族独立、人民解放的光明道路，开启国家富强、人民幸福的征程</li>
-      <li><strong>铸就精神：</strong>孕育坚持真理、坚守理想、践行初心、不怕牺牲、对党忠诚、不负人民的<strong>伟大建党精神</strong></li>
-    </ul>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <ul class="rich-list">
+          <li><span class="fb" data-a="开天辟地：中华民族发展史的伟大事件">开天辟地：中华民族发展史的伟大事件</span></li>
+          <li><span class="fb" data-a="指明道路：踏上民族独立、人民解放的光明道路，开启国家富强、人民幸福的征程">指明道路：踏上民族独立、人民解放的光明道路，开启国家富强、人民幸福的征程</span></li>
+          <li><span class="fb" data-a="铸就精神：孕育坚持真理、坚守理想、践行初心、不怕牺牲、对党忠诚、不负人民的伟大建党精神">铸就精神：孕育坚持真理、坚守理想、践行初心、不怕牺牲、对党忠诚、不负人民的伟大建党精神</span></li>
+        </ul>
+      </div>
+      <div class="mask-hint">点击揭开</div>
+    </div>
   </div>
 
-  <div class="key-point">
-    <p><strong>总体总结：</strong>深刻改变中华民族的发展方向、前途命运，改变世界发展趋势与格局。</p>
+  <div class="key-point mask-target-wrapper">
+    <div class="mask-target">
+      <p><strong>总体总结：</strong><span class="fb" data-a="深刻改变中华民族的发展方向、前途命运，改变世界发展趋势与格局">深刻改变中华民族的发展方向、前途命运，改变世界发展趋势与格局</span></p>
+    </div>
+    <div class="mask-hint">点击揭开</div>
   </div>
 </section>
 
@@ -523,33 +573,44 @@ body {
 
   <div class="block">
     <div class="block-label">中国革命胜利的原因</div>
-    <ul class="rich-list">
-      <li><strong>群众基础：</strong>工人、农民、城市小资产阶级联合为主要革命力量</li>
-      <li><strong>根本保证：</strong>中国共产党的领导</li>
-      <li><strong>外部条件：</strong>国际无产阶级与各国人民群众的支持</li>
-    </ul>
-  </div>
-
-  <div class="exam-callout">
-    <div class="exam-callout-title">材料题重点</div>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <ul class="rich-list">
+          <li><strong>群众基础：</strong><span class="fb" data-a="工人、农民、城市小资产阶级联合为主要革命力量">工人、农民、城市小资产阶级联合为主要革命力量</span></li>
+          <li><strong>根本保证：</strong><span class="fb" data-a="中国共产党的领导">中国共产党的领导</span></li>
+          <li><strong>外部条件：</strong><span class="fb" data-a="国际无产阶级与各国人民群众的支持">国际无产阶级与各国人民群众的支持</span></li>
+        </ul>
+      </div>
+      <div class="mask-hint">点击揭开</div>
+    </div>
   </div>
 
   <div class="block">
     <div class="block-label">中国革命胜利的历史意义</div>
-    <ul class="rich-list">
-      <li>推翻<strong>帝国主义、封建主义、官僚资本主义</strong>三座大山</li>
-      <li>结束近代百余年民族屈辱，扫除国家发展障碍</li>
-    </ul>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <ul class="rich-list">
+          <li><span class="fb" data-a="推翻帝国主义、封建主义、官僚资本主义三座大山">推翻帝国主义、封建主义、官僚资本主义三座大山</span></li>
+          <li><span class="fb" data-a="结束近代百余年民族屈辱，扫除国家发展障碍">结束近代百余年民族屈辱，扫除国家发展障碍</span></li>
+        </ul>
+      </div>
+      <div class="mask-hint">点击揭开</div>
+    </div>
   </div>
 
   <div class="block">
     <div class="block-label">新中国成立初期面临的四大考验</div>
-    <ul class="rich-list">
-      <li>能否<strong>保卫革命成果</strong>，巩固新生人民政权</li>
-      <li>能否克服严重经济困难，<strong>恢复发展国民经济</strong></li>
-      <li>能否巩固民族独立，<strong>维护国家主权与安全</strong></li>
-      <li>能否经受<strong>全国执政考验</strong>，持续保持优良作风</li>
-    </ul>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <ul class="rich-list">
+          <li><span class="fb" data-a="能否保卫革命成果，巩固新生人民政权">能否保卫革命成果，巩固新生人民政权</span></li>
+          <li><span class="fb" data-a="能否克服严重经济困难，恢复发展国民经济">能否克服严重经济困难，恢复发展国民经济</span></li>
+          <li><span class="fb" data-a="能否巩固民族独立，维护国家主权与安全">能否巩固民族独立，维护国家主权与安全</span></li>
+          <li><span class="fb" data-a="能否经受全国执政考验，持续保持优良作风">能否经受全国执政考验，持续保持优良作风</span></li>
+        </ul>
+      </div>
+      <div class="mask-hint">点击揭开</div>
+    </div>
   </div>
 </section>
 
@@ -562,43 +623,65 @@ body {
 
   <div class="block">
     <div class="block-label">过渡时期总路线</div>
-    <div class="key-point">
-      <p><strong>完整表述：</strong>逐步实现国家的社会主义工业化，并逐步完成对农业、手工业、资本主义工商业的社会主义改造。</p>
-    </div>
-    <div class="def-grid" style="margin-top:1rem;">
-      <span class="def-term">简称</span>
-      <span class="def-desc"><strong>一化三改</strong></span>
-      <span class="def-term">一化</span>
-      <span class="def-desc">社会主义工业化</span>
-      <span class="def-term">三改</span>
-      <span class="def-desc">农业、手工业、资本主义工商业的社会主义改造</span>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <div class="key-point">
+          <p><strong>完整表述：</strong><span class="fb" data-a="逐步实现国家的社会主义工业化，并逐步完成对农业、手工业、资本主义工商业的社会主义改造">逐步实现国家的社会主义工业化，并逐步完成对农业、手工业、资本主义工商业的社会主义改造</span></p>
+        </div>
+        <div class="def-grid" style="margin-top:.8rem;">
+          <span class="def-term">简称</span>
+          <span class="def-desc"><strong><span class="fb" data-a="一化三改">一化三改</span></strong></span>
+          <span class="def-term">一化</span>
+          <span class="def-desc"><span class="fb" data-a="社会主义工业化">社会主义工业化</span></span>
+          <span class="def-term">三改</span>
+          <span class="def-desc"><span class="fb" data-a="农业、手工业、资本主义工商业的社会主义改造">农业、手工业、资本主义工商业的社会主义改造</span></span>
+        </div>
+      </div>
+      <div class="mask-hint">点击揭开</div>
     </div>
   </div>
 
   <div class="block">
     <div class="block-label">过渡时期总路线的历史必然性</div>
-    <ul class="rich-list">
-      <li><strong>社会主义工业化</strong>是国家独立、富强的首要条件</li>
-      <li>个体农业的<strong>社会主义改造</strong>是工业化的必要条件</li>
-      <li>资本主义工商业的<strong>社会主义改造</strong>是工业化发展的客观需要</li>
-    </ul>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <ul class="rich-list">
+          <li><span class="fb" data-a="社会主义工业化是国家独立、富强的首要条件">社会主义工业化是国家独立、富强的首要条件</span></li>
+          <li><span class="fb" data-a="个体农业的社会主义改造是工业化的必要条件">个体农业的社会主义改造是工业化的必要条件</span></li>
+          <li><span class="fb" data-a="资本主义工商业的社会主义改造是工业化发展的客观需要">资本主义工商业的社会主义改造是工业化发展的客观需要</span></li>
+        </ul>
+      </div>
+      <div class="mask-hint">点击揭开</div>
+    </div>
   </div>
 
   <div class="block">
     <div class="block-label">社会主义基本制度确立的伟大意义</div>
-    <ul class="rich-list">
-      <li>调动工人阶级与广大劳动人民积极性，为社会生产大发展<strong>开辟广阔道路</strong></li>
-      <li>为当代中国一切发展进步奠定<strong>根本政治保障</strong></li>
-      <li>为社会主义先进文化发展<strong>指明前进方向</strong></li>
-      <li>标志占世界四分之一人口的东方大国<strong>进入社会主义社会</strong></li>
-    </ul>
+    <div class="block-content mask-target-wrapper">
+      <div class="mask-target">
+        <ul class="rich-list">
+          <li><span class="fb" data-a="调动工人阶级与广大劳动人民积极性，为社会生产大发展开辟广阔道路">调动工人阶级与广大劳动人民积极性，为社会生产大发展开辟广阔道路</span></li>
+          <li><span class="fb" data-a="为当代中国一切发展进步奠定根本政治保障">为当代中国一切发展进步奠定根本政治保障</span></li>
+          <li><span class="fb" data-a="为社会主义先进文化发展指明前进方向">为社会主义先进文化发展指明前进方向</span></li>
+          <li><span class="fb" data-a="标志占世界四分之一人口的东方大国进入社会主义社会">标志占世界四分之一人口的东方大国进入社会主义社会</span></li>
+        </ul>
+      </div>
+      <div class="mask-hint">点击揭开</div>
+    </div>
+  </div>
+
+  <div class="key-point mask-target-wrapper">
+    <div class="mask-target">
+      <p><strong>总体总结：</strong><span class="fb" data-a="深刻改变中华民族的发展方向、前途命运，改变世界发展趋势与格局">深刻改变中华民族的发展方向、前途命运，改变世界发展趋势与格局</span></p>
+    </div>
+    <div class="mask-hint">点击揭开</div>
   </div>
 </section>
 
 </div><!-- /content -->
 
 <footer class="footer">
-  <p>中国近代史纲要 · 复习精要</p>
+  <p>中国近代史纲要 · 默写复习工具</p>
 </footer>
 
 </main>
@@ -613,26 +696,209 @@ body {
     bar.style.width = h > 0 ? (window.scrollY / h * 100) + '%' : '0%';
   }, { passive: true });
 
-  /* ─── Sidebar Active State ─── */
+  /* ─── Sidebar Active ─── */
   const links = document.querySelectorAll('.sidebar nav a');
   const chapters = document.querySelectorAll('.chapter');
   if (links.length && chapters.length) {
-    const observer = new IntersectionObserver(function(entries) {
+    const obs = new IntersectionObserver(function(entries) {
       let best = null, bestRatio = 0;
       entries.forEach(function(e) {
         if (e.intersectionRatio > bestRatio) { bestRatio = e.intersectionRatio; best = e.target; }
       });
       if (best) {
         var id = best.getAttribute('id');
-        links.forEach(function(l) {
-          l.classList.toggle('active', l.getAttribute('href') === '#' + id);
-        });
+        links.forEach(function(l) { l.classList.toggle('active', l.getAttribute('href') === '#' + id); });
       }
     }, { rootMargin: '-20% 0px -60% 0px', threshold: [0, 0.1, 0.2, 0.4] });
-    chapters.forEach(function(c) { observer.observe(c); });
+    chapters.forEach(function(c) { obs.observe(c); });
   }
+
+  /* =============================================
+     默写模式核心逻辑
+     ============================================= */
+
+  const body = document.body;
+  const modeBtns = document.querySelectorAll('.mode-btn');
+  const progressEl = document.getElementById('modeProgress');
+  const resetBtn = document.getElementById('modeReset');
+
+  // ─── 状态 ───
+  let currentMode = 'browse'; // browse | mask | fill
+  const maskTargets = document.querySelectorAll('.mask-target');
+  const fillBlanks  = document.querySelectorAll('.fb');
+
+  // ─── 遮罩记数 ───
+  function countMaskRevealed() {
+    let total = maskTargets.length;
+    let revealed = 0;
+    maskTargets.forEach(function(el) { if (el.classList.contains('revealed')) revealed++; });
+    return { total: total, revealed: revealed };
+  }
+
+  // ─── 填空记数 ───
+  function countFillCorrect() {
+    let total = fillBlanks.length;
+    let correct = 0;
+    fillBlanks.forEach(function(el) {
+      var inp = el.querySelector('.fb-input');
+      if (inp && inp.classList.contains('correct')) correct++;
+    });
+    return { total: total, correct: correct };
+  }
+
+  // ─── 更新进度 ───
+  function updateProgress() {
+    if (currentMode === 'browse') {
+      progressEl.textContent = '';
+      return;
+    }
+    if (currentMode === 'mask') {
+      var c = countMaskRevealed();
+      progressEl.textContent = '遮罩 ' + c.revealed + '/' + c.total;
+      return;
+    }
+    if (currentMode === 'fill') {
+      var c = countFillCorrect();
+      progressEl.textContent = '填空 ' + c.correct + '/' + c.total;
+      return;
+    }
+  }
+
+  // ─── 切换模式 ───
+  function setMode(mode) {
+    currentMode = mode;
+    body.classList.remove('mask-mode', 'fill-mode');
+    if (mode === 'mask') body.classList.add('mask-mode');
+    if (mode === 'fill') body.classList.add('fill-mode');
+
+    modeBtns.forEach(function(btn) {
+      btn.classList.toggle('active', btn.dataset.mode === mode);
+    });
+
+    // 填空模式：生成 input
+    if (mode === 'fill') {
+      fillBlanks.forEach(function(el) {
+        if (el.querySelector('.fb-input')) return; // 已生成
+        var answer = el.getAttribute('data-a') || el.textContent.trim();
+        var textSpan = document.createElement('span');
+        textSpan.className = 'fb-text';
+        textSpan.textContent = answer;
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'fb-input';
+        input.placeholder = '…';
+        input.spellcheck = false;
+        input.autocomplete = 'off';
+        input.dataset.answer = answer;
+        input.style.width = Math.min(Math.max(answer.length, 4), 26) + 'em';
+        var stateSpan = document.createElement('span');
+        stateSpan.className = 'fb-state';
+        stateSpan.textContent = '✓';
+        var revealLink = document.createElement('span');
+        revealLink.className = 'fb-answer-reveal';
+        revealLink.textContent = '查看';
+        revealLink.addEventListener('click', function(e) {
+          e.stopPropagation();
+          input.value = answer;
+          input.classList.add('correct');
+          input.classList.remove('wrong');
+          stateSpan.classList.add('correct');
+          updateProgress();
+        });
+        el.innerHTML = '';
+        el.appendChild(textSpan);
+        el.appendChild(input);
+        el.appendChild(stateSpan);
+        el.appendChild(revealLink);
+
+        // 输入检测
+        var checkAnswer = function() {
+          var val = input.value.trim();
+          var ans = input.dataset.answer.trim();
+          if (val === '' ) { input.classList.remove('correct','wrong'); return; }
+          if (val === ans) {
+            input.classList.add('correct');
+            input.classList.remove('wrong');
+            stateSpan.classList.add('correct');
+          } else {
+            input.classList.remove('correct');
+            input.classList.add('wrong');
+            stateSpan.classList.remove('correct');
+            setTimeout(function() { input.classList.remove('wrong'); }, 400);
+          }
+          updateProgress();
+        };
+        input.addEventListener('blur', checkAnswer);
+        input.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') { input.blur(); }
+        });
+        // 实时检测：用户输入时如果对了立刻显示
+        input.addEventListener('input', function() {
+          var val = input.value.trim();
+          var ans = input.dataset.answer.trim();
+          if (val === ans) {
+            input.classList.add('correct');
+            input.classList.remove('wrong');
+            stateSpan.classList.add('correct');
+            updateProgress();
+          } else if (val === '') {
+            input.classList.remove('correct','wrong');
+            stateSpan.classList.remove('correct');
+          } else if (ans.startsWith(val)) {
+            // 部分正确，不标记错误
+            input.classList.remove('wrong');
+          } else {
+            input.classList.add('wrong');
+            stateSpan.classList.remove('correct');
+            setTimeout(function() { input.classList.remove('wrong'); }, 400);
+          }
+        });
+      });
+    }
+
+    updateProgress();
+  }
+
+  // ─── 遮罩点击揭开 ───
+  maskTargets.forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      if (currentMode !== 'mask') return;
+      if (el.classList.contains('revealed')) return;
+      el.classList.add('revealed');
+      updateProgress();
+    });
+  });
+
+  // ─── 模式按钮 ───
+  modeBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      setMode(this.dataset.mode);
+    });
+  });
+
+  // ─── 重置 ───
+  resetBtn.addEventListener('click', function() {
+    if (currentMode === 'mask') {
+      maskTargets.forEach(function(el) { el.classList.remove('revealed'); });
+    }
+    if (currentMode === 'fill') {
+      fillBlanks.forEach(function(el) {
+        var inp = el.querySelector('.fb-input');
+        if (inp) {
+          inp.value = '';
+          inp.classList.remove('correct','wrong');
+          var state = el.querySelector('.fb-state');
+          if (state) state.classList.remove('correct');
+        }
+      });
+    }
+    updateProgress();
+  });
+
+  // ─── 默认 ───
+  setMode('browse');
+
 })();
 </script>
-
 </body>
 </html>

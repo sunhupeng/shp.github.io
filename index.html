@@ -227,6 +227,12 @@ body.fill-mode .fb-input.correct ~ .fb-state.correct { display:inline; }
   text-underline-offset:2px; white-space:nowrap; flex-shrink:0;
 }
 body.fill-mode .fb-answer-reveal { display:inline; }
+.fb-check-btn {
+  display:none; font-size:.58rem; color:var(--accent);
+  cursor:pointer; text-decoration:underline;
+  text-underline-offset:2px; white-space:nowrap; flex-shrink:0;
+}
+body.fill-mode .fb-check-btn { display:inline; }
 
 @keyframes fbShake {
   0%,100% { transform:translateX(0); }
@@ -386,6 +392,7 @@ body.fill-mode .fb-answer-reveal { display:inline; }
   <button class="mode-btn active" data-mode="browse">📖 浏览</button>
   <button class="mode-btn" data-mode="mask">🙈 遮罩</button>
   <button class="mode-btn" data-mode="fill">✍ 填空</button>
+  <button class="mode-btn" id="btnCheck">✅ 检查</button>
   <span class="mode-progress" id="modeProgress"></span>
   <span class="mode-reset" id="modeReset">重置</span>
 </div>
@@ -438,9 +445,10 @@ body.fill-mode .fb-answer-reveal { display:inline; }
     <div class="block-content mask-target-wrapper">
       <div class="mask-target">
         <ul class="rich-list">
-          <li><strong>直接原因：</strong><span class="fb" data-a="经济技术的落后">经济技术的落后</span></li>
           <li><strong>根本原因：</strong><span class="fb" data-a="社会制度的腐败">社会制度的腐败</span></li>
+          <li><strong>直接原因：</strong><span class="fb" data-a="经济技术的落后">经济技术的落后</span></li>
         </ul>
+        <p style="font-size:.85rem;color:var(--text-soft);margin-top:.3rem;">总结：社会制度的腐败是根本原因</p>
       </div>
       <div class="mask-hint">点击揭开</div>
     </div>
@@ -467,10 +475,10 @@ body.fill-mode .fb-answer-reveal { display:inline; }
     <div class="block-content mask-target-wrapper">
       <div class="mask-target">
         <ul class="rich-list">
-          <li><span class="fb" data-a="客观促进中国早期工商业、民族资本主义发展">客观促进中国早期工商业、民族资本主义发展</span></li>
-          <li>开办新式学堂，派遣留学生，是<span class="fb" data-a="中国近代教育的开端">中国近代教育的开端</span></li>
-          <li>催生资本主义生产方式，冲击传统<span class="fb" data-a=""重本抑末"观念">"重本抑末"观念</span></li>
-          <li><span class="fb" data-a="改变社会风气与价值观念，工商业者社会地位提升">改变社会风气与价值观念，工商业者社会地位提升</span></li>
+          <li><span class="fb" data-a="促进了中国早期工商业和民族资本主义的发展">促进了中国早期工商业和民族资本主义的发展</span></li>
+          <li>开办新式学堂，派出最早的留学生，是<span class="fb" data-a="中国近代教育的开端">中国近代教育的开端</span></li>
+          <li>冲击传统<span class="fb" data-a=""重本轻末"等观念">"重本轻末"等观念</span></li>
+          <li><span class="fb" data-a="社会风气和价值观念开始变化，工商业者的地位上升">社会风气和价值观念开始变化，工商业者的地位上升</span></li>
         </ul>
       </div>
       <div class="mask-hint">点击揭开</div>
@@ -490,10 +498,11 @@ body.fill-mode .fb-answer-reveal { display:inline; }
     <div class="block-content mask-target-wrapper">
       <div class="mask-target">
         <ul class="rich-list">
-          <li><span class="fb" data-a="推翻清王朝统治，结束中国两千多年封建君主专制制度">推翻清王朝统治，结束中国两千多年封建君主专制制度</span></li>
-          <li><span class="fb" data-a="极大推动人民思想解放">极大推动人民思想解放</span></li>
-          <li><span class="fb" data-a="推动中国社会全方位变革">推动中国社会全方位变革</span></li>
-          <li><span class="fb" data-a="一定程度打击帝国主义侵略势力，推动亚洲民族解放运动高涨">一定程度打击帝国主义侵略势力</span>，推动亚洲民族解放运动高涨</li>
+          <li><span class="fb" data-a="推翻了清王朝的统治">推翻了清王朝的统治</span></li>
+          <li><span class="fb" data-a="结束了中国两千多年的封建君主专制制度">结束了中国两千多年的封建君主专制制度</span></li>
+          <li><span class="fb" data-a="推动了人民的思想解放">推动了人民的思想解放</span></li>
+          <li><span class="fb" data-a="推动了中国社会的变革">推动了中国社会的变革</span></li>
+          <li><span class="fb" data-a="一定程度打击了帝国主义的侵略势力，推动了亚洲各民族解放运动的高涨">一定程度打击了帝国主义的侵略势力</span>，推动了亚洲各民族解放运动的高涨</li>
         </ul>
       </div>
       <div class="mask-hint">点击揭开</div>
@@ -509,12 +518,12 @@ body.fill-mode .fb-answer-reveal { display:inline; }
   </div>
 
   <div class="block">
-    <div class="block-label">五四运动的历史特点</div>
+    <div class="block-label">五四运动的历史特点和意义</div>
     <div class="block-content mask-target-wrapper">
       <div class="mask-target">
         <ul class="rich-list">
           <li><span class="fb" data-a="拯救民族危亡、捍卫民族主权的伟大社会革命运动">拯救民族危亡、捍卫民族主权的伟大社会革命运动</span></li>
-          <li><span class="fb" data-a="以先进青年为先锋、广大群众参与的彻底反帝反封建爱国革命运动">以先进青年为先锋、广大群众参与的彻底反帝反封建爱国革命运动</span></li>
+          <li><span class="fb" data-a="一场以先进青年为先锋、广大群众参加的彻底反帝反封建的伟大爱国革命运动">一场以先进青年为先锋、广大群众参加的彻底反帝反封建的伟大爱国革命运动</span></li>
         </ul>
       </div>
       <div class="mask-hint">点击揭开</div>
@@ -526,8 +535,8 @@ body.fill-mode .fb-answer-reveal { display:inline; }
     <div class="block-content mask-target-wrapper">
       <div class="mask-target">
         <ul class="rich-list">
-          <li><span class="fb" data-a="新民主主义革命的开端，近代民族独立与发展的里程碑">新民主主义革命的开端，近代民族独立与发展的里程碑</span></li>
-          <li>孕育伟大<span class="fb" data-a="五四爱国精神，铸就永久奋斗精神传统">五四爱国精神，铸就永久奋斗精神传统</span></li>
+          <li><span class="fb" data-a="新民主主义革命的开端，在近代以来中华民族追求民族独立和发展进步的历程中具有里程碑意义">新民主主义革命的开端</span>，在近代以来中华民族追求民族独立和发展进步的历程中具有里程碑意义</li>
+          <li><span class="fb" data-a="孕育了伟大的五四爱国精神和永久奋斗的伟大传统">孕育了伟大的五四爱国精神和永久奋斗的伟大传统</span></li>
         </ul>
       </div>
       <div class="mask-hint">点击揭开</div>
@@ -548,8 +557,8 @@ body.fill-mode .fb-answer-reveal { display:inline; }
       <div class="mask-target">
         <ul class="rich-list">
           <li><span class="fb" data-a="开天辟地：中华民族发展史的伟大事件">开天辟地：中华民族发展史的伟大事件</span></li>
-          <li><span class="fb" data-a="指明道路：踏上民族独立、人民解放的光明道路，开启国家富强、人民幸福的征程">指明道路：踏上民族独立、人民解放的光明道路，开启国家富强、人民幸福的征程</span></li>
-          <li><span class="fb" data-a="铸就精神：孕育坚持真理、坚守理想、践行初心、不怕牺牲、对党忠诚、不负人民的伟大建党精神">铸就精神：孕育坚持真理、坚守理想、践行初心、不怕牺牲、对党忠诚、不负人民的伟大建党精神</span></li>
+          <li><span class="fb" data-a="指明道路：中国人民从此踏上争取民族独立、人民解放的光明道路，开启了实现国家富强、人民幸福的历史征程">指明道路：中国人民从此踏上争取民族独立、人民解放的光明道路，开启了实现国家富强、人民幸福的历史征程</span></li>
+          <li><span class="fb" data-a="铸就建党精神：孕育了坚持真理、坚守理想、践行初心、不怕牺牲、对党忠诚、不负人民的伟大建党精神">铸就建党精神：孕育了坚持真理、坚守理想、践行初心、不怕牺牲、对党忠诚、不负人民的伟大建党精神</span></li>
         </ul>
       </div>
       <div class="mask-hint">点击揭开</div>
@@ -558,7 +567,7 @@ body.fill-mode .fb-answer-reveal { display:inline; }
 
   <div class="key-point mask-target-wrapper">
     <div class="mask-target">
-      <p><strong>总体总结：</strong><span class="fb" data-a="深刻改变中华民族的发展方向、前途命运，改变世界发展趋势与格局">深刻改变中华民族的发展方向、前途命运，改变世界发展趋势与格局</span></p>
+      <p><strong>总体总结：</strong><span class="fb" data-a="改变了中华民族的发展方向，改变了中华民族的前途命运，改变了世界发展的趋势与格局">改变了中华民族的发展方向，改变了中华民族的前途命运，改变了世界发展的趋势与格局</span></p>
     </div>
     <div class="mask-hint">点击揭开</div>
   </div>
@@ -576,9 +585,9 @@ body.fill-mode .fb-answer-reveal { display:inline; }
     <div class="block-content mask-target-wrapper">
       <div class="mask-target">
         <ul class="rich-list">
-          <li><strong>群众基础：</strong><span class="fb" data-a="工人、农民、城市小资产阶级联合为主要革命力量">工人、农民、城市小资产阶级联合为主要革命力量</span></li>
+          <li><strong>群众基础：</strong><span class="fb" data-a="工人、农民、城市小资产阶级群众的联合成为主要力量">工人、农民、城市小资产阶级群众的联合成为主要力量</span></li>
           <li><strong>根本保证：</strong><span class="fb" data-a="中国共产党的领导">中国共产党的领导</span></li>
-          <li><strong>外部条件：</strong><span class="fb" data-a="国际无产阶级与各国人民群众的支持">国际无产阶级与各国人民群众的支持</span></li>
+          <li><strong>外部条件：</strong><span class="fb" data-a="国际无产阶级和人民群众的支持">国际无产阶级和人民群众的支持</span></li>
         </ul>
       </div>
       <div class="mask-hint">点击揭开</div>
@@ -590,8 +599,8 @@ body.fill-mode .fb-answer-reveal { display:inline; }
     <div class="block-content mask-target-wrapper">
       <div class="mask-target">
         <ul class="rich-list">
-          <li><span class="fb" data-a="推翻帝国主义、封建主义、官僚资本主义三座大山">推翻帝国主义、封建主义、官僚资本主义三座大山</span></li>
-          <li><span class="fb" data-a="结束近代百余年民族屈辱，扫除国家发展障碍">结束近代百余年民族屈辱，扫除国家发展障碍</span></li>
+          <li><span class="fb" data-a="推翻了帝国主义、封建主义、官僚资本主义三座大山，结束了100多年来中华民族遭受的屈辱">推翻了帝国主义、封建主义、官僚资本主义三座大山，结束了100多年来中华民族遭受的屈辱</span></li>
+          <li><span class="fb" data-a="扫除了国家发展的障碍">扫除了国家发展的障碍</span></li>
         </ul>
       </div>
       <div class="mask-hint">点击揭开</div>
@@ -623,19 +632,14 @@ body.fill-mode .fb-answer-reveal { display:inline; }
 
   <div class="block">
     <div class="block-label">过渡时期总路线</div>
-    <div class="block-content mask-target-wrapper">
-      <div class="mask-target">
-        <div class="key-point">
-          <p><strong>完整表述：</strong><span class="fb" data-a="逐步实现国家的社会主义工业化，并逐步完成对农业、手工业、资本主义工商业的社会主义改造">逐步实现国家的社会主义工业化，并逐步完成对农业、手工业、资本主义工商业的社会主义改造</span></p>
-        </div>
-        <div class="def-grid" style="margin-top:.8rem;">
-          <span class="def-term">简称</span>
-          <span class="def-desc"><strong><span class="fb" data-a="一化三改">一化三改</span></strong></span>
-          <span class="def-term">一化</span>
-          <span class="def-desc"><span class="fb" data-a="社会主义工业化">社会主义工业化</span></span>
-          <span class="def-term">三改</span>
-          <span class="def-desc"><span class="fb" data-a="农业、手工业、资本主义工商业的社会主义改造">农业、手工业、资本主义工商业的社会主义改造</span></span>
-        </div>
+        <div class="block-content mask-target-wrapper">
+          <div class="mask-target">
+            <div class="key-point">
+              <p><strong>完整表述：</strong><span class="fb" data-a="逐步实现国家的社会主义工业化，并逐步完成国家对农业、手工业和资本主义工商业的社会主义改造">逐步实现国家的社会主义工业化，并逐步完成国家对农业、手工业和资本主义工商业的社会主义改造</span></p>
+            </div>
+            <div class="key-point" style="margin-top:.5rem;">
+              <p>简称 <span class="fb" data-a="一化三改">一化三改</span> —— <span class="fb" data-a="社会主义工业化">社会主义工业化</span>（一化）；<span class="fb" data-a="对农业、手工业和资本主义工商业的社会主义改造">对农业、手工业和资本主义工商业的社会主义改造</span>（三改）</p>
+            </div>
       </div>
       <div class="mask-hint">点击揭开</div>
     </div>
@@ -646,9 +650,9 @@ body.fill-mode .fb-answer-reveal { display:inline; }
     <div class="block-content mask-target-wrapper">
       <div class="mask-target">
         <ul class="rich-list">
-          <li><span class="fb" data-a="社会主义工业化是国家独立、富强的首要条件">社会主义工业化是国家独立、富强的首要条件</span></li>
-          <li><span class="fb" data-a="个体农业的社会主义改造是工业化的必要条件">个体农业的社会主义改造是工业化的必要条件</span></li>
-          <li><span class="fb" data-a="资本主义工商业的社会主义改造是工业化发展的客观需要">资本主义工商业的社会主义改造是工业化发展的客观需要</span></li>
+          <li><span class="fb" data-a="社会主义工业化是国家独立富强的首要条件">社会主义工业化是国家独立富强的首要条件</span></li>
+          <li><span class="fb" data-a="对个体农业的社会主义改造是工业化的必要条件">对个体农业的社会主义改造是工业化的必要条件</span></li>
+          <li><span class="fb" data-a="对资本主义工商业的改造是工业化发展的客观需要">对资本主义工商业的改造是工业化发展的客观需要</span></li>
         </ul>
       </div>
       <div class="mask-hint">点击揭开</div>
@@ -660,10 +664,10 @@ body.fill-mode .fb-answer-reveal { display:inline; }
     <div class="block-content mask-target-wrapper">
       <div class="mask-target">
         <ul class="rich-list">
-          <li><span class="fb" data-a="调动工人阶级与广大劳动人民积极性，为社会生产大发展开辟广阔道路">调动工人阶级与广大劳动人民积极性，为社会生产大发展开辟广阔道路</span></li>
-          <li><span class="fb" data-a="为当代中国一切发展进步奠定根本政治保障">为当代中国一切发展进步奠定根本政治保障</span></li>
-          <li><span class="fb" data-a="为社会主义先进文化发展指明前进方向">为社会主义先进文化发展指明前进方向</span></li>
-          <li><span class="fb" data-a="标志占世界四分之一人口的东方大国进入社会主义社会">标志占世界四分之一人口的东方大国进入社会主义社会</span></li>
+          <li><span class="fb" data-a="提高了工人阶级和广大劳动人民的积极性，为社会生产大发展开辟了广阔道路">提高了工人阶级和广大劳动人民的积极性，为社会生产大发展开辟了广阔道路</span></li>
+          <li><span class="fb" data-a="为当代中国的一切发展进步提供了根本政治保障">为当代中国的一切发展进步提供了根本政治保障</span></li>
+          <li><span class="fb" data-a="为社会主义先进文化指明了前进方向">为社会主义先进文化指明了前进方向</span></li>
+          <li><span class="fb" data-a="标志着占世界四分之一人口的东方大国进入了社会主义社会">标志着占世界四分之一人口的东方大国进入了社会主义社会</span></li>
         </ul>
       </div>
       <div class="mask-hint">点击揭开</div>
@@ -672,7 +676,7 @@ body.fill-mode .fb-answer-reveal { display:inline; }
 
   <div class="key-point mask-target-wrapper">
     <div class="mask-target">
-      <p><strong>总体总结：</strong><span class="fb" data-a="深刻改变中华民族的发展方向、前途命运，改变世界发展趋势与格局">深刻改变中华民族的发展方向、前途命运，改变世界发展趋势与格局</span></p>
+      <p><strong>总体总结：</strong><span class="fb" data-a="改变了中华民族的发展方向，改变了中华民族的前途命运，改变了世界发展的趋势与格局">改变了中华民族的发展方向，改变了中华民族的前途命运，改变了世界发展的趋势与格局</span></p>
     </div>
     <div class="mask-hint">点击揭开</div>
   </div>
@@ -790,10 +794,30 @@ body.fill-mode .fb-answer-reveal { display:inline; }
         input.spellcheck = false;
         input.autocomplete = 'off';
         input.dataset.answer = answer;
-        input.style.width = Math.min(Math.max(answer.length, 4), 26) + 'em';
+        input.style.width = '4em';
         var stateSpan = document.createElement('span');
         stateSpan.className = 'fb-state';
         stateSpan.textContent = '✓';
+        var checkBtn = document.createElement('span');
+        checkBtn.className = 'fb-check-btn';
+        checkBtn.textContent = '检查';
+        checkBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var val = input.value.trim();
+          var ans = input.dataset.answer.trim();
+          if (val === '') return;
+          if (val === ans) {
+            input.classList.add('correct');
+            input.classList.remove('wrong');
+            stateSpan.classList.add('correct');
+          } else {
+            input.classList.remove('correct');
+            input.classList.add('wrong');
+            stateSpan.classList.remove('correct');
+            setTimeout(function() { input.classList.remove('wrong'); }, 600);
+          }
+          updateProgress();
+        });
         var revealLink = document.createElement('span');
         revealLink.className = 'fb-answer-reveal';
         revealLink.textContent = '查看';
@@ -803,55 +827,46 @@ body.fill-mode .fb-answer-reveal { display:inline; }
           input.classList.add('correct');
           input.classList.remove('wrong');
           stateSpan.classList.add('correct');
+          var vl = answer.length;
+          input.style.width = Math.min(Math.max(vl, 4), 26) + 'em';
           updateProgress();
         });
         el.innerHTML = '';
         el.appendChild(textSpan);
         el.appendChild(input);
+        el.appendChild(checkBtn);
         el.appendChild(stateSpan);
         el.appendChild(revealLink);
 
-        // 输入检测
-        var checkAnswer = function() {
-          var val = input.value.trim();
-          var ans = input.dataset.answer.trim();
-          if (val === '' ) { input.classList.remove('correct','wrong'); return; }
+        // 动态宽度：随输入字数改变
+        input.addEventListener('input', function() {
+          var vl = (this.value || '').length;
+          this.style.width = Math.min(Math.max(vl, 4), 26) + 'em';
+          this.classList.remove('correct', 'wrong');
+          var st = this.parentElement.querySelector('.fb-state');
+          if (st) st.classList.remove('correct');
+          updateProgress();
+        });
+
+        // Enter 键检测当前输入
+        input.addEventListener('keydown', function(e) {
+          if (e.key !== 'Enter') return;
+          var val = this.value.trim();
+          var ans = this.dataset.answer.trim();
+          if (val === '') return;
+          var st = this.parentElement.querySelector('.fb-state');
           if (val === ans) {
-            input.classList.add('correct');
-            input.classList.remove('wrong');
-            stateSpan.classList.add('correct');
+            this.classList.add('correct');
+            this.classList.remove('wrong');
+            if (st) st.classList.add('correct');
           } else {
-            input.classList.remove('correct');
-            input.classList.add('wrong');
-            stateSpan.classList.remove('correct');
-            setTimeout(function() { input.classList.remove('wrong'); }, 400);
+            this.classList.remove('correct');
+            this.classList.add('wrong');
+            if (st) st.classList.remove('correct');
+            var self = this;
+            setTimeout(function() { self.classList.remove('wrong'); }, 600);
           }
           updateProgress();
-        };
-        input.addEventListener('blur', checkAnswer);
-        input.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter') { input.blur(); }
-        });
-        // 实时检测：用户输入时如果对了立刻显示
-        input.addEventListener('input', function() {
-          var val = input.value.trim();
-          var ans = input.dataset.answer.trim();
-          if (val === ans) {
-            input.classList.add('correct');
-            input.classList.remove('wrong');
-            stateSpan.classList.add('correct');
-            updateProgress();
-          } else if (val === '') {
-            input.classList.remove('correct','wrong');
-            stateSpan.classList.remove('correct');
-          } else if (ans.startsWith(val)) {
-            // 部分正确，不标记错误
-            input.classList.remove('wrong');
-          } else {
-            input.classList.add('wrong');
-            stateSpan.classList.remove('correct');
-            setTimeout(function() { input.classList.remove('wrong'); }, 400);
-          }
         });
       });
     }
@@ -892,6 +907,29 @@ body.fill-mode .fb-answer-reveal { display:inline; }
         }
       });
     }
+    updateProgress();
+  });
+
+  // ─── 检查按钮 ───
+  document.getElementById('btnCheck').addEventListener('click', function() {
+    if (currentMode !== 'fill') return;
+    fillBlanks.forEach(function(el) {
+      var inp = el.querySelector('.fb-input');
+      if (!inp) return;
+      var val = inp.value.trim();
+      var ans = inp.dataset.answer.trim();
+      if (val === '') return;
+      var state = el.querySelector('.fb-state');
+      if (val === ans) {
+        inp.classList.add('correct');
+        inp.classList.remove('wrong');
+        if (state) state.classList.add('correct');
+      } else {
+        inp.classList.remove('correct');
+        inp.classList.add('wrong');
+        if (state) state.classList.remove('correct');
+      }
+    });
     updateProgress();
   });
 

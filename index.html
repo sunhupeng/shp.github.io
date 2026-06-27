@@ -1,674 +1,638 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<title>大数据技术复习指南</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国近代史纲要 · 复习精要</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400,50;9..144,500,60;9..144,600,70;9..144,700,80&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-/* ===== THEME ===== */
-:root,[data-theme=light]{
-  --bg:#F6F3EE;--surface:#FFFFFF;--surface-alt:#F0ECE4;
-  --text:#1E1C18;--text-secondary:#7A746E;--text-muted:#9E9890;
-  --primary:#1B4965;--primary-light:#EDF2F6;
-  --accent:#C8644A;--accent-light:#FBF0EC;
-  --border:#E5DFD7;--border-light:#F0ECE6;
-  --code-bg:#EDEAE2;--tpl-bg:#FFF9F0;--tpl-border:#E8D5B8;
-  --shadow:0 1px 3px rgba(30,28,24,0.06),0 1px 2px rgba(30,28,24,0.04);
-  --shadow-md:0 4px 12px rgba(30,28,24,0.08);
-  --nav-bg:rgba(246,243,238,0.92);
-  --hero-from:#1B4965;--hero-to:#2A6F97;
-  --search-icon:#9E9890;
-  --overlay:rgba(30,28,24,0.04);
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --page: #f6f2ec;
+  --surface: #f0e9e0;
+  --card: #faf7f3;
+  --border: #e3d9ce;
+  --text: #2c2720;
+  --text-soft: #6b5d4f;
+  --text-muted: #9a8b7a;
+  --accent: #b2422a;
+  --accent-hover: #8f3521;
+  --accent-light: #f0e0d8;
+  --gold: #8b7355;
+  --gold-light: #e8dccc;
+  --ink: #3a3228;
+  --radius: 8px;
+  --font-serif: 'Noto Serif SC', 'SimSun', 'STSong', serif;
+  --font-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-display: 'EB Garamond', 'Noto Serif SC', serif;
+  --content: 800px;
+  --sidebar: 260px;
 }
-[data-theme=dark]{
-  --bg:#171612;--surface:#1E1C18;--surface-alt:#24221C;
-  --text:#E8E4DE;--text-secondary:#9E9890;--text-muted:#6B6560;
-  --primary:#6BA3C6;--primary-light:#1E2E3A;
-  --accent:#E08A72;--accent-light:#2E1E1A;
-  --border:#35322C;--border-light:#2A2822;
-  --code-bg:#1E1C18;--tpl-bg:#1E1C18;--tpl-border:#4A3A2A;
-  --shadow:0 1px 3px rgba(0,0,0,0.2),0 1px 2px rgba(0,0,0,0.15);
-  --shadow-md:0 4px 12px rgba(0,0,0,0.3);
-  --nav-bg:rgba(23,22,18,0.92);
-  --hero-from:#0D2A3D;--hero-to:#143A52;
-  --search-icon:#6B6560;
-  --overlay:rgba(255,255,255,0.03);
-}
-
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;font-size:16px}
-body{font-family:'Sora',-apple-system,sans-serif;color:var(--text);background:var(--bg);line-height:1.7;-webkit-font-smoothing:antialiased;padding-bottom:4rem;transition:background 0.3s,color 0.3s}
-body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background-image:radial-gradient(var(--overlay) 1px,transparent 1px);background-size:24px 24px;pointer-events:none;z-index:-1}
-::selection{background:var(--primary);color:#fff}
-
-/* ===== THEME TOGGLE ===== */
-.theme-toggle{display:inline-flex;align-items:center;gap:0.4rem;border:none;background:var(--surface-alt);color:var(--text-secondary);padding:0.35rem 0.7rem;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;transition:all 0.25s;font-family:inherit;letter-spacing:0.03em}
-.theme-toggle:hover{background:var(--primary-light);color:var(--primary)}
-.theme-toggle .icon{font-size:0.85rem;line-height:1}
-
-/* ===== HERO ===== */
-.hero{background:linear-gradient(135deg,var(--hero-from),var(--hero-to));color:#fff;padding:3.5rem 1.5rem 3rem;position:relative;overflow:hidden;transition:background 0.5s}
-.hero::after{content:'';position:absolute;top:-40%;right:-20%;width:60%;height:120%;background:radial-gradient(ellipse,rgba(255,255,255,0.06) 0%,transparent 70%);pointer-events:none}
-.hero-inner{max-width:800px;margin:0 auto;position:relative;z-index:1}
-.hero-label{font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;opacity:0.6;margin-bottom:0.75rem;font-weight:600;font-family:inherit}
-.hero h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;font-variation-settings:'SOFT' 80;line-height:1.15;margin-bottom:0.5rem}
-.hero p{font-size:clamp(0.9rem,2vw,1.05rem);opacity:0.8;max-width:600px;line-height:1.6}
-.hero-actions{display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1.25rem;align-items:center}
-.hero-stats{margin-top:1.5rem;display:flex;gap:2rem;flex-wrap:wrap}
-.hero-stat{font-size:0.85rem;opacity:0.7}
-.hero-stat strong{font-weight:600;opacity:1;font-size:1rem}
-
-/* ===== SEARCH ===== */
-.search-wrap{max-width:800px;margin:0 auto;padding:0 1.5rem;position:relative;z-index:10}
-.search-box{position:relative;margin-top:-1.1rem}
-.search-box input{width:100%;padding:0.8rem 1rem 0.8rem 2.6rem;border:1px solid var(--border);border-radius:10px;font-size:0.88rem;font-family:inherit;background:var(--surface);color:var(--text);box-shadow:var(--shadow-md);transition:all 0.25s;outline:none}
-.search-box input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
-.search-box input::placeholder{color:var(--text-muted)}
-.search-icon{position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--search-icon);font-size:0.9rem;pointer-events:none;line-height:1}
-.search-clear{position:absolute;right:0.6rem;top:50%;transform:translateY(-50%);border:none;background:var(--surface-alt);color:var(--text-muted);width:1.6rem;height:1.6rem;border-radius:50%;font-size:0.7rem;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all 0.2s}
-.search-clear:hover{background:var(--accent-light);color:var(--accent)}
-.search-clear.show{display:flex}
-
-/* ===== NAV ===== */
-.nav-wrap{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:background 0.3s}
-.nav{max-width:800px;margin:0 auto;display:flex;gap:0;overflow-x:auto;padding:0 1rem;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.nav::-webkit-scrollbar{display:none}
-.nav a{flex-shrink:0;padding:0.75rem 0.9rem;font-size:0.8rem;font-weight:500;color:var(--text-secondary);text-decoration:none;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap}
-.nav a:hover,.nav a.active{color:var(--primary);border-bottom-color:var(--primary)}
-
-/* ===== MAIN ===== */
-main{max-width:800px;margin:0 auto;padding:0 1.5rem}
-section{margin-top:3rem;opacity:0;transform:translateY(24px);transition:opacity 0.6s ease-out,transform 0.6s ease-out}
-section.visible{opacity:1;transform:translateY(0)}
-.section-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
-.section-header h2{font-family:'Fraunces',Georgia,serif;font-size:clamp(1.2rem,3vw,1.6rem);font-weight:600;font-variation-settings:'SOFT' 70;color:var(--primary);line-height:1.2}
-.section-header .rule{flex:1;height:1px;background:var(--border)}
-.section-header .count{font-size:0.75rem;color:var(--text-muted);font-weight:500;white-space:nowrap}
-.sec-controls{display:flex;gap:0.5rem;margin-left:auto}
-.sec-controls button{border:none;background:var(--surface-alt);color:var(--text-muted);padding:0.2rem 0.6rem;border-radius:4px;font-size:0.65rem;cursor:pointer;transition:all 0.2s;font-family:inherit;font-weight:500}
-.sec-controls button:hover{background:var(--primary-light);color:var(--primary)}
-.section-desc{font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.5rem}
-
-/* ===== Q ITEM ===== */
-.q-item{border-bottom:1px solid var(--border-light);overflow:hidden;transition:background 0.2s}
-.q-item:first-child{border-top:1px solid var(--border-light)}
-.q-item.hidden{display:none}
-.q-item.highlight{background:var(--accent-light);margin:0 -0.5rem;padding:0 0.5rem;border-radius:var(--radius-sm)}
-.q-header{display:flex;align-items:baseline;gap:0.75rem;padding:1rem 0;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:background 0.15s;border-radius:var(--radius-sm)}
-.q-header:hover{background:var(--primary-light)}
-.q-num{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--primary);color:#fff;font-size:0.7rem;font-weight:600;transition:background 0.3s}
-.q-text{flex:1;font-size:0.92rem;font-weight:500;line-height:1.5;color:var(--text)}
-.q-text .q-match{background:#FDE68A;color:#1E1C18;border-radius:2px;padding:0 1px}
-[data-theme=dark] .q-text .q-match{background:#6B5B2A;color:#E8E4DE}
-.q-toggle{flex-shrink:0;font-size:0.75rem;color:var(--text-muted);transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);width:1.2rem;text-align:center}
-.q-item.open .q-toggle{transform:rotate(45deg)}
-.q-answer{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.33,1,0.68,1),opacity 0.3s ease;opacity:0}
-.q-item.open .q-answer{max-height:5000px;opacity:1}
-.q-answer-inner{padding:0 0 1.2rem 2.35rem;font-size:0.88rem;color:var(--text-secondary);line-height:1.7}
-
-/* ===== TEMPLATE ===== */
-.q-template{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.33,1,0.68,1),opacity 0.3s ease;opacity:0}
-.q-item.open .q-template{max-height:5000px;opacity:1}
-.q-template .tpl-label{font-size:0.7rem;font-weight:600;color:var(--accent);letter-spacing:0.05em;text-transform:uppercase;margin:0.5rem 0 0.2rem 2.35rem}
-.q-template pre{background:var(--tpl-bg);border:1px solid var(--tpl-border);border-left:3px solid var(--accent);border-radius:6px;padding:0.9rem 1rem;overflow-x:auto;font-size:0.82rem;line-height:1.6;margin:0 0 0.4rem 2.35rem}
-.q-answer-inner .ans-label{font-size:0.7rem;font-weight:600;color:var(--primary);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:0.3rem}
-
-/* ===== KNOWLEDGE ===== */
-.k-list{list-style:none}
-.k-item{display:flex;align-items:baseline;gap:0.75rem;padding:0.75rem 0;border-bottom:1px solid var(--border-light);font-size:0.9rem}
-.k-item:first-child{border-top:1px solid var(--border-light)}
-.k-item.hidden{display:none}
-.k-num{flex-shrink:0;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:600;transition:background 0.3s}
-.k-text{flex:1;line-height:1.6}
-.k-text .q-match{background:#FDE68A;color:#1E1C18;border-radius:2px;padding:0 1px}
-[data-theme=dark] .k-text .q-match{background:#6B5B2A;color:#E8E4DE}
-
-/* ===== CODE ===== */
-pre{background:var(--code-bg);border-radius:6px;padding:1rem;overflow-x:auto;font-size:0.82rem;line-height:1.6;border:1px solid var(--border);margin-top:0.5rem;position:relative}
-code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:0.8rem}
-pre code{background:none!important;padding:0!important}
-.hljs{background:transparent!important}
-.copy-btn{position:absolute;top:0.4rem;right:0.4rem;border:none;background:var(--surface);color:var(--text-muted);padding:0.2rem 0.55rem;border-radius:4px;font-size:0.65rem;cursor:pointer;opacity:0;transition:opacity 0.2s,background 0.2s,color 0.2s;font-family:inherit;font-weight:500}
-pre:hover .copy-btn{opacity:1}
-.copy-btn:hover{background:var(--primary-light);color:var(--primary)}
-.copy-btn.copied{opacity:1;background:var(--accent-light);color:var(--accent)}
-
-/* ===== TAG ===== */
-.tag{display:inline-block;font-size:0.62rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:0.12rem 0.45rem;border-radius:3px;margin-right:0.35rem;vertical-align:middle}
-.tag-code{background:var(--accent-light);color:var(--accent)}
-.tag-fill{background:var(--primary-light);color:var(--primary)}
-
-/* ===== COMPREHENSIVE ===== */
-.comp-q{padding:1rem 0;border-bottom:1px solid var(--border-light);font-size:0.9rem;line-height:1.6}
-.comp-q:first-child{border-top:1px solid var(--border-light)}
-.comp-q.hidden{display:none}
-.comp-q .q-label{font-weight:600;color:var(--primary);margin-bottom:0.3rem;cursor:pointer}
-.comp-q .q-answer{margin-top:0.5rem;color:var(--text-secondary);max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.33,1,0.68,1),opacity 0.3s ease;opacity:0}
-.comp-q.open .q-answer{max-height:2000px;opacity:1}
-.comp-q .q-toggle{float:right;color:var(--text-muted);font-size:0.8rem;cursor:pointer;transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1)}
-.comp-q.open .q-toggle{transform:rotate(45deg)}
-
-/* ===== BACK TO TOP ===== */
-.back-top{position:fixed;bottom:2rem;right:1.5rem;z-index:90;width:2.6rem;height:2.6rem;border-radius:50%;border:none;background:var(--surface);color:var(--text-secondary);box-shadow:var(--shadow-md);cursor:pointer;opacity:0;transform:translateY(20px);transition:all 0.35s cubic-bezier(0.33,1,0.68,1);font-size:1.1rem;display:flex;align-items:center;justify-content:center}
-.back-top.show{opacity:1;transform:translateY(0)}
-.back-top:hover{background:var(--primary);color:#fff;transform:translateY(-2px)}
-.back-top.show:hover{transform:translateY(-2px)}
-
-/* ===== FOOTER ===== */
-footer{text-align:center;padding:3rem 1.5rem 1.5rem;font-size:0.75rem;color:var(--text-muted)}
-
-/* ===== SCROLL PROGRESS ===== */
-.scroll-progress{position:fixed;top:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent));z-index:200;transition:width 0.1s}
-
-/* ===== MOBILE CODE WRAPPING ===== */
-@media(max-width:500px){
-  .hero{padding:2.5rem 1.2rem 2rem}
-  main{padding:0 1rem}
-  .search-wrap{padding:0 1rem}
-  .q-header{padding:0.85rem 0}
-  .q-answer-inner{padding-left:0}
-  .q-template pre{margin-left:0}
-  .q-template .tpl-label{margin-left:0}
-  .nav a{padding:0.6rem 0.7rem;font-size:0.75rem}
-  .hero-stats{gap:1.2rem}
-  .back-top{bottom:1.2rem;right:1rem;width:2.2rem;height:2.2rem;font-size:0.95rem}
-  pre{white-space:pre-wrap;word-break:break-all;font-size:0.72rem;padding:0.75rem}
-  code{font-size:0.72rem;word-break:break-all}
-  .q-template pre{font-size:0.7rem}
-  .q-template pre code{font-size:0.7rem}
-  .copy-btn{opacity:1;top:0.25rem;right:0.25rem;padding:0.15rem 0.45rem;font-size:0.6rem}
+html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
+body {
+  font-family: var(--font-serif);
+  background: var(--page);
+  color: var(--text);
+  line-height: 1.8;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
 }
 
-@media print{
-  .nav-wrap,.scroll-progress,.back-top,.search-wrap,.theme-toggle,.sec-controls,.copy-btn{display:none!important}
-  .q-answer,.comp-q .q-answer,.q-template{max-height:none!important;opacity:1!important}
-  .q-item,.comp-q{break-inside:avoid}
-  section{opacity:1!important;transform:none!important}
-  body{background:#fff;padding:0}
-  .hero{padding:2rem 1.5rem;background:#1B4965!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+/* ─── Progress Bar ─── */
+#progress {
+  position: fixed; top: 0; left: 0; z-index: 100;
+  width: 100%; height: 3px; background: transparent;
+  pointer-events: none;
+}
+#progress-bar {
+  height: 100%; width: 0%;
+  background: var(--accent);
+  transition: width 0.1s linear;
+}
+
+/* ─── Layout ─── */
+.wrapper { display: flex; min-height: 100vh; }
+
+/* ─── Sidebar ─── */
+.sidebar {
+  position: fixed; top: 3px; left: 0;
+  width: var(--sidebar); height: calc(100vh - 3px);
+  padding: 2.5rem 1.5rem 2rem;
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+  background: var(--page);
+  z-index: 50;
+}
+.sidebar-logo {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--accent-light);
+}
+.sidebar-logo small {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 0.15rem;
+}
+.sidebar nav ul { list-style: none; }
+.sidebar nav li { margin-bottom: 0.25rem; }
+.sidebar nav a {
+  display: flex; align-items: baseline; gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--text-soft);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.2s;
+  line-height: 1.4;
+}
+.sidebar nav a .num {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  min-width: 1.8em;
+  flex-shrink: 0;
+}
+.sidebar nav a:hover {
+  background: var(--surface);
+  color: var(--accent);
+}
+.sidebar nav a.active {
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ─── Main ─── */
+.main { margin-left: var(--sidebar); flex: 1; min-width: 0; }
+
+/* ─── Hero ─── */
+.hero {
+  position: relative;
+  padding: 6rem 3rem 4rem;
+  max-width: var(--content);
+  margin: 0 auto;
+  text-align: center;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: 0; left: 15%; right: 15%;
+  height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+.hero-label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text);
+  letter-spacing: 0.04em;
+}
+.hero h1 .en {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.45em;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  margin-top: 0.4rem;
+}
+.hero p {
+  margin-top: 1.2rem;
+  font-size: 0.95rem;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+
+/* ─── Content ─── */
+.content { padding: 1rem 3rem 6rem; max-width: var(--content); margin: 0 auto; }
+
+/* ─── Chapter ─── */
+.chapter {
+  margin-bottom: 4rem;
+  scroll-margin-top: 2rem;
+}
+.chapter-header {
+  display: flex; align-items: baseline; gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--accent-light);
+}
+.chapter-number {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1;
+  opacity: 0.6;
+}
+.chapter-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+/* ─── Card Block ─── */
+.block {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1.25rem;
+}
+.block-label {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+/* ─── Two-column contradiction list ─── */
+.contradictions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 0.75rem 0;
+}
+.contradiction-item {
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+.contradiction-item .icon {
+  font-size: 1.3rem;
+  margin-bottom: 0.25rem;
+  display: block;
+  opacity: 0.5;
+}
+.contradiction-item .main {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.contradiction-item .sub {
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  line-height: 1.4;
+  margin-top: 0.2rem;
+}
+
+/* ─── Key Point ─── */
+.key-point {
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+  padding: 1rem 1.25rem;
+  margin: 0.75rem 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.key-point p { font-size: 0.95rem; color: var(--text); }
+
+/* ─── List Styles ─── */
+.rich-list { list-style: none; margin: 0.75rem 0; }
+.rich-list li {
+  position: relative;
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  border-bottom: 1px solid var(--border);
+}
+.rich-list li:last-child { border-bottom: none; }
+.rich-list li::before {
+  content: '';
+  position: absolute; left: 0; top: 1rem;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.4;
+}
+.rich-list li strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ─── Definition Grid ─── */
+.def-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 1rem;
+  margin: 0.75rem 0;
+}
+.def-term {
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.def-desc { color: var(--text); }
+
+/* ─── Exam Callout ─── */
+.exam-callout {
+  background: var(--gold-light);
+  border: 1px solid #d4c5ae;
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin: 1rem 0;
+}
+.exam-callout-title {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+.exam-callout p { font-size: 0.9rem; color: var(--ink); line-height: 1.7; }
+
+/* ─── Tag Pills ─── */
+.tag {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.15rem 0.65rem;
+  border-radius: 3px;
+  background: var(--accent-light);
+  color: var(--accent);
+  margin-right: 0.25rem;
+}
+.tag-exam { background: var(--gold-light); color: var(--gold); }
+.tag-important { background: #fce8e4; color: var(--accent); }
+
+/* ─── Footer ─── */
+.footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  border-top: 1px solid var(--border);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .hero { padding: 3rem 1.5rem 2.5rem; }
+  .content { padding: 0.5rem 1.5rem 4rem; }
+  .contradictions { grid-template-columns: 1fr; }
+  .chapter-number { font-size: 1.8rem; }
+}
+@media (max-width: 480px) {
+  body { font-size: 15px; }
+  .hero h1 { font-size: 1.6rem; }
+  .block { padding: 1rem 1.1rem; }
+}
+
+/* ─── Print ─── */
+@media print {
+  .sidebar, #progress { display: none; }
+  .main { margin-left: 0; }
+  .chapter { break-inside: avoid; page-break-inside: avoid; }
 }
 </style>
 </head>
 <body>
 
-<div class="scroll-progress" id="progress"></div>
-<button class="back-top" id="backTop" aria-label="返回顶部">↑</button>
+<div id="progress"><div id="progress-bar"></div></div>
 
-<header class="hero">
-  <div class="hero-inner">
-    <div class="hero-label">复习指南</div>
-    <h1>大数据技术</h1>
-    <p>涵盖 Hadoop、MapReduce、HBase、Spark、Flink 核心知识点与编程题，适合考前冲刺与系统复习。</p>
-    <div class="hero-actions">
-      <button class="theme-toggle" id="themeToggle" aria-label="切换主题"><span class="icon">☀</span> 主题</button>
+<div class="wrapper">
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    近代史纲要
+    <small>复习精要</small>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#ch1" class="active"><span class="num">第一章</span>鸦片战争前后的中国与世界</a></li>
+      <li><a href="#ch2"><span class="num">第二章</span>洋务运动</a></li>
+      <li><a href="#ch3"><span class="num">第三章</span>辛亥革命</a></li>
+      <li><a href="#ch4"><span class="num">第四章</span>五四运动与中共成立</a></li>
+      <li><a href="#ch7"><span class="num">第七章</span>中国革命胜利</a></li>
+      <li><a href="#ch8"><span class="num">第八章</span>过渡时期与社会主义</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<main class="main">
+
+<section class="hero">
+  <div class="hero-label">中国近现代史纲要</div>
+  <h1>
+    复习精要
+    <span class="en">Modern Chinese History · Study Companion</span>
+  </h1>
+  <p>依据教材章节脉络整理的核心考点与知识要点</p>
+</section>
+
+<div class="content">
+
+<!-- ═══ 第一章 ═══ -->
+<section class="chapter" id="ch1">
+  <div class="chapter-header">
+    <span class="chapter-number">01</span>
+    <h2 class="chapter-title">鸦片战争前后的中国与世界</h2>
+  </div>
+
+  <div class="block">
+    <div class="block-label">近代中国的两大主要矛盾</div>
+    <div class="contradictions">
+      <div class="contradiction-item">
+        <span class="icon">⚔</span>
+        <div class="main">帝国主义和中华民族的矛盾</div>
+        <div class="sub">最主要的矛盾</div>
+      </div>
+      <div class="contradiction-item">
+        <span class="icon">⚖</span>
+        <div class="main">封建主义和人民大众的矛盾</div>
+        <div class="sub">社会内部矛盾</div>
+      </div>
     </div>
-    <div class="hero-stats">
-      <span class="hero-stat"><strong>5</strong> 选择</span>
-      <span class="hero-stat"><strong>5</strong> 判断</span>
-      <span class="hero-stat"><strong>6</strong> 填空</span>
-      <span class="hero-stat"><strong>16</strong> 编程</span>
-      <span class="hero-stat"><strong>10</strong> 综合</span>
+  </div>
+
+  <div class="block">
+    <div class="block-label">近代中国的两大历史任务</div>
+    <ul class="rich-list">
+      <li><strong>争取民族独立、人民解放</strong> —— 改变被压迫的地位</li>
+      <li><strong>实现国家富强、人民幸福</strong> —— 走向现代化</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <div class="block-label">反侵略战争失败的原因</div>
+    <ul class="rich-list">
+      <li><strong>直接原因：</strong>经济技术的落后</li>
+      <li><strong>根本原因：</strong>社会制度的腐败</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══ 第二章 ═══ -->
+<section class="chapter" id="ch2">
+  <div class="chapter-header">
+    <span class="chapter-number">02</span>
+    <h2 class="chapter-title">洋务运动</h2>
+  </div>
+
+  <div class="exam-callout">
+    <div class="exam-callout-title">材料题重点</div>
+    <p>本考点常以材料分析题形式出现，重点考查洋务运动的客观历史作用与评价。</p>
+  </div>
+
+  <div class="block">
+    <div class="block-label">历史作用</div>
+    <ul class="rich-list">
+      <li><strong>客观促进</strong>中国早期工商业、民族资本主义发展</li>
+      <li>开办新式学堂，派遣留学生，是<strong>中国近代教育的开端</strong></li>
+      <li>催生资本主义生产方式，冲击传统<strong>"重本抑末"</strong>观念</li>
+      <li>改变社会风气与价值观念，<strong>工商业者社会地位提升</strong></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══ 第三章 ═══ -->
+<section class="chapter" id="ch3">
+  <div class="chapter-header">
+    <span class="chapter-number">03</span>
+    <h2 class="chapter-title">辛亥革命的历史意义</h2>
+  </div>
+
+  <div class="block">
+    <ul class="rich-list">
+      <li><strong>推翻清王朝统治</strong>，结束中国两千多年封建君主专制制度</li>
+      <li><strong>极大推动人民思想解放</strong></li>
+      <li><strong>推动中国社会全方位变革</strong></li>
+      <li><strong>一定程度打击帝国主义侵略势力</strong>，推动亚洲民族解放运动高涨</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══ 第四章 ═══ -->
+<section class="chapter" id="ch4">
+  <div class="chapter-header">
+    <span class="chapter-number">04</span>
+    <h2 class="chapter-title">五四运动与中国共产党成立</h2>
+  </div>
+
+  <div class="block">
+    <div class="block-label">五四运动的历史特点</div>
+    <ul class="rich-list">
+      <li>拯救民族危亡、捍卫民族主权的<strong>伟大社会革命运动</strong></li>
+      <li>以先进青年为先锋、广大群众参与的<strong>彻底反帝反封建爱国革命运动</strong></li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <div class="block-label">五四运动的历史意义</div>
+    <ul class="rich-list">
+      <li><strong>新民主主义革命的开端</strong>，近代民族独立与发展的里程碑</li>
+      <li>孕育伟大<strong>五四爱国精神</strong>，铸就永久奋斗精神传统</li>
+    </ul>
+  </div>
+
+  <div class="exam-callout">
+    <div class="exam-callout-title">简答 / 材料题</div>
+    <p>中国共产党成立的历史意义常以简答或材料题考查。</p>
+  </div>
+
+  <div class="block">
+    <div class="block-label">中国共产党成立的历史意义</div>
+    <ul class="rich-list">
+      <li><strong>开天辟地：</strong>中华民族发展史的伟大事件</li>
+      <li><strong>指明道路：</strong>踏上民族独立、人民解放的光明道路，开启国家富强、人民幸福的征程</li>
+      <li><strong>铸就精神：</strong>孕育坚持真理、坚守理想、践行初心、不怕牺牲、对党忠诚、不负人民的<strong>伟大建党精神</strong></li>
+    </ul>
+  </div>
+
+  <div class="key-point">
+    <p><strong>总体总结：</strong>深刻改变中华民族的发展方向、前途命运，改变世界发展趋势与格局。</p>
+  </div>
+</section>
+
+<!-- ═══ 第七章 ═══ -->
+<section class="chapter" id="ch7">
+  <div class="chapter-header">
+    <span class="chapter-number">07</span>
+    <h2 class="chapter-title">中国革命胜利</h2>
+  </div>
+
+  <div class="block">
+    <div class="block-label">中国革命胜利的原因</div>
+    <ul class="rich-list">
+      <li><strong>群众基础：</strong>工人、农民、城市小资产阶级联合为主要革命力量</li>
+      <li><strong>根本保证：</strong>中国共产党的领导</li>
+      <li><strong>外部条件：</strong>国际无产阶级与各国人民群众的支持</li>
+    </ul>
+  </div>
+
+  <div class="exam-callout">
+    <div class="exam-callout-title">材料题重点</div>
+  </div>
+
+  <div class="block">
+    <div class="block-label">中国革命胜利的历史意义</div>
+    <ul class="rich-list">
+      <li>推翻<strong>帝国主义、封建主义、官僚资本主义</strong>三座大山</li>
+      <li>结束近代百余年民族屈辱，扫除国家发展障碍</li>
+    </ul>
+  </div>
+
+  <div class="block">
+    <div class="block-label">新中国成立初期面临的四大考验</div>
+    <ul class="rich-list">
+      <li>能否<strong>保卫革命成果</strong>，巩固新生人民政权</li>
+      <li>能否克服严重经济困难，<strong>恢复发展国民经济</strong></li>
+      <li>能否巩固民族独立，<strong>维护国家主权与安全</strong></li>
+      <li>能否经受<strong>全国执政考验</strong>，持续保持优良作风</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══ 第八章 ═══ -->
+<section class="chapter" id="ch8">
+  <div class="chapter-header">
+    <span class="chapter-number">08</span>
+    <h2 class="chapter-title">过渡时期与社会主义制度确立</h2>
+  </div>
+
+  <div class="block">
+    <div class="block-label">过渡时期总路线</div>
+    <div class="key-point">
+      <p><strong>完整表述：</strong>逐步实现国家的社会主义工业化，并逐步完成对农业、手工业、资本主义工商业的社会主义改造。</p>
+    </div>
+    <div class="def-grid" style="margin-top:1rem;">
+      <span class="def-term">简称</span>
+      <span class="def-desc"><strong>一化三改</strong></span>
+      <span class="def-term">一化</span>
+      <span class="def-desc">社会主义工业化</span>
+      <span class="def-term">三改</span>
+      <span class="def-desc">农业、手工业、资本主义工商业的社会主义改造</span>
     </div>
   </div>
-</header>
 
-<div class="search-wrap">
-  <div class="search-box">
-    <span class="search-icon">⌕</span>
-    <input type="text" id="searchInput" placeholder="搜索题目、知识点或关键词…" autocomplete="off">
-    <button class="search-clear" id="searchClear" aria-label="清除搜索">✕</button>
+  <div class="block">
+    <div class="block-label">过渡时期总路线的历史必然性</div>
+    <ul class="rich-list">
+      <li><strong>社会主义工业化</strong>是国家独立、富强的首要条件</li>
+      <li>个体农业的<strong>社会主义改造</strong>是工业化的必要条件</li>
+      <li>资本主义工商业的<strong>社会主义改造</strong>是工业化发展的客观需要</li>
+    </ul>
   </div>
-</div>
 
-<nav class="nav-wrap" id="topNav">
-  <div class="nav">
-    <a href="#mcq">选择</a>
-    <a href="#tf">判断</a>
-    <a href="#fill">填空</a>
-    <a href="#code">编程</a>
-    <a href="#comprehensive">综合</a>
+  <div class="block">
+    <div class="block-label">社会主义基本制度确立的伟大意义</div>
+    <ul class="rich-list">
+      <li>调动工人阶级与广大劳动人民积极性，为社会生产大发展<strong>开辟广阔道路</strong></li>
+      <li>为当代中国一切发展进步奠定<strong>根本政治保障</strong></li>
+      <li>为社会主义先进文化发展<strong>指明前进方向</strong></li>
+      <li>标志占世界四分之一人口的东方大国<strong>进入社会主义社会</strong></li>
+    </ul>
   </div>
-</nav>
-
-<main>
-
-<section id="mcq">
-  <div class="section-header">
-    <h2>选择题知识点</h2>
-    <span class="count" id="mcqCount"></span>
-    <div class="rule"></div>
-  </div>
-  <ul class="k-list" id="mcqList"></ul>
 </section>
 
-<section id="tf">
-  <div class="section-header">
-    <h2>判断题知识点</h2>
-    <span class="count" id="tfCount"></span>
-    <div class="rule"></div>
-  </div>
-  <ul class="k-list" id="tfList"></ul>
-</section>
+</div><!-- /content -->
 
-<section id="fill">
-  <div class="section-header">
-    <h2>填空题</h2>
-    <span class="count" id="fillCount"></span>
-    <div class="rule"></div>
-    <div class="sec-controls"><button data-expand="fillList">展开全部</button></div>
-  </div>
-  <div id="fillList"></div>
-</section>
-
-<section id="code">
-  <div class="section-header">
-    <h2>编程题</h2>
-    <span class="count" id="codeCount"></span>
-    <div class="rule"></div>
-    <div class="sec-controls"><button data-expand="codeList">展开全部</button></div>
-  </div>
-  <div id="codeList"></div>
-</section>
-
-<section id="comprehensive">
-  <div class="section-header">
-    <h2>综合应用题</h2>
-    <span class="count" id="compCount"></span>
-    <div class="rule"></div>
-    <div class="sec-controls"><button data-expand="compList">展开全部</button></div>
-  </div>
-  <div id="compList"></div>
-</section>
+<footer class="footer">
+  <p>中国近代史纲要 · 复习精要</p>
+</footer>
 
 </main>
-
-<footer>大数据技术复习指南</footer>
+</div>
 
 <script>
-const DATA = {
-  mcq: [
-    { n:"大数据4V特征", t:"Volume（大量）、Velocity（高速）、Variety（多样）、Value（价值）" },
-    { n:"Hadoop 组件功能", t:"HDFS（分布式存储）、MapReduce（分布式计算）、YARN（资源调度）、Common（公共工具库）" },
-    { n:"MapReduce Shuffle", t:"Map 端：分区 → 排序 → 溢写 → 合并；Reduce 端：拉取 → 合并 → 排序 → 输入 Reducer" },
-    { n:"HBase vs 关系数据库", t:"HBase：列式存储、NoSQL、最终一致性、无事务、水平扩展；RDBMS：行式存储、SQL、ACID 事务、强一致、垂直扩展" },
-    { n:"Spark 组件", t:"SparkCore（基础引擎）、SparkSQL（结构化查询）、SparkStreaming（流处理）、MLlib（机器学习）、GraphX（图计算）" }
-  ],
-  tf: [
-    { n:"HDFS 适用场景", t:"适合：大文件存储、流式数据访问、一次写入多次读取。不适合：小文件、低延迟访问、大量随机写" },
-    { n:"HBase 与 Hive 区别", t:"HBase：NoSQL 数据库，支持实时读写；Hive：数据仓库工具，基于 MapReduce 做离线批处理，延迟高" },
-    { n:"YARN 作用", t:"集群资源管理与任务调度。核心组件：ResourceManager（全局资源管理）、NodeManager（单节点管理）、ApplicationMaster（任务协调）" },
-    { n:"NoSQL 事务特性", t:"BASE 理论：Basically Available（基本可用）、Soft State（软状态）、Eventually Consistent（最终一致性），不支持 ACID" },
-    { n:"Flink 批流一体", t:"正确。Flink 原生支持批处理（Batch）和流处理（Streaming）统一架构，同一 API 处理两种场景" }
-  ],
-  fill: [
-    { q:"HDFS 元数据结构", a:"（索引节点号，文件名，所属目录，权限，时间戳，块列表（块编号，副本位置））" },
-    { q:"Shuffle 概念", a:"映射任务输出到归约任务输入之间，对数据进行分区、排序、合并、传输的过程" },
-    { q:"HBase 数据坐标", a:"（行键，列族，列限定符，时间戳）四维唯一定位一个单元格" },
-    { q:"Spark RDD 操作类型", a:"转换操作（惰性执行，如映射/过滤/分组等）和行动操作（触发计算，如归约/收集/保存等）" },
-    { q:"NoSQL 三大基石", a:"CAP 定理（一致性/可用性/分区容忍性）、BASE 理论、最终一致性" },
-    { q:"流计算框架", a:"Storm、Flink、Spark Streaming、Kafka Streams、Pulsar Functions" }
-  ],
-  code: [
-    { q:"1. MapReduce 实现平均值计算<br><small>输入：每行一个整数；输出：所有整数的平均值</small>",tp:false,
-      a:`// Mapper
-static class AvgMapper extends Mapper&lt;Object,Text,Text,IntWritable&gt;{
-  public void map(Object k,Text v,Context c)throws IOException,InterruptedException{
-    c.write(new Text("avg"),new IntWritable(Integer.parseInt(v.toString())));
+(function() {
+  /* ─── Scroll Progress ─── */
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', function() {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = h > 0 ? (window.scrollY / h * 100) + '%' : '0%';
+  }, { passive: true });
+
+  /* ─── Sidebar Active State ─── */
+  const links = document.querySelectorAll('.sidebar nav a');
+  const chapters = document.querySelectorAll('.chapter');
+  if (links.length && chapters.length) {
+    const observer = new IntersectionObserver(function(entries) {
+      let best = null, bestRatio = 0;
+      entries.forEach(function(e) {
+        if (e.intersectionRatio > bestRatio) { bestRatio = e.intersectionRatio; best = e.target; }
+      });
+      if (best) {
+        var id = best.getAttribute('id');
+        links.forEach(function(l) {
+          l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+        });
+      }
+    }, { rootMargin: '-20% 0px -60% 0px', threshold: [0, 0.1, 0.2, 0.4] });
+    chapters.forEach(function(c) { observer.observe(c); });
   }
-}
-// Reducer
-static class AvgReducer extends Reducer&lt;Text,IntWritable,Text,DoubleWritable&gt;{
-  public void reduce(Text k,Iterable&lt;IntWritable&gt;vs,Context c)throws IOException,InterruptedException{
-    int s=0,n=0;for(IntWritable v:vs){s+=v.get();n++;}
-    c.write(k,new DoubleWritable((double)s/n));
-  }
-}`},
-    { q:"2. MapReduce Join 操作（代码填空）<br><small>员工(empId,name) + 部门(empId,deptName) → 输出员工及部门</small>",
-      tp:`// Map 端为每条记录打标签
-// 员工文件: context.write(new Text(empId),new Text("emp,"+name));
-// 部门文件: context.write(new Text(empId),new Text("dept,"+deptName));
-// Reduce 端按标签拼接
-// for(Text v:values){
-//   String[] p=v.toString().split(",");
-//   if(p[0].equals("emp"))name=p[1];else dept=p[1];
-// }
-// context.write(key,new Text(name+","+dept));`,
-      a:`// Map: 输出标签化键值对
-context.write(new Text(fields[0]),new Text("emp,"+fields[1]));
-context.write(new Text(fields[0]),new Text("dept,"+fields[2]));
-// Reduce: 标记来源后拼接
-String name="",dept="";
-for(Text v:values){
-  String[] p=v.toString().split(",");
-  if(p[0].equals("emp"))name=p[1];else dept=p[1];
-}
-context.write(key,new Text(name+","+dept));`},
-    { q:"3. WordCount Map 函数填空",
-      tp:`public static class TokenizerMapper extends Mapper&lt;Object,Text,Text,IntWritable&gt;{
-  private final static IntWritable one=new IntWritable(1);
-  private Text word=new Text();
-  public void map(Object key,Text value,Context context)
-      throws IOException,InterruptedException{
-    StringTokenizer itr=new StringTokenizer(value.toString());
-    while(itr.hasMoreTokens()){
-      word.set(itr.nextToken());
-      // 填空：输出键值对，键为单词，值为1
-      ______             ______;
-    }
-  }
-}`,
-      a:`context.write(word,one);`},
-    { q:"4. HBase 批量插入 100 条数据<br><small>行键 row+i，列族 cf，列 col，值随机</small>",tp:false,
-      a:`Connection conn=ConnectionFactory.createConnection();
-Table t=conn.getTable(TableName.valueOf("test"));
-List&lt;Put&gt; puts=new ArrayList&lt;&gt;();Random r=new Random();
-for(int i=0;i<100;i++){
-  Put p=new Put(Bytes.toBytes("row"+i));
-  p.addColumn(Bytes.toBytes("cf"),Bytes.toBytes("col"),Bytes.toBytes(String.valueOf(r.nextInt())));
-  puts.add(p);
-}
-t.put(puts);t.close();conn.close();`},
-    { q:"5. HBase 建表 + 插入一行（填空）<br><small>创建 student 表，列族 info，插入行键 001，info:name = Tom</small>",
-      tp:`Connection conn=ConnectionFactory.createConnection();
-Admin admin=conn.getAdmin();
-TableName tableName=TableName.valueOf("student");
-if(!admin.tableExists(tableName)){
-  TableDescriptorBuilder builder=TableDescriptorBuilder.newBuilder(tableName);
-  ColumnFamilyDescriptor cf=________________________;  // 填空：创建列族描述符
-  builder.setColumnFamily(cf);
-  admin.createTable(builder.build());
-}
-Table table=conn.getTable(tableName);
-Put put=new Put(Bytes.toBytes("001"));
-put.________________________;  // 填空：添加列 "info:name" 值为 "Tom"
-table.put(put);table.close();conn.close();`,
-      a:`// ① 创建列族描述符
-ColumnFamilyDescriptor cf=ColumnFamilyDescriptorBuilder.newBuilder(Bytes.toBytes("info")).build();
-// ② 添加列
-put.addColumn(Bytes.toBytes("info"),Bytes.toBytes("name"),Bytes.toBytes("Tom"));`},
-    { q:"6. HBase 扫描表 student 输出所有行",tp:false,
-      a:`Connection conn=ConnectionFactory.createConnection();
-Table t=conn.getTable(TableName.valueOf("student"));
-ResultScanner rs=t.getScanner(new Scan());
-for(Result r:rs){
-  for(Cell c:r.listCells())
-    System.out.println(
-      Bytes.toString(CellUtil.cloneRow(c))+":"+
-      Bytes.toString(CellUtil.cloneFamily(c))+":"+
-      Bytes.toString(CellUtil.cloneQualifier(c))+"="+
-      Bytes.toString(CellUtil.cloneValue(c)));
-}
-rs.close();conn.close();`},
-    { q:"7. Spark 单词计数（Scala）<br><small>HDFS /user/input/data.txt → 字母序输出到 /user/output/result</small>",tp:false,
-      a:`val sc=new SparkContext(new SparkConf().setAppName("WC"))
-sc.textFile("/user/input/data.txt")
-  .flatMap(_.split("\\\\s+"))
-  .map((_,1))
-  .reduceByKey(_+_)
-  .sortByKey()
-  .saveAsTextFile("/user/output/result")`},
-    { q:"8. HBase 查询 student 表（填空）<br><small>查询行键 001，info:name 的值</small>",
-      tp:`Connection conn=ConnectionFactory.createConnection();
-Table table=conn.getTable(TableName.valueOf("student"));
-Get get=new Get(Bytes.toBytes("001"));
-// 填空：添加要获取的列
-get.                                              ;
-Result result=table.get(get);
-// 填空：获取列的值并转换为字符串
-byte[]value=                                        ;
-System.out.println(Bytes.toString(value));
-table.close();conn.close();`,
-      a:`// ① 添加要获取的列
-get.addColumn(Bytes.toBytes("info"),Bytes.toBytes("name"));
-// ② 获取列的值并转换为字符串
-byte[]value=result.getValue(Bytes.toBytes("info"),Bytes.toBytes("name"));`},
-    { q:"9. Spark 文件合并去重（Scala）<br><small>读取 /input/A.txt 和 /input/B.txt，合并去重输出</small>",tp:false,
-      a:`val sc=new SparkContext(new SparkConf().setAppName("Merge"))
-sc.textFile("/input/A.txt")
-  .union(sc.textFile("/input/B.txt"))
-  .distinct()
-  .coalesce(1)
-  .saveAsTextFile("/output/merged.txt")`},
-    { q:"10. Flink Socket 5 秒窗口统计（Scala）<br><small>localhost:9999 每 5 秒统计单词次数</small>",tp:false,
-      a:`val env=StreamExecutionEnvironment.getExecutionEnvironment
-env.socketTextStream("localhost",9999)
-  .flatMap(_.split("\\\\s+"))
-  .map((_,1))
-  .keyBy(0)
-  .timeWindow(Time.seconds(5))
-  .sum(1).print()
-env.execute()`},
-    { q:"11. Flink Kafka 过滤 ERROR（Java）",tp:false,
-      a:`env.addSource(new FlinkKafkaConsumer&lt;&gt;("log",new SimpleStringSchema(),props))
-  .filter(line->line.contains("ERROR"))
-  .print();
-env.execute();`},
-    { q:"12. Flink 滑动窗口平均值（Scala）<br><small>每 10 秒统计过去 30 秒平均值</small>",tp:false,
-      a:`val env=StreamExecutionEnvironment.getExecutionEnvironment
-env.socketTextStream("localhost",9999)
-  .map(x=>(1,x.toInt)).keyBy(0)
-  .window(SlidingProcessingTimeWindows.of(Time.seconds(30),Time.seconds(10)))
-  .apply((k,w,vals,out)=>{val s=vals.map(_._2);out.collect(k,s.sum/s.size)})
-  .print()
-env.execute()`},
-    { q:"13. MaxMapper 填空<br><small>Map 求整数最大值，输出常量键</small>",
-      tp:`public static class MaxMapper extends Mapper&lt;LongWritable,Text,IntWritable,IntWritable&gt;{
-  public void map(LongWritable key,Text value,Context context)
-      throws IOException,InterruptedException{
-    int num=Integer.parseInt(value.toString());
-    // 填空：输出键值对，键为常量，值为当前数字
-    ___                                   _ ;
-  }
-}`,
-      a:`// 填空：输出键值对，键为常量，值为当前数字
-context.write(new IntWritable(1),new IntWritable(num));`},
-    { q:"14. MapReduce 数据去重<br><small>输入两个文件，输出所有不重复的行</small>",tp:false,
-      a:`static class DM extends Mapper&lt;Object,Text,Text,NullWritable&gt;{
-  public void map(Object k,Text v,Context c){c.write(v,NullWritable.get());}
-}
-static class DR extends Reducer&lt;Text,NullWritable,Text,NullWritable&gt;{
-  public void reduce(Text k,Iterable&lt;NullWritable&gt;vs,Context c){c.write(k,NullWritable.get());}
-}
-job.setMapperClass(DM.class);job.setReducerClass(DR.class);
-job.setOutputKeyClass(Text.class);job.setOutputValueClass(NullWritable.class);`},
-    { q:"15. Spark SQL 分组聚合<br><small>读取 JSON，按部门分组统计平均工资</small>",tp:false,
-      a:`val spark=SparkSession.builder().appName("GA").getOrCreate()
-spark.read.json(args(0)).groupBy("dept").avg("salary").show()`},
-    { q:"16. MapReduce 倒排索引<br><small>输入多个文档，输出单词及其出现的文档列表</small>",tp:false,
-      a:`static class IM extends Mapper&lt;Object,Text,Text,Text&gt;{
-  public void map(Object k,Text v,Context c){
-    String fn=((FileSplit)c.getInputSplit()).getPath().getName();
-    for(String w:v.toString().split(" "))c.write(new Text(w),new Text(fn));
-  }
-}
-static class IR extends Reducer&lt;Text,Text,Text,Text&gt;{
-  public void reduce(Text k,Iterable&lt;Text&gt;vs,Context c){
-    Set&lt;String&gt;s=new HashSet&lt;&gt;();for(Text v:vs)s.add(v.toString());
-    c.write(k,new Text(String.join(",",s)));
-  }
-}`}
-  ],
-  comp: [
-    { q:"1. HDFS 写数据过程简述", a:"Client → NameNode 创建文件 → NN 返回 DN 列表 → Client 分块流水线写入 DN → DN 间副本复制 → ACK 确认 → 关闭" },
-    { q:"2. Region 三层定位过程与 ZooKeeper 作用", a:"Client → ZooKeeper（获取 Root 表位置）→ Root 表（获取 Meta 表位置）→ Meta 表（获取 Region 所在 RegionServer）→ 直接访问。<br><br>ZooKeeper 作用：存储 Root 表地址、监控 RegionServer 心跳、HMaster 选举" },
-    { q:"3. 电商推荐系统方案设计", a:"采集层（Flume/Kafka）→ 存储层（HDFS/HBase）→ 批处理（Spark MLlib 离线模型）→ 实时处理（Flink 实时特征）→ 推荐算法（协同过滤/矩阵分解）→ 结果（Redis 缓存）→ 展示层（API）" },
-    { q:"4. Hive vs Impala — 50TB+每日100GB 复杂 SQL 分析", a:"推荐 Hive。Hive 适合大规模批处理、复杂 ETL、容错性强；Impala 适合低延迟交互查询但内存受限、高并发差。方案：Hive 做离线 ETL，Impala 做即席查询" },
-    { q:"5. 交通流量实时分析与预测系统设计", a:"采集（传感器/Kafka）→ 实时（Flink 窗口聚合+ML 预测）→ 存储（HBase 时序+Redis 缓存）→ 离线（Spark SQL 历史分析）→ 可视化（ECharts 地图热力图）。<br><br>选 Flink：真正的流处理、毫秒级延迟、Exactly-Once 语义、CEP 复杂事件处理" },
-    { q:"6. 点击流实时监测+每日离线聚合", a:"实时链路：Flume → Kafka → Flink → HBase（实时展示）。<br>离线链路：Kafka → HDFS → Spark SQL/Hive → MySQL（报表）。<br>数据流向：用户点击 → Nginx → Flume → Kafka → 分流到实时和离线链路" },
-    { q:"7. MySQL + HBase 混合使用场景", a:"MySQL：订单事务（ACID 强一致、Join、索引）。<br>HBase：用户行为日志（海量数据、高并发读写、水平扩展、稀疏列）。<br>各自优势互补" },
-    { q:"8. 医疗大数据安全与隐私保护", a:"技术措施：数据加密（TDE+列加密）、访问控制（RBAC+ACL）、审计日志、脱敏脱标识、差分隐私。<br>管理措施：等保三级、数据分级、最小权限原则、匿名化处理、合规审计" },
-    { q:"9. 智慧城市可视化应用场景与图表类型", a:"① 交通流量 → 热力图/流图<br>② 环境监测（PM2.5、温度）→ 折线图/散点图<br>③ 公共安全 → 地理分布图/柱状图<br>④ 能源消耗 → 仪表盘/面积图" },
-    { q:"10. 电商个性化推荐系统方案", a:"采集（埋点→Kafka）→ 存储（HDFS 海量+HBase 实时）→ 批处理（Spark MLlib 训练 ALS/协同过滤）→ 实时（Flink 更新用户特征+实时召回）→ 算法（CF+CB+深度学习排序）→ 结果（Redis）→ 展示（API）。<br><br>选型：Spark 离线训练，Flink 实时特征+实时计算" }
-  ]
-};
-
-// ===== RENDER =====
-function renderKList(id, items, countId) {
-  const ul=document.getElementById(id);
-  items.forEach((d,i)=>{
-    const li=document.createElement('li');
-    li.className='k-item';
-    li.innerHTML='<span class="k-num">'+(i+1)+'</span><span class="k-text"><strong>'+d.n+'</strong>：'+d.t+'</span>';
-    ul.appendChild(li);
-  });
-  document.getElementById(countId).textContent=items.length+' 项';
-}
-
-function renderCodeList(id,items){
-  const c=document.getElementById(id);
-  items.forEach(d=>{
-    const num=d.q.match(/^\d+/)?.[0]||'?',hasTpl=d.tp&&d.tp.length>0;
-    const tplHTML=hasTpl
-      ?'<div class="q-template"><div class="tpl-label">原标题代码（填空）</div><pre><code class="language-java">'+d.tp+'</code></pre></div>'
-      :'';
-    const ansLabel=hasTpl?'<div class="ans-label">答案</div>':'';
-    const div=document.createElement('div');div.className='q-item';
-    div.innerHTML=
-      '<div class="q-header"><span class="q-num">'+num+'</span><span class="q-text">'+d.q+' <span class="tag tag-code">代码</span></span><span class="q-toggle">+</span></div>'
-      +tplHTML
-      +'<div class="q-answer"><div class="q-answer-inner">'
-      +ansLabel+'<pre><code class="language-java">'+d.a+'</code></pre></div></div>';
-    div.addEventListener('click',e=>{
-      if(e.target.closest('.copy-btn'))return;
-      div.classList.toggle('open');
-      if(div.classList.contains('open'))div.querySelectorAll('pre code').forEach(b=>hljs.highlightElement(b));
-    });
-    c.appendChild(div);
-  });
-  document.getElementById('codeCount').textContent=items.length+' 题';
-}
-
-function renderToggleList(id,items,countId){
-  const c=document.getElementById(id);
-  items.forEach(d=>{
-    const div=document.createElement('div');div.className='q-item';
-    div.innerHTML='<div class="q-header"><span class="q-text"><span class="tag tag-fill">填空</span> '+d.q+'</span><span class="q-toggle">+</span></div><div class="q-answer"><div class="q-answer-inner">'+d.a+'</div></div>';
-    div.addEventListener('click',()=>div.classList.toggle('open'));
-    c.appendChild(div);
-  });
-  document.getElementById(countId).textContent=items.length+' 题';
-}
-
-function renderCompList(id,items){
-  const c=document.getElementById(id);
-  items.forEach(d=>{
-    const div=document.createElement('div');div.className='comp-q';
-    div.innerHTML='<div class="q-label">'+d.q+'<span class="q-toggle">+</span></div><div class="q-answer">'+d.a+'</div>';
-    div.addEventListener('click',()=>div.classList.toggle('open'));
-    c.appendChild(div);
-  });
-  document.getElementById('compCount').textContent=items.length+' 题';
-}
-
-renderKList('mcqList',DATA.mcq,'mcqCount');
-renderKList('tfList',DATA.tf,'tfCount');
-renderToggleList('fillList',DATA.fill,'fillCount');
-renderCodeList('codeList',DATA.code);
-renderCompList('compList',DATA.comp);
-
-// ===== COPY BUTTONS =====
-document.querySelectorAll('.q-answer pre,.q-template pre').forEach(pre=>{
-  const btn=document.createElement('button');
-  btn.className='copy-btn';btn.textContent='复制';
-  btn.addEventListener('click',async e=>{
-    e.stopPropagation();
-    const code=pre.querySelector('code')?pre.querySelector('code').textContent:pre.textContent;
-    try{await navigator.clipboard.writeText(code.trim());btn.textContent='已复制';btn.classList.add('copied');setTimeout(()=>{btn.textContent='复制';btn.classList.remove('copied')},2000)}
-    catch{navigator.clipboard&&navigator.clipboard.writeText(code.trim())}
-  });
-  pre.appendChild(btn);
-});
-
-// ===== EXPAND ALL =====
-document.querySelectorAll('[data-expand]').forEach(btn=>{
-  btn.addEventListener('click',e=>{
-    e.stopPropagation();
-    const id=btn.dataset.expand,container=document.getElementById(id);
-    const allOpen=container.querySelectorAll(':scope>.q-item.open').length===container.querySelectorAll(':scope>.q-item').length;
-    container.querySelectorAll(':scope>.q-item').forEach(el=>{
-      if(allOpen)el.classList.remove('open');else el.classList.add('open');
-    });
-    btn.textContent=allOpen?'展开全部':'收起全部';
-    if(!allOpen)container.querySelectorAll('pre code').forEach(b=>hljs.highlightElement(b));
-  });
-});
-
-// ===== SEARCH =====
-const searchInput=document.getElementById('searchInput');
-const searchClear=document.getElementById('searchClear');
-let searchTerm='';
-
-function highlightText(text,term){
-  if(!term)return text;
-  const escaped=term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-  return text.replace(new RegExp('('+escaped+')','gi'),'<span class="q-match">$1</span>');
-}
-
-function filterItems(){
-  const term=searchInput.value.trim().toLowerCase();
-  searchTerm=term;
-  searchClear.classList.toggle('show',term.length>0);
-  document.querySelectorAll('.k-item,.q-item,.comp-q').forEach(el=>{
-    const text=el.textContent.toLowerCase();
-    el.classList.toggle('hidden',term&&!text.includes(term));
-  });
-  // Update counts
-  document.querySelectorAll('section').forEach(sec=>{
-    const visible=sec.querySelectorAll(':scope>.k-item:not(.hidden),:scope>.q-item:not(.hidden),:scope>.comp-q:not(.hidden)').length;
-    const total=sec.querySelectorAll(':scope>.k-item,:scope>.q-item,:scope>.comp-q').length;
-    const countEl=sec.querySelector('.count');
-    if(countEl){
-      if(term)countEl.textContent=visible+'/'+total+' 项';
-      else countEl.textContent=total+' 项';
-    }
-  });
-}
-
-searchInput.addEventListener('input',filterItems);
-searchClear.addEventListener('click',()=>{searchInput.value='';filterItems();searchInput.focus()});
-
-// ===== SCROLL PROGRESS =====
-const progress=document.getElementById('progress');
-window.addEventListener('scroll',()=>{
-  const h=document.documentElement.scrollHeight-window.innerHeight;
-  progress.style.width=(window.scrollY/h*100)+'%';
-});
-
-// ===== BACK TO TOP =====
-const backTop=document.getElementById('backTop');
-window.addEventListener('scroll',()=>{backTop.classList.toggle('show',window.scrollY>400)});
-backTop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
-
-// ===== NAV ACTIVE =====
-const secEls=document.querySelectorAll('section[id]');
-const navLinks=document.querySelectorAll('.nav a');
-const navObserver=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting)navLinks.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));
-  });
-},{rootMargin:'-20% 0px -70% 0px'});
-secEls.forEach(s=>navObserver.observe(s));
-
-// ===== ENTRANCE ANIMATION =====
-const sectionObserver=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');sectionObserver.unobserve(e.target)}});
-},{threshold:0.08});
-document.querySelectorAll('section').forEach(s=>sectionObserver.observe(s));
-
-// ===== THEME =====
-const themeToggle=document.getElementById('themeToggle');
-let dark=false;
-const saved=localStorage.getItem('bd-theme');
-if(saved==='dark'){dark=true;document.documentElement.setAttribute('data-theme','dark');themeToggle.innerHTML='<span class="icon">☾</span> 主题'}
-themeToggle.addEventListener('click',()=>{
-  dark=!dark;
-  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
-  localStorage.setItem('bd-theme',dark?'dark':'light');
-  themeToggle.innerHTML=dark?'<span class="icon">☾</span> 主题':'<span class="icon">☀</span> 主题';
-});
+})();
 </script>
+
 </body>
 </html>

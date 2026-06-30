@@ -106,25 +106,63 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);line-he
 
 @keyframes fs{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 
+/* Hamburger */
+.hamb{display:none;position:fixed;top:12px;left:14px;z-index:200;width:38px;height:38px;border-radius:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);cursor:pointer;align-items:center;justify-content:center;font-size:1.2rem;transition:all 0.2s}
+.hamb:hover{background:var(--surface2);border-color:var(--accent-dim)}
+.hamb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+
+/* Overlay */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:90;opacity:0;transition:opacity 0.3s}
+.overlay.sh{opacity:1}
+
 @media(max-width:900px){
   .sidebar{width:240px}
   .main{margin-left:240px}
   .hero{padding:40px 28px 32px}
   .ch-wrap{padding:28px 28px 60px}
   .mbar{padding:10px 28px}
+  .mbar .ml{font-size:0.75rem}
+  .mstat{font-size:0.75rem}
 }
-@media(max-width:640px){
-  .sidebar{width:100%;height:auto;position:relative;border-right:none;border-bottom:1px solid var(--border);max-height:50vh}
-  .main{margin-left:0}
-  .hero{padding:28px 20px 24px}
-  .hero h2{font-size:1.6rem}
-  .ch-wrap{padding:20px}
-  .mbar{padding:10px 20px;flex-wrap:wrap}
-  .card{padding:14px 16px}
+@media(max-width:680px){
+  .hamb{display:flex}
+  .sidebar{transform:translateX(-100%);width:280px;transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);z-index:100}
+  .sidebar.op{transform:translateX(0)}
+  .overlay{display:block;pointer-events:none}
+  .overlay.sh{pointer-events:auto}
+  .main{margin-left:0;padding-top:0}
+  .hero{padding:56px 20px 28px;margin-top:0}
+  .hero h2{font-size:1.4rem}
+  .hero p{font-size:0.85rem}
+  .hero-stats{gap:20px;margin-top:18px}
+  .hero-stat .val{font-size:1.3rem}
+  .hero-stat .lbl{font-size:0.65rem}
+  .mbar{padding:10px 16px 10px 56px;flex-wrap:wrap;gap:10px;min-height:52px}
+  .mbar .ml{font-size:0.72rem}
+  .mstat{font-size:0.72rem}
+  .ch-wrap{padding:16px}
+  .ch-hdr h3{font-size:1.3rem}
+  .ch-hdr .sub{font-size:0.8rem}
+  .card{padding:12px 14px;margin-bottom:10px}
+  .card .qt{font-size:0.85rem;line-height:1.6}
+  .opt{padding:10px 12px;font-size:0.82rem;min-height:44px}
+  .opt .mk{width:22px;height:22px;flex-shrink:0}
+  .sec-title{font-size:0.88rem;margin-bottom:14px}
+  .sec{margin-bottom:28px}
+  .btn-ans{padding:8px 14px;font-size:0.75rem;min-height:36px}
+  .ans{font-size:0.82rem;padding:10px 14px}
+  .ans .it{margin-bottom:8px}
+  .cb{padding:12px 14px;font-size:0.75rem}
+  .cb pre{white-space:pre-wrap;word-break:break-all}
 }
 </style>
 </head>
 <body>
+
+<button class="hamb" id="hamb" onclick="toggleSidebar()" aria-label="菜单">
+  <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
 <aside class="sidebar" id="sb">
   <div class="sidebar-header">
@@ -527,6 +565,21 @@ function showCh(i){
   document.getElementById('cw-'+i).classList.add('on');
   document.querySelectorAll('.nav-btn').forEach(function(e,idx){e.classList.toggle('on',idx===i)});
   document.getElementById('ctx').scrollIntoView({behavior:'smooth'});
+  closeSidebar();
+}
+
+function toggleSidebar(){
+  var sb=document.getElementById('sb');
+  var ov=document.getElementById('overlay');
+  var op=sb.classList.contains('op');
+  sb.classList.toggle('op',!op);
+  ov.classList.toggle('sh',!op);
+  document.body.style.overflow=op?'':'hidden';
+}
+function closeSidebar(){
+  document.getElementById('sb').classList.remove('op');
+  document.getElementById('overlay').classList.remove('sh');
+  document.body.style.overflow='';
 }
 
 function ta(uid){

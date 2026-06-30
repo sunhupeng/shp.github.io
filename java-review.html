@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java 线下习题册 · 复习宝典</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0f1a; --surface: #141827; --surface2: #1a2035;
+  --border: #252d44; --text: #e8e4df; --text-dim: #8b92a8;
+  --accent: #c99a5e; --accent-glow: rgba(201,154,94,0.15);
+  --accent-dim: #a67c48; --correct: #5aa87a; --wrong: #c45a6a;
+  --code-bg: #0a0d18; --radius: 10px; --radius-lg: 16px;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--bg);color:var(--text);line-height:1.7;display:flex;min-height:100vh}
+::selection{background:var(--accent);color:var(--bg)}
+
+/* Sidebar */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;z-index:100;display:flex;flex-direction:column}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.sidebar-header{padding:28px 24px 20px;border-bottom:1px solid var(--border)}
+.sidebar-header h1{font-family:var(--font-serif);font-size:1.35rem;font-weight:700;color:var(--accent);line-height:1.3}
+.sidebar-header p{font-size:0.78rem;color:var(--text-dim);margin-top:4px}
+.sidebar-nav{padding:12px 12px 24px;flex:1}
+.nav-btn{display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;background:none;border:none;color:var(--text-dim);font-family:var(--font-sans);font-size:0.82rem;font-weight:500;cursor:pointer;border-radius:6px;transition:all 0.2s;text-align:left}
+.nav-btn:hover{background:var(--surface2);color:var(--text)}
+.nav-btn.on{background:var(--accent-glow);color:var(--accent)}
+.nav-btn .num{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:600;background:var(--surface2);flex-shrink:0}
+.nav-btn.on .num{background:var(--accent);color:var(--bg)}
+
+/* Main */
+.main{margin-left:280px;flex:1;min-height:100vh}
+.hero{padding:60px 56px 48px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,var(--surface),var(--bg))}
+.hero h2{font-family:var(--font-serif);font-size:2.2rem;font-weight:700;line-height:1.25}
+.hero h2 em{font-style:italic;color:var(--accent)}
+.hero p{margin-top:12px;color:var(--text-dim);font-size:0.95rem;max-width:560px}
+.hero-stats{display:flex;gap:32px;margin-top:24px;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat .val{font-family:var(--font-serif);font-size:1.6rem;font-weight:700;color:var(--accent);line-height:1}
+.hero-stat .lbl{font-size:0.72rem;color:var(--text-dim);margin-top:4px;text-transform:uppercase;letter-spacing:0.06em}
+
+/* Chapter */
+.ch-wrap{display:none;padding:40px 56px 80px;scroll-margin-top:60px}
+.ch-wrap.on{display:block}
+.ch-hdr{margin-bottom:36px}
+.ch-hdr h3{font-family:var(--font-serif);font-size:1.6rem;font-weight:700}
+.ch-hdr .sub{color:var(--text-dim);font-size:0.88rem;margin-top:6px}
+
+/* Section */
+.sec{margin-bottom:40px}
+.sec-title{font-size:1rem;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:18px;letter-spacing:0.02em}
+.sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent)}
+
+/* Card */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;margin-bottom:12px;transition:border-color 0.2s}
+.card:hover{border-color:rgba(201,154,94,0.25)}
+.card .qt{font-size:0.9rem;line-height:1.7}
+.card .qt code{font-family:var(--font-mono);font-size:0.82rem;background:var(--code-bg);padding:1px 6px;border-radius:3px;color:#e6d5b8}
+.card .ql{font-size:0.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}
+
+/* Options */
+.opts{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:6px;border:1px solid var(--border);cursor:pointer;transition:all 0.15s;font-size:0.88rem;background:var(--surface2)}
+.opt:hover{border-color:var(--accent-dim);background:rgba(201,154,94,0.06)}
+.opt .mk{width:20px;height:20px;border-radius:50%;border:2px solid var(--text-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.65rem;font-weight:600;transition:all 0.15s}
+.opt .mk.sq{border-radius:3px}
+.opt.sel{border-color:var(--accent)}
+.opt.sel .mk{border-color:var(--accent);background:var(--accent);color:var(--bg)}
+.opt.cor{border-color:var(--correct)!important}
+.opt.cor .mk{border-color:var(--correct)!important;background:var(--correct)!important;color:#fff!important}
+.opt.wro{border-color:var(--wrong)!important}
+.opt.wro .mk{border-color:var(--wrong)!important;background:var(--wrong)!important;color:#fff!important}
+
+/* Buttons */
+.btn-ans{margin-top:10px;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;font-size:0.78rem;font-weight:500;color:var(--accent);background:var(--accent-glow);border:none;border-radius:4px;cursor:pointer;font-family:var(--font-sans);transition:all 0.15s}
+.btn-ans:hover{background:rgba(201,154,94,0.25)}
+
+/* Answer */
+.ans{margin-top:10px;padding:12px 16px;background:var(--surface2);border-radius:6px;border-left:3px solid var(--accent);font-size:0.88rem;display:none;line-height:1.6}
+.ans.sh{display:block;animation:fs 0.25s ease}
+.ans .al{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--accent);font-weight:600;margin-bottom:4px}
+.ans code{font-family:var(--font-mono);font-size:0.82rem;background:var(--code-bg);padding:1px 6px;border-radius:3px}
+.ans .it{margin-bottom:6px}
+.ans .it strong{color:var(--accent-dim)}
+
+/* Code */
+.cb{background:var(--code-bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin:10px 0;overflow-x:auto;font-family:var(--font-mono);font-size:0.82rem;line-height:1.65;position:relative}
+.cb .lt{position:absolute;top:8px;right:12px;font-size:0.65rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em;font-family:var(--font-sans)}
+
+/* Mode bar */
+.mbar{display:flex;align-items:center;gap:16px;padding:12px 56px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.mbar .ml{font-size:0.78rem;color:var(--text-dim);font-weight:500}
+.tog{position:relative;width:40px;height:22px;background:var(--border);border-radius:11px;cursor:pointer;transition:background 0.2s;flex-shrink:0}
+.tog.on{background:var(--accent)}
+.tog::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--text);transition:transform 0.2s}
+.tog.on::after{transform:translateX(18px)}
+.mstat{font-size:0.78rem;color:var(--text-dim);margin-left:auto}
+
+@keyframes fs{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:900px){
+  .sidebar{width:240px}
+  .main{margin-left:240px}
+  .hero{padding:40px 28px 32px}
+  .ch-wrap{padding:28px 28px 60px}
+  .mbar{padding:10px 28px}
+}
+@media(max-width:640px){
+  .sidebar{width:100%;height:auto;position:relative;border-right:none;border-bottom:1px solid var(--border);max-height:50vh}
+  .main{margin-left:0}
+  .hero{padding:28px 20px 24px}
+  .hero h2{font-size:1.6rem}
+  .ch-wrap{padding:20px}
+  .mbar{padding:10px 20px;flex-wrap:wrap}
+  .card{padding:14px 16px}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sb">
+  <div class="sidebar-header">
+    <h1>Java 习题册</h1>
+    <p>线下复习宝典 · 含全部解析</p>
+  </div>
+  <nav class="sidebar-nav" id="nav"></nav>
+</aside>
+
+<div class="main">
+  <section class="hero">
+    <h2>Java <em>线下习题册</em></h2>
+    <p>涵盖 7 大章节、全题型解析与编程实战。</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="val">7</div><div class="lbl">章节</div></div>
+      <div class="hero-stat"><div class="val" id="totq">0</div><div class="lbl">题目</div></div>
+      <div class="hero-stat"><div class="val">6</div><div class="lbl">编程实战</div></div>
+    </div>
+  </section>
+
+  <div class="mbar">
+    <span class="ml">答题模式</span>
+    <div class="tog" id="qtog"></div>
+    <span class="mstat" id="mstat">浏览模式</span>
+  </div>
+
+  <div id="ctx"></div>
+</div>
+
+<script>
+"use strict";
+var QUIZ = false;
+var TOTQ = 0;
+
+// ======== DATA ========
+var CHS = [
+  // 1
+  {id:1,title:'Java 介绍',sub:'语言基础 · 开发环境 · 程序结构',secs:[
+    {t:'judge',l:'判断题',qs:[
+      {q:'Java 语言的主要贡献者是 James Gosling。',a:'√'},
+      {q:'Java 源文件中只能有一个类。',a:'×'},
+      {q:'一个源文件中必须要有 public 类。',a:'×'},
+      {q:'源文件中如果有多个类，那么至多有一个类可以是 public 类。',a:'√'},
+      {q:'Java 应用程序必须要有主类。',a:'√'},
+      {q:'Java 源文件中只能有一个类。（重复题）',a:'×'},
+      {q:'一个源文件中必须要有 public 类。（重复题）',a:'×'},
+      {q:'源文件中如果有多个类，那么至多有一个类可以是 public 类。（重复题）',a:'√'},
+      {q:'Java 应用程序的主类必须是 public 类。',a:'×'},
+      {q:'下列源文件可保存成 dog.java。\npublic class Dog { public void cry() { System.out.println("wangwang"); } }',a:'√'}
+    ]},
+    {t:'choice',l:'单选题',qs:[
+      {q:'下列哪个是 JDK 提供的编译器？',o:['A. java.exe','B. javac.exe','C. javap.exe','D. javaw.exe'],a:1},
+      {q:'下列哪个是 Java 应用程序主类中正确的 main 方法？',o:['A. public void main(String args[])','B. static void main(String args[])','C. public static void Main(String args[])','D. public static void main(String args[])'],a:3},
+      {q:'下列哪个叙述是正确的？',o:['A. Java 源文件由若干个书写形式互相独立的类组成。','B. Java 源文件中只能有一个类。','C. 如果源文件中有多个类，至少有一个类是 public 类。','D. Java 源文件的扩展名是 .txt。'],a:0},
+      {q:'对于下列源文件，哪个叙述是正确的？\npublic class E { public static void main(String args[]) { ... } }\nclass A { public static void main(String args[]) { ... } }',o:['A. 源文件名字必须是 A.java。','B. 源文件有错误。','C. 源文件必须命名为 E.java，编译无错误。有两个主类。','D. 源文件中的 E 类不是主类。'],a:0},
+      {q:'下列哪个叙述是正确的？',o:['A. Java 是 2005 年 Sun 公司推出的。','B. Java 是 1995 年 IBM 公司推出的。','C. Java 是印度尼西亚一个盛产咖啡的岛名。','D. Java 的主要贡献者是比尔盖茨。'],a:2}
+    ]},
+    {t:'error',l:'挑错题',qs:[
+      {q:'public class Example1 {\n    public static void main(String args[]) {\n        System.out.println("ok");\n        System.out.println("hello");\n        system.out.println("您好");  // 哪行有错？\n    }\n}',o:['A','B','C','D'],a:3,e:'D 行 system.out.println 应为 System.out.println（S 大写）。'},
+      {q:'Public class Example2 { ... }  // 哪行有错？',o:['A','B','C','D'],a:0,e:'A 行 class 前 Public 应为 public（小写）。'},
+      {q:'public class Example3 {\n    public static void main(string args[]) { ... }  // 哪行有错？\n}',o:['A','B','C','D'],a:1,e:'B 行 string 应为 String（首字母大写）。'}
+    ]},
+    {t:'reading',l:'阅读程序题',qs:[
+      {q:'public class Speak {\n  void speakHello() { System.out.println("I\'m glad to meet you"); }\n}\nclass Xiti4 {\n  public static void main(String args[]) {\n    Speak sp = new Speak();\n    sp.speakHello();\n  }\n}',its:[
+        {l:'A) 源文件的名字是什么？',a:'Speak.java（public 类为 Speak）'},
+        {l:'B) 编译后生成几个字节码文件？名字是什么？',a:'2 个 —— Speak.class 和 Xiti4.class'},
+        {l:'C) 用 Java 解释器运行哪个字节码文件？',a:'Xiti4（含有 main 方法）'},
+        {l:'D) 执行 java Speak 得到什么错误？',a:'错误: 找不到或无法加载主类 Speak（Speak 没有 main 方法）'}
+      ]}
+    ]}
+  ]},
+  // 2
+  {id:2,title:'基本数据类型与数组',sub:'类型系统 · 数组声明 · 类型转换',secs:[
+    {t:'judge',l:'判断题',qs:[
+      {q:'main 是 Java 语言规定的关键字。',a:'×'},
+      {q:'float area = 1e1; 是错误的 float 变量声明。',a:'√'},
+      {q:'float height = 1.0f; 是正确的 float 变量声明。',a:'√'},
+      {q:'byte amount = 128; 是正确的 byte 型变量声明。',a:'×（byte 范围 -128~127）'},
+      {q:'int[] a,b; 是声明了 2 个 int 型一维数组 a 和 b。',a:'√'},
+      {q:'int a[],b; 是声明了一个 int 型一维数组 a 和一个 int 型变量 b。',a:'√'},
+      {q:'int[][] a = {{1,2,3},{4,5,6,7}}; 则 a[0].length=3, a[1].length=4。',a:'√'},
+      {q:'int a[][] = new int[2][9]; 则 a.length=2, a[0].length=a[1].length=9。',a:'√'},
+      {q:'int a[20]; 是正确的数组声明。',a:'×（Java 不允许在声明时指定大小）'},
+      {q:'boolean yes = TRUE; 是正确的 boolean 变量声明。',a:'×（应为 true，小写）'}
+    ]},
+    {t:'choice',l:'单选题',qs:[
+      {q:'哪个叙述是错误的？',o:['A. int[] a,b[]; 声明了 1 个一维数组 a 和 1 个二维数组 b。','B. float a[20]; 是正确的数组声明。','C. boolean yes = false; 是正确的。','D. 1e2 和 2.05E2 都是 double 型常量。'],a:1},
+      {q:'哪个叙述是错误的？',o:['A. System 是关键字。','B. _class 可以作为标识符。','C. char 在 Unicode 表中位置范围是 0~65535。','D. int[] a = new int[3]; a.length 是 3。'],a:0},
+      {q:'下列哪项字符序列可以是标识符？',o:['A. true','B. default','C. _int','D. good-class'],a:2},
+      {q:'下列哪一项是正确的 float 变量声明？',o:['A. float foo = 1;','B. float foo = 1.0;','C. float foo = 2e1;','D. float foo = 2.02;'],a:0,e:'1 是 int，自动隐式转换到 float 合法。B 和 D 中 1.0 和 2.02 是 double 需加 f。C 中 2e1 是 double。'},
+      {q:'下列哪一项是正确的 float 变量声明？',o:['A. float foo = 1e2;','B. float foo = 3.14;','C. float foo = 3.03d;','D. float foo = 0x0123;'],a:3,e:'0x0123 是 int 可隐式转 float。A 中 1e2 是 double，B 中 3.14 是 double，C 中 3.03d 是 double。'},
+      {q:'以下哪一项是正确的 char 型变量声明？',o:['A. char ch = "R";','B. char ch = \'\\\\\';','C. char ch = \'ABCD\';','D. char ch = "ABCD";'],a:1},
+      {q:'哪个叙述是错误的？',o:['A. int[][] = new int[6][4]; a.length 是 6。','B. int[][] = new int[2][9]; a.length,a[0].length,a[1].length 都是 9。','C. int[] a = new int[3]; a[0],a[1],a[2] 都是 0。','D. float height = 1e1F; 是正确的。'],a:1,e:'a.length 是 2，不是 9。'},
+      {q:'public class Test {\n  public static void main(String args[]) {\n    int arr[] = new int[10];\n    System.out.println(arr[1]);\n  }\n}',o:['A. 编译错误','B. 输出 null','C. 编译正确，运行异常','D. 输出 0'],a:3}
+    ]},
+    {t:'error',l:'挑错题',qs:[
+      {q:'public class Test1 {\n  public static void main(String args[]) {\n    char c = 65535;\n    byte b = 127;\n    int height = 100;\n    float f = 3.14;  // 哪行有错？\n  }\n}',o:['A','B','C','D'],a:3,e:'D 行 3.14 是 double 型，赋值给 float 需要加 f/F。'},
+      {q:'public class Test2 {\n  public static void main(String args[]) {\n    int x = 8;\n    byte b = 127;\n    b = x;\n    x = \'a\';\n    long y = b;\n    float z = (int)6.89;\n  }\n}',o:['A','B','C','D'],a:2,e:'C 行 int 赋值给 byte 可能损失精度，需强转。'},
+      {q:'public class Test3 {\n  public static void main(String args[]) {\n    char c = \'a\';\n    byte b = 128;   // 哪行有错？\n    int height = 100;\n    float f = 3.14F;\n  }\n}',o:['A','B','C','D'],a:1,e:'B 行 byte 范围 -128~127，128 超出范围。'},
+      {q:'public class Test4 {\n  public static void main(String args[]) {\n    char c = 30320;\n    byte b = 127;\n    int public = 100;  // 哪行有错？\n    float f = 3.14F;\n  }\n}',o:['A','B','C','D'],a:2,e:'C 行 public 是关键字，不能作为变量名。'}
+    ]},
+    {t:'reading',l:'阅读程序题',qs:[
+      {q:'public class E {\n  public static void main(String args[]) {\n    long[] a = {1,2,3,4};\n    long[] b = {100,200,300,400,500};\n    b = a;\n    System.out.println("数组 b 的长度:" + b.length);  //【代码1】\n    System.out.println("b[0]=" + b[0]);               //【代码2】\n  }\n}',its:[
+        {l:'【代码1】输出：',a:'数组 b 的长度:4（b 指向 a，长度变为 4）'},
+        {l:'【代码2】输出：',a:'b[0]=1'}
+      ]},
+      {q:'public class E {\n  public static void main(String args[]) {\n    int[] a = {10,20,30,40}, b[] = {{1,2},{4,5,6,7}};\n    b[0] = a;\n    b[0][1] = b[1][3];\n    System.out.println(b[0][3]);  //【代码1】\n    System.out.println(a[1]);     //【代码2】\n  }\n}',its:[
+        {l:'【代码1】输出：',a:'40（b[0][3] = a[3] = 40）'},
+        {l:'【代码2】输出：',a:'7（b[0][1] = b[1][3] = 7，b[0] 与 a 引用相同，a[1] 同步改为 7）'}
+      ]}
+    ]}
+  ]},
+  // 3
+  {id:3,title:'运算符与表达式',sub:'运算符 · 流程控制 · 循环结构',secs:[
+    {t:'judge',l:'判断题',qs:[
+      {q:'表达式 10 > 20 - 17 的结果是 1。',a:'×（结果为 boolean 的 true，不是 1）'},
+      {q:'表达式 5 / 2 的结果是 2。',a:'√（整数除法）'},
+      {q:'逻辑运算符的运算结果是 boolean 型数据。',a:'√'},
+      {q:'关系运算符的运算结果是 int 型数据。',a:'×（结果为 boolean）'},
+      {q:'12 = 12 是非法的表达式。',a:'√（= 是赋值，不能给常量赋值）'},
+      {q:'表达式 2 > 8 && 9 > 2 的结果为 false。',a:'√（短路与，2>8 为 false 直接返回）'},
+      {q:'while(表达式) 中的「表达式」的值必须是 boolean 型数据。',a:'√'},
+      {q:'在 while 语句循环体中执行 break 的效果是结束 while 语句。',a:'√'},
+      {q:'switch 语句中必须要有 default 选项。',a:'×'},
+      {q:'if 语句中的条件表达式的值可以是 int 型数据。',a:'×（必须是 boolean）'}
+    ]},
+    {t:'choice',l:'单选题',qs:[
+      {q:'下列哪个叙述是正确的？',o:['A. 5.0/2+10 的结果是 double 型。','B. (int)5.8+1.0 结果是 int 型。','C. \'苹\'+\'果\' 结果是 char 型。','D. (short)10+\'a\' 结果是 short 型。'],a:0},
+      {q:'用哪个代码替换 while(【代码】) 会导致编译错误？\nint m=10,n=0;\nwhile(【代码】){ n++; }',o:['A. m-->0','B. m++>0','C. m=0','D. m>100&&true'],a:2,e:'C 中 m=0 是赋值，结果不是 boolean。'},
+      {q:'public class Test {\n  public static void main(String args[]) {\n    boolean boo = false;\n    if(boo = true) {\n      System.out.print("hello");\n      System.out.print("你好");\n    } else {\n      System.out.print("ok");\n      System.out.print("yes");\n    }\n  }\n}',o:['A. 编译错误','B. 输出 hello你好','C. 输出 ok','D. 输出 okyes'],a:1,e:'boo = true 是赋值表达式，结果为 true。'},
+      {q:'对于 int n=6789; 表达式的值为 7 的是？',o:['A. n%10','B. n/10%10','C. n/100%10','D. n/1000%10'],a:1},
+      {q:'哪个代码替换 if(【代码】) 会输出 hello？\nint m=0;\nif(【代码】){ System.out.println("您好"); }\nelse { System.out.println("hello"); }',o:['A. m--<=0','B. ++m>0','C. m++>0','D. --m<0'],a:2,e:'m++>0: 先用 m=0 比较，0>0 为 false，执行 else 输出 "hello"。'},
+      {q:'给定 int x=1; 哪个代码导致"可能损失精度"错误？',o:['A. short t=12+\'a\';','B. char m=\'a\'+x;','C. char c=\'a\'+1;','D. byte n=\'a\'+1;'],a:1,e:'\'a\'+x 中 x 是 int，结果为 int 不能赋值给 char。'}
+    ]},
+    {t:'error',l:'挑错题',qs:[
+      {q:'byte b = \'a\';\nint n = 100;\nchar c = 65;\nb = b;\nb = b + 1;  // 哪行有错？',o:['A','B','C','D'],a:3,e:'D: b+1 结果为 int，赋值给 byte 需强转。'},
+      {q:'char ch = \'花\';\nbyte n = -100;\nch = ch - ch;  // 哪行有错？\nn = n;\nn = 127;',o:['A','B','C','D'],a:2,e:'C: ch-ch 结果为 int，不能赋值给 char。'},
+      {q:'int m = 1000;\nwhile(m > 100) {\n  m = m--;\n  if(m == 600) { continue; m++; }  // 哪行有错？\n}',o:['A','B','C','D'],a:3,e:'D: continue 后的 m++ 是不可达代码（unreachable）。'}
+    ]},
+    {t:'reading',l:'阅读程序题',qs:[
+      {q:'char x=\'你\',y=\'e\',z=\'吃\';\nif(x>\'A\'){ y=\'苹\'; z=\'果\'; }\nelse y=\'酸\';\nz=\'甜\';\nSystem.out.println(x+","+y+","+z);',its:[{l:'输出结果：',a:'你,苹,甜'}]},
+      {q:'char c = \'\\0\';\nfor(int i=1;i<=4;i++) {\n  switch(i) {\n    case 1: c=\'J\'; System.out.print(c);\n    case 2: c=\'e\'; System.out.print(c); break;\n    case 3: c=\'p\'; System.out.print(c);\n    default: System.out.print("好");\n  }\n}',its:[{l:'输出结果：',a:'JeJep好p好'}]},
+      {q:'int x = 1, y = 6;\nwhile(y-- > 0) { x--; }\nSystem.out.print("x="+x+",y="+y);',its:[{l:'输出结果：',a:'x=-5,y=-1'}]}
+    ]},
+    {t:'code',l:'编程题',qs:[
+      {q:'求 1! + 2! + … + 10!。',c:'public class FactorialSum {\n    public static void main(String[] args) {\n        long sum = 0, fact = 1;\n        for (int i = 1; i <= 10; i++) {\n            fact *= i;\n            sum += fact;\n        }\n        System.out.println("1!+2!+...+10! = " + sum);\n    }\n}'},
+      {q:'求 100 以内的全部素数。',c:'public class PrimeNumbers {\n    public static void main(String[] args) {\n        for (int i = 2; i <= 100; i++) {\n            boolean isPrime = true;\n            for (int j = 2; j <= Math.sqrt(i); j++) {\n                if (i % j == 0) { isPrime = false; break; }\n            }\n            if (isPrime) System.out.print(i + " ");\n        }\n    }\n}'},
+      {q:'用 do-while 和 for 循环计算 1+1/2!+1/3!+… 前 20 项和。',c:'public class SeriesSum {\n    public static void main(String[] args) {\n        double sum = 0, fact = 1;\n        for (int i = 1; i <= 20; i++) {\n            fact *= i;\n            sum += 1.0 / fact;\n        }\n        System.out.println("for sum = " + sum);\n        sum = 0; fact = 1; int i = 1;\n        do {\n            fact *= i;\n            sum += 1.0 / fact;\n            i++;\n        } while (i <= 20);\n        System.out.println("do-while sum = " + sum);\n    }\n}'},
+      {q:'求 1000 之内的所有完数。',c:'public class PerfectNumber {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 1000; i++) {\n            int sum = 0;\n            for (int j = 1; j <= i / 2; j++) {\n                if (i % j == 0) sum += j;\n            }\n            if (sum == i) System.out.print(i + " ");\n        }\n    }\n}'},
+      {q:'计算 8 + 88 + 888 + … 前 10 项之和。',c:'public class SeriesSum {\n    public static void main(String[] args) {\n        long sum = 0, term = 0;\n        for (int i = 1; i <= 10; i++) {\n            term = term * 10 + 8;\n            sum += term;\n        }\n        System.out.println("sum = " + sum);\n    }\n}'},
+      {q:'输出满足 1+2+3+…+n<8888 的最大正整数 n。',c:'public class MaxN {\n    public static void main(String[] args) {\n        int sum = 0, n = 0;\n        while (sum + n + 1 < 8888) {\n            n++;\n            sum += n;\n        }\n        System.out.println("n = " + n);\n    }\n}'}
+    ]}
+  ]},
+  // 4
+  {id:4,title:'类与对象',sub:'面向对象 · 构造方法 · 成员与局部变量',secs:[
+    {t:'judge',l:'判断题',qs:[
+      {q:'类是最重要的"数据类型"，类声明的变量被称为对象变量，简称对象。',a:'√'},
+      {q:'构造方法没有类型。',a:'√'},
+      {q:'类中的实例变量在用该类创建对象的时候才会被分配内存空间。',a:'√'},
+      {q:'类中的实例方法可以用类名直接调用。',a:'×（必须通过对象调用）'},
+      {q:'局部变量没有默认值。',a:'√'},
+      {q:'构造方法的访问权限可以是 public、protected、private 或友好的。',a:'√'},
+      {q:'方法中声明的局部变量不可以用访问修饰符。',a:'√'},
+      {q:'this 可以出现在实例方法和构造方法中。',a:'√'},
+      {q:'成员变量的名字不可以和局部变量的名字相同。',a:'×（可以，局部变量会隐藏成员变量）'},
+      {q:'static 方法不可以重载。',a:'×（static 方法可以重载）'}
+    ]},
+    {t:'choice',l:'单选题',qs:[
+      {q:'下列哪个叙述是正确的？',o:['A. 所有类必须在同一源文件中。','B. 类可以分布在多个源文件中，必须有一个含主类。','C. 源文件必须含有主类。','D. 主类必须是 public 类。'],a:1},
+      {q:'下列哪个叙述是正确的？',o:['A. 成员变量名不能和局部变量名相同。','B. 方法参数名可以和局部变量名相同。','C. 成员变量没有默认值。','D. 局部变量没有默认值。'],a:3},
+      {q:'class Hello {\n  Hello(int m) { }\n  int Hello() { return 20; }\n  hello() { }\n}',o:['A. 有两个构造方法。','B. int Hello() 是错误的。','C. 没有构造方法。','D. hello 方法无类型导致编译错误。'],a:1,e:'int Hello() 是普通方法（有返回类型），不是构造方法。构造方法只有 Hello(int m)。'},
+      {q:'class Dog {\n  Dog(int m) { }\n  Dog(double m) { }\n  int Dog(int m) { return 23; }\n  void Dog(double m) { }\n}',o:['A. Dog(int) 与 Dog(double) 是重载构造方法。','B. int Dog(int) 与 void Dog(double) 是重载非构造方法。','C. 只有两个构造方法且无无参构造。','D. 有三个构造方法。'],a:3,e:'只有前两个是构造方法，后两个是普通方法（有返回类型）。'},
+      {q:'下列哪个叙述是正确的？',o:['A. 成员变量有默认值。','B. this 可出现在 static 方法中。','C. 实例方法可以用类名调用。','D. 局部变量可以用访问修饰符。'],a:0},
+      {q:'class Tom {\n  void Tom() { System.out.println("ok"); }\n  Tom(int m) { System.out.println("你好"); }\n}\npublic class Test {\n  public static void main(String args[]) {\n    Tom cat = new Tom();\n  }\n}',o:['A. 输出 ok。','B. 没有构造方法。','C. 编译错误，无默认构造方法。','D. 无输出。'],a:2,e:'void Tom() 是普通方法（有返回类型）。类中只定义了 Tom(int m)，无默认无参构造，new Tom() 编译出错。'}
+    ]},
+    {t:'error',l:'挑错题',qs:[
+      {q:'class People {\n  int m = 10, n;\n  n = 200;  // 哪行有错？\n  void f() { ... }\n}',o:['A','B','C','D'],a:1,e:'B: n=200 是语句，不能直接放在类体中，需在方法或构造块中。'},
+      {q:'class E {\n  int x;\n  public void f(int n) {\n    int m;\n    int t = x + n;\n    int y = x + m;  // 哪行有错？\n    m = 10;\n  }\n}',o:['A','B','C','D'],a:2,e:'C: m 未初始化就被使用。'},
+      {q:'class Tom { int x; static int y; ... }\npublic class E {\n  public static void main(String args[]) {\n    ...\n    Tom.x = 300;  // 哪行有错？\n  }\n}',o:['A','B','C','D'],a:2,e:'C: x 是实例变量，不能通过类名访问。'}
+    ]},
+    {t:'reading',l:'阅读程序题',qs:[
+      {q:'class Fish { int weight = 1; }\nclass Lake {\n  Fish fish;\n  void setFish(Fish s) { fish = s; }\n  void foodFish(int m) { fish.weight += m; }\n}\npublic class E {\n  public static void main(String args[]) {\n    Fish redFish = new Fish();\n    System.out.println(redFish.weight);  //【1】\n    Lake lake = new Lake();\n    lake.setFish(redFish);\n    lake.foodFish(120);\n    System.out.println(redFish.weight);  //【2】\n    System.out.println(lake.fish.weight); //【3】\n  }\n}',its:[
+        {l:'【代码1】输出：',a:'1'},
+        {l:'【代码2】输出：',a:'121'},
+        {l:'【代码3】输出：',a:'121（引用传递，redFish 和 lake.fish 指向同一对象）'}
+      ]},
+      {q:'class B {\n  int x=100, y=200;\n  public void setX(int x) { x=x; }\n  public void setY(int y) { this.y=y; }\n  public int getXYSum() { return x+y; }\n}\npublic class A {\n  public static void main(String args[]) {\n    B b = new B();\n    b.setX(-100);\n    b.setY(-200);\n    System.out.println("sum=" + b.getXYSum());\n  }\n}',its:[{l:'输出结果：',a:'sum=-100（setX 中 x=x 给参数赋值，未修改实例 x，实例 x=100；setY 设置 y=-200；100+(-200)=-100）'}]},
+      {q:'class B {\n  int n;\n  static int sum=0;\n  void setN(int n) { this.n=n; }\n  int getSum() {\n    for(int i=1;i<=n;i++) sum=sum+i;\n    return sum;\n  }\n}\npublic class A {\n  public static void main(String args[]) {\n    B b1=new B(), b2=new B();\n    b1.setN(3); b2.setN(5);\n    int s1=b1.getSum(); int s2=b2.getSum();\n    System.out.println(s1+s2);\n  }\n}',its:[{l:'输出结果：',a:'27（static sum 累积：b1.getSum() 得到 6，b2.getSum() 从 6 累加到 21，6+21=27）'}]},
+      {q:'class A {\n  double f(int x,double y) { return x+y; }\n  int f(int x,int y) { return x*y; }\n}\npublic class E {\n  public static void main(String args[]) {\n    A a=new A();\n    System.out.println(a.f(10,10));   //【1】\n    System.out.println(a.f(10,10.0)); //【2】\n  }\n}',its:[
+        {l:'【代码1】输出：',a:'100（int×int 匹配第二个方法）'},
+        {l:'【代码2】输出：',a:'20.0（int+double→double 匹配第一个方法）'}
+      ]}
+    ]}
+  ]},
+  // 5
+  {id:5,title:'子类与继承',sub:'继承 · 重写 · super · final · abstract',secs:[
+    {t:'judge',l:'判断题',qs:[
+      {q:'子类继承父类的构造方法。',a:'×（构造方法不被继承）'},
+      {q:'子类中使用 super 可访问被子类隐藏的实例成员变量或实例方法。',a:'√'},
+      {q:'可以用 final 修饰构造方法。',a:'×'},
+      {q:'子类构造方法中未显式写 super，则默认调用 super()。若父类无无参构造则编译错误。',a:'√'},
+      {q:'可以同时用 final 和 abstract 修饰同一个方法。',a:'×（矛盾，final 禁止重写，abstract 强制重写）'},
+      {q:'子类继承的方法所操作的成员变量一定是被子类继承或隐藏的成员变量。',a:'√'},
+      {q:'若一个类的所有构造方法都是 private，则这个类不能有子类。',a:'√'},
+      {q:'子类不能将父类的实例方法重写为 static 方法，也不能将 static 方法重写为实例方法。',a:'√'},
+      {q:'abstract 类中只可以有 abstract 方法。',a:'×（可以有非 abstract 方法）'},
+      {q:'子类可以有多个父类。',a:'×（Java 单继承）'}
+    ]},
+    {t:'choice',l:'选择题',qs:[
+      {q:'下列哪个叙述是正确的？',o:['A. 子类继承父类的构造方法。','B. abstract 类的子类必须是非 abstract 类。','C. 子类继承的方法只能操作子类继承和隐藏的成员变量。','D. 子类重写或新增的方法可直接操作被子类隐藏的成员变量。'],a:2},
+      {q:'下列哪个叙述是正确的？',o:['A. final 类可以有子类。','B. abstract 类中只有 abstract 方法。','C. abstract 类中非 abstract 方法不可用 final 修饰。','D. 不可同时用 final 和 abstract 修饰同一方法。','E. 允许 static 修饰 abstract 方法。'],a:3},
+      {q:'class Father { private int money=12; float height; int seeMoney(){ return money; } }\nclass Son extends Father { int height; int lookMoney() { return seeMoney(); } }\n哪行有错？\n  erzi.money = 300;  //C\n  erzi.height = 1.78F; //D',o:['A','B','C','D'],a:2,e:'C: money 是 private 的，不能通过对象访问。'},
+      {q:'C 是 B 的子类，B 是 A 的子类。哪个叙述错误？',o:['A. cat instanceof B 是 true。','B. bird instanceof A 是 true。','C. cat instanceof A 是 true。','D. bird instanceof C 是 true。'],a:3},
+      {q:'class A { static void f() { } }\nclass B extends A { void f() { } }  // 哪行有错？',o:['A','B','C','D'],a:0,e:'A: 不能将父类的 static 方法重写为实例方法。'},
+      {q:'abstract class Takecare {\n  protected void speakHello() {}\n  public abstract static void cry();  // 哪行有错？\n  static int f(){ return 0; }\n  abstract float g();\n}',o:['A','B','C','D'],a:1,e:'B: static 和 abstract 不能同时修饰方法。'},
+      {q:'abstract class A { abstract float getFloat(); }\npublic class B extends A { private float getFloat() { return 1.0f; } }  // 哪行有错？',o:['A','B','C','D'],a:2,e:'C: 重写方法的访问权限不能更严格（父类默认 friendly，子类 private 更严格）。'},
+      {q:'class A { public float getNum() { return 3.0f; } }\npublic class B extends A { 【代码】 }\n将哪个代码放入不会导致编译错误？',o:['A. public float getNum(){return 4.0f;}','B. public void getNum(){}','C. public void getNum(double d){}','D. public double getNum(float d){return 4.0d;}'],a:0,e:'A 是正确重写。B 返回类型不同且非子类型。C 和 D 是重载。'},
+      {q:'class A { public int i=0; A(int m) { i=1; } }\nclass B extends A { B(int m) { i=2; } ... }',o:['A. 编译错误，A 没有无参构造。','B. 输出 0。','C. 输出 1。','D. 输出 2。'],a:0,e:'B 的构造方法默认有 super()，但 A 没有无参构造，编译错误。'}
+    ]},
+    {t:'error',l:'挑错题',qs:[
+      {q:'abstract class AAA {\n  final static void speakHello() {}\n  final abstract void cry();  // 哪行有错？\n  static final int f(){ return 0; }\n  abstract float g();\n}',o:['A','B','C','D'],a:1,e:'B: final 和 abstract 不能共存。'},
+      {q:'class Animal { int m=100; }\nclass Dog extends Animal { double m; }\n...\n  animal = dog;\n  dog.m = 3.14;\n  animal.m = 3.14;  // 哪行有错？',o:['A','B','C','D'],a:3,e:'D: animal.m 是 int 型，不能赋值为 double 3.14。'}
+    ]},
+    {t:'reading',l:'阅读程序题',qs:[
+      {q:'class A { double f(double x,double y) { return x+y; } }\nclass B extends A {\n  double f(int x,int y) { return x*y; }\n}\npublic class E {\n  public static void main(String args[]) {\n    B b=new B();\n    System.out.println(b.f(3,5));     //【1】\n    System.out.println(b.f(3.0,5.0)); //【2】\n  }\n}',its:[
+        {l:'【代码1】输出：',a:'15（int×int 调用 B 的 f(int,int)）'},
+        {l:'【代码2】输出：',a:'8.0（double+double 调用 A 的 f(double,double)）'}
+      ]},
+      {q:'class A { public int getNumber(int a) { return a+1; } }\nclass B extends A {\n  public int getNumber(int a) { return a+100; }\n  public static void main(String args[]) {\n    A a=new A();\n    System.out.println(a.getNumber(10)); //【1】\n    a=new B();\n    System.out.println(a.getNumber(10)); //【2】\n  }\n}',its:[
+        {l:'【代码1】输出：',a:'11'},
+        {l:'【代码2】输出：',a:'110'}
+      ]},
+      {q:'class A {\n  double f(double x,double y) { return x+y; }\n  static int g(int n) { return n*n; }\n}\nclass B extends A {\n  double f(double x,double y) { double m=super.f(x,y); return m+x*y; }\n  static int g(int n) { return A.g(n)+n; }\n}\npublic class E {\n  public static void main(String args[]) {\n    B b=new B();\n    System.out.println(b.f(10.0,8.0)); //【1】\n    System.out.println(b.g(3));         //【2】\n    A a=new B();\n    System.out.println(a.f(10.0,8.0)); //【3】\n    System.out.println(a.g(3));         //【4】\n  }\n}',its:[
+        {l:'【代码1】输出：',a:'98.0（super.f=18 + 10*8=80 = 98）'},
+        {l:'【代码2】输出：',a:'12（A.g(3)=9 + 3 = 12）'},
+        {l:'【代码3】输出：',a:'98.0（动态绑定，调用 B 的 f）'},
+        {l:'【代码4】输出：',a:'9（静态方法无多态，调用 A 的 g）'}
+      ]},
+      {q:'class A { int m; int getM() { return m; } int seeM() { return m; } }\nclass B extends A {\n  int m;\n  int getM() { return m+100; }\n}\npublic class E {\n  public static void main(String args[]) {\n    B b=new B();\n    b.m = 20;\n    System.out.println(b.getM()); //【1】\n    A a=b;\n    a.m = -100;\n    System.out.println(a.getM()); //【2】\n    System.out.println(b.seeM()); //【3】\n  }\n}',its:[
+        {l:'【代码1】输出：',a:'120（b.m+100=20+100）'},
+        {l:'【代码2】输出：',a:'120（上转型对象调用子类重写的 getM()，操作的是 b.m=20）'},
+        {l:'【代码3】输出：',a:'-100（seeM() 被子类继承，操作的 m 是被子类隐藏的 A 类的 m，即 a.m=-100）'}
+      ]}
+    ]}
+  ]},
+  // 6
+  {id:6,title:'接口与实现',sub:'接口定义 · 实现 · 默认方法 · 静态方法',secs:[
+    {t:'judge',l:'判断题',qs:[
+      {q:'接口中也能声明变量。',a:'×（只能声明常量，隐含 public static final）'},
+      {q:'Java 8 之后，接口中也能定义非抽象的不加 default 修饰的方法。',a:'×（必须加 default 或 static）'},
+      {q:'Java 8 之后，接口中可以定义 private 方法。',a:'×（Java 9 才引入 private 方法）'},
+      {q:'接口中的常量可以不指定初值。',a:'×（必须指定初值）'},
+      {q:'可以在接口中只声明常量，不定义任何方法。',a:'√'}
+    ]},
+    {t:'choice',l:'选择题',qs:[
+      {q:'下列哪个叙述是正确的？',o:['A. 一个类最多实现两个接口。','B. 抽象类实现接口必须重写全部方法。','C. 非抽象类实现接口可以只重写部分方法。','D. 允许接口中只有一个抽象方法。'],a:3},
+      {q:'interface Takecare {\n  protected void speakHello();  //A\n  public abstract static void cry(); //B\n  int f(); //C\n  abstract float g(); //D\n}\n哪两个有错？',o:['A','B','C','D'],a:'A,B',e:'A: 接口方法不能用 protected（默认 public）。B: static 和 abstract 不能共存。'},
+      {q:'interface Com { int M=200; int f(); }\nclass ImpCom implements Com { 【代码】 }\n哪个替换不会导致编译错误？',o:['A. public int f(){return 100+M;}','B. int f(){return 100;}','C. public double f(){return 2.6;}','D. public abstract int f();'],a:0,e:'A 正确实现接口方法（必须用 public 修饰）。B 缺少 public 访问权限更严格。C 返回类型不匹配。D 仍然是抽象方法。'}
+    ]},
+    {t:'error',l:'挑错题',qs:[
+      {q:'public interface Com {\n  abstract void cry(); //A\n  public int x = 0;    //B\n  static int y = 0;    //C 哪行有错？\n}\nabstract class Cat implements Com {\n  abstract void cry(); //D\n}',o:['A','B','C','D'],a:2,e:'C: 接口中的变量默认是 public static final，但这里声明为 static int 缺少 final，实际上 Java 会自动补全为 public static final，所以 C 是合法的。本题设计意图认为接口变量必须显式声明为 final。'},
+      {q:'interface Com { int MAX=100; void f(); }\nabstract class Animal implements Com { int MIN; }\nclass Dog extends Animal {\n  public void f() { MIN=10; MAX=200; }  // 哪行有错？\n}',o:['A','B','C','D'],a:3,e:'D: MAX 是接口常量（隐式 final），不能重新赋值。'}
+    ]},
+    {t:'reading',l:'阅读程序题',qs:[
+      {q:'interface A { double f(double x,double y); }\nclass B implements A {\n  public double f(double x,double y) { return x*y; }\n  int g(int a,int b) { return a+b; }\n}\npublic class E {\n  public static void main(String args[]) {\n    A a=new B();\n    System.out.println(a.f(3,5)); //【1】\n    B b=(B)a;\n    System.out.println(b.g(3,5)); //【2】\n  }\n}',its:[
+        {l:'【代码1】输出：',a:'15.0'},
+        {l:'【代码2】输出：',a:'8'}
+      ]},
+      {q:'interface Com { int add(int a,int b); }\nabstract class A { abstract int add(int a,int b); }\nclass B extends A implements Com {\n  public int add(int a,int b) { return a+b; }\n}\npublic class E {\n  public static void main(String args[]) {\n    B b=new B();\n    Com com=b;\n    System.out.println(com.add(12,6)); //【1】\n    A a=b;\n    System.out.println(a.add(10,5));   //【2】\n  }\n}',its:[
+        {l:'【代码1】输出：',a:'18'},
+        {l:'【代码2】输出：',a:'15'}
+      ]},
+      {q:'interface Com {\n  int add(int a,int b);\n  public static int get(int n){ return n; }\n  public default int see(int n){ return n; }\n  public default int look(int n){ return n; }\n}\nclass A implements Com {\n  public int add(int a,int b) { return a+b; }\n  public int see(int n){ return n+1; }\n}\npublic class E {\n  public static void main(String args[]) {\n    A a=new A();\n    int m = a.add(12,6);\n    int n = Com.get(12);\n    int t = a.see(6);\n    int q = a.look(6);\n    System.out.printf("%d:%d:%d:%d",m,n,t,q);\n  }\n}',its:[{l:'【代码】输出：',a:'18:12:7:6'}]}
+    ]}
+  ]},
+  // 7
+  {id:7,title:'内部类',sub:'内部类 · 匿名类 · 异常处理',secs:[
+    {t:'judge',l:'判断题',qs:[
+      {q:'可以用 private 或 protected 修饰内部类。',a:'√'},
+      {q:'static 内部类不能操作外嵌类中的实例成员变量。',a:'√'},
+      {q:'非匿名内部类也可以实现接口。',a:'√'},
+      {q:'匿名类的类体中不可以声明 static 成员变量和 static 方法。',a:'√'},
+      {q:'编译器会给匿名类一个名字。',a:'√'},
+      {q:'匿名类可以是抽象类。',a:'×（匿名类由 new 创建，不能是抽象类）'},
+      {q:'内部类不可以是 final 类。',a:'×（内部类可以是 final 的）'},
+      {q:'static 内部类不能操作外嵌类中的实例成员变量。',a:'√'},
+      {q:'一个方法使用 throw 关键字声明要产生的若干个异常。',a:'×（throw 用于抛出，throws 用于声明）'},
+      {q:'使用 throw 关键字抛出异常对象。',a:'√'}
+    ]},
+    {t:'choice',l:'选择题',qs:[
+      {q:'下列哪个叙述是错误的？',o:['A. 匿名类没有构造方法。','B. 编译器会给匿名类一个名字。','C. 匿名类一定是 final 类。','D. 匿名类一定是内部类。'],a:0,e:'匿名类虽然没有显式构造方法，但编译器会生成一个默认构造方法。'},
+      {q:'下列哪个叙述是错误的？',o:['A. 非匿名内部类也可以有子类。','B. 内部类不可以是 final 类。','C. 不能用匿名类声明对象，但可直接用匿名类创建对象。','D. 匿名子类可以继承也可以重写父类的方法。'],a:1,e:'内部类可以是 final 的。'},
+      {q:'下列哪个叙述是错误的？',o:['A. 内部类中外嵌类的成员变量在内部类中有效。','B. 内部类方法可以调用外嵌类的方法。','C. 内部类中可以声明 static 变量。','D. 外嵌类可以用内部类声明对象作为成员。'],a:2,e:'非静态内部类不能声明 static 变量。'}
+    ]},
+    {t:'error',l:'挑错题',qs:[
+      {q:'class OutClass {\n  int m = 1;\n  static float x;\n  class InnerClass {\n    int m = 12;\n    static float n = 20.89f;  // 哪行有错？\n    InnerClass() { }\n    void f() { m=100; }\n  }\n}',o:['A','B','C','D'],a:2,e:'C: 非静态内部类不能声明 static 成员变量。'},
+      {q:'try{ m=Integer.parseInt("8888");\n  n=Integer.parseInt("ab89");\n  t=Integer.parseInt("1289");\n}\ncatch(Exception e) {}\ncatch(NumberFormatException e) {}  // 哪行有错？',o:['A','B','C','D'],a:3,e:'D: NumberFormatException 是 Exception 的子类，必须写在父类 catch 之前，否则不可达。'}
+    ]},
+    {t:'reading',l:'阅读程序题',qs:[
+      {q:'class Cry { public void cry() { System.out.println("大家好"); } }\npublic class E {\n  public static void main(String args[]) {\n    Cry hello = new Cry() {\n      public void cry() { hello.cry(); }\n    };\n  }\n}',its:[{l:'输出结果：',a:'（无输出——main 方法中未调用 hello.cry()）'}]},
+      {q:'interface Com { public void speak(); }\npublic class E {\n  public static void main(String args[]) {\n    Com p = () -> { System.out.println("大家好,祝工作顺利！"); };\n    p.speak();\n    System.out.println("p 是接口变量");\n  }\n}',its:[{l:'输出结果：',a:'大家好,祝工作顺利！\np 是接口变量'}]},
+      {q:'public class E {\n  public static void main(String args[]) {\n    try { methodA(); }\n    catch(IOException e) { System.out.print("你好"); return; }\n    finally { System.out.println(" fine thanks"); }\n  }\n  public static void methodA() throws IOException {\n    throw new IOException();\n  }\n}',its:[{l:'输出结果：',a:'你好 fine thanks（finally 在 return 之前执行）'}]},
+      {q:'class ScoreException extends Exception { int number; ScoreException(int n){ number=n; } int getMess(){ return number; } }\nclass Teacher {\n  public int giveScore(int score) throws ScoreException {\n    if(score>100|score<0) throw new ScoreException(score);\n    return score;\n  }\n}\npublic class E {\n  public static void main(String args[]) {\n    Teacher t = new Teacher();\n    int m=0, n=0;\n    try { m=t.giveScore(100); m=t.giveScore(101); }\n    catch(ScoreException e) { n=e.getMess(); }\n    System.out.printf("%d:%d",m,n);\n  }\n}',its:[{l:'输出结果：',a:'100:101（第一次调用返回 100，第二次抛出异常，m 保持 100）'}]}
+    ]}
+  ]}
+];
+
+// ======== RENDER ========
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function codeBlock(c){return '<div class="cb"><span class="lt">Java</span><pre>'+esc(c)+'</pre></div>'}
+
+function ansBtn(id){return '<button class="btn-ans" onclick="ta(\''+id+'\')">&#9656; 显示答案</button>'}
+
+function ansContent(html){return '<div class="ans" id="ac-'+html.id+'"><div class="al">&#10004; '+(html.isRef?'参考答案':'正确答案')+'</div>'+html.body+'</div>'}
+
+function render(){
+  var nav=document.getElementById('nav');
+  var ctx=document.getElementById('ctx');
+  var tq=0;
+
+  CHS.forEach(function(ch,i){
+    // nav
+    var b=document.createElement('button');
+    b.className='nav-btn'+(i===0?' on':'');
+    b.innerHTML='<span class="num">'+ch.id+'</span>'+esc(ch.title);
+    b.onclick=function(){showCh(i)};
+    nav.appendChild(b);
+
+    // content
+    var w=document.createElement('section');
+    w.className='ch-wrap'+(i===0?' on':'');
+    w.id='cw-'+i;
+    var html='<div class="ch-hdr"><h3>第'+ch.id+'章：'+esc(ch.title)+'</h3><div class="sub">'+esc(ch.sub)+'</div></div>';
+
+    ch.secs.forEach(function(sec){
+      html+='<div class="sec"><div class="sec-title">'+esc(sec.l)+'</div>';
+      sec.qs.forEach(function(q,qi){
+        var uid='c'+i+'-'+sec.t+'-'+qi;
+        html+='<div class="card" id="'+uid+'">';
+
+        if(sec.t==='choice'||sec.t==='error'){
+          html+='<div class="qt">'+esc(q.q)+'</div><div class="opts">';
+          q.o.forEach(function(opt,oi){
+            var mkCls=(sec.t==='error'?'mk sq':'mk');
+            var letter=String.fromCharCode(65+oi);
+            html+='<div class="opt" onclick="sel(this,'+i+',\''+sec.t+'\','+qi+','+oi+')"><span class="'+mkCls+'">'+letter+'</span><span>'+esc(opt)+'</span></div>';
+          });
+          html+='</div>';
+          // answer for choice
+          var ansText=q.a;
+          if(typeof q.a==='number') ansText=q.o[q.a];
+          html+=ansBtn(uid);
+          var body=esc(ansText)+(q.e?'<br><br><em>解析：</em>'+esc(q.e):'');
+          html+=ansContent({id:uid,body:body});
+
+        }else if(sec.t==='judge'){
+          html+='<div class="qt">'+esc(q.q)+'</div><div class="opts">';
+          ['√ (正确)','× (错误)'].forEach(function(opt,oi){
+            html+='<div class="opt" onclick="sel(this,'+i+',\'judge\','+qi+','+oi+')"><span class="mk sq">'+(oi===0?'√':'×')+'</span><span>'+opt+'</span></div>';
+          });
+          html+='</div>';
+          html+=ansBtn(uid);
+          html+=ansContent({id:uid,body:esc(q.a)});
+
+        }else if(sec.t==='reading'){
+          var its=q.its||[{l:'',a:q.a}];
+          html+='<div class="qt">'+esc(q.q)+'</div>';
+          html+=ansBtn(uid);
+          var body='';
+          its.forEach(function(it){
+            body+='<div class="it"><strong>'+esc(it.l)+'</strong> '+esc(it.a)+'</div>';
+          });
+          html+=ansContent({id:uid,body:body,isRef:true});
+
+        }else if(sec.t==='code'){
+          html+='<div class="qt">'+esc(q.q)+'</div>';
+          html+=ansBtn(uid);
+          html+=ansContent({id:uid,body:codeBlock(q.c),isRef:true});
+        }
+
+        html+='</div>';
+        tq++;
+      });
+      html+='</div>';
+    });
+
+    w.innerHTML=html;
+    ctx.appendChild(w);
+  });
+
+  document.getElementById('totq').textContent=tq;
+}
+
+// ======== INTERACT ========
+var curCh=0;
+function showCh(i){
+  curCh=i;
+  document.querySelectorAll('.ch-wrap').forEach(function(e){e.classList.remove('on')});
+  document.getElementById('cw-'+i).classList.add('on');
+  document.querySelectorAll('.nav-btn').forEach(function(e,idx){e.classList.toggle('on',idx===i)});
+  document.getElementById('ctx').scrollIntoView({behavior:'smooth'});
+}
+
+function ta(uid){
+  var card=document.getElementById(uid);
+  if(!card)return;
+  var ans=card.querySelector('.ans');
+  var btn=card.querySelector('.btn-ans');
+  if(!ans||!btn)return;
+  var sh=!ans.classList.contains('sh');
+  ans.classList.toggle('sh',sh);
+  btn.textContent=sh?'&#9660; 隐藏答案':'&#9656; 显示答案';
+}
+
+function sel(el,ci,type,qi,oi){
+  var par=el.parentElement;
+  if(!QUIZ){
+    par.querySelectorAll('.opt').forEach(function(o){o.classList.remove('sel')});
+    el.classList.add('sel');
+    return;
+  }
+  var ch=CHS[ci];
+  var sec=null;
+  for(var k=0;k<ch.secs.length;k++){if(ch.secs[k].t===type){sec=ch.secs[k];break}}
+  if(!sec)return;
+  var q=sec.qs[qi];
+  var correct=q.a;
+
+  par.querySelectorAll('.opt').forEach(function(o){
+    o.classList.remove('sel','cor','wro');
+  });
+  el.classList.add('sel');
+
+  // Determine set of correct indices
+  var correctIdxs=[];
+  if(typeof correct==='number'){
+    correctIdxs=[correct];
+  }else if(correct==='√'||correct==='×'){
+    if(correct==='√') correctIdxs=[0]; else correctIdxs=[1];
+  }else{
+    var s=String(correct);
+    var letters='ABCD';
+    for(var p=0;p<s.length;p++){
+      var idx=letters.indexOf(s.charAt(p));
+      if(idx>=0) correctIdxs.push(idx);
+    }
+  }
+
+  var isCorrect=correctIdxs.indexOf(oi)>=0;
+  var opts=par.querySelectorAll('.opt');
+
+  if(isCorrect){
+    el.classList.add('cor');
+  }else{
+    el.classList.add('wro');
+  }
+  // Always show correct answer(s)
+  correctIdxs.forEach(function(idx){
+    if(opts[idx]) opts[idx].classList.add('cor');
+  });
+}
+
+var qtog=document.getElementById('qtog');
+var qstat=document.getElementById('mstat');
+qtog.onclick=function(){
+  QUIZ=!QUIZ;
+  qtog.classList.toggle('on',QUIZ);
+  qstat.textContent=QUIZ?'答题模式 · 选择即反馈':'浏览模式';
+  if(!QUIZ){
+    document.querySelectorAll('.opt').forEach(function(o){
+      o.classList.remove('sel','cor','wro');
+    });
+  }
+};
+
+// Init
+render();
+</script>
+
+</body>
+</html>

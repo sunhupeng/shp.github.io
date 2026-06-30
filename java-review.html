@@ -23,13 +23,13 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);line-he
 ::selection{background:var(--accent);color:var(--bg)}
 
 /* Sidebar */
-.sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;z-index:100;display:flex;flex-direction:column}
-.sidebar::-webkit-scrollbar{width:4px}
-.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.sidebar-header{padding:28px 24px 20px;border-bottom:1px solid var(--border)}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;background:var(--surface);border-right:1px solid var(--border);z-index:100;display:flex;flex-direction:column;overflow:hidden}
+.sidebar-header{flex-shrink:0;padding:28px 24px 20px;border-bottom:1px solid var(--border);position:relative;z-index:2;background:var(--surface)}
 .sidebar-header h1{font-family:var(--font-serif);font-size:1.35rem;font-weight:700;color:var(--accent);line-height:1.3}
 .sidebar-header p{font-size:0.78rem;color:var(--text-dim);margin-top:4px}
-.sidebar-nav{padding:12px 12px 24px;flex:1}
+.sidebar-nav{padding:12px 12px 24px;flex:1;overflow-y:auto;min-height:0;position:relative;z-index:1;overscroll-behavior:contain}
+.sidebar-nav::-webkit-scrollbar{width:4px}
+.sidebar-nav::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 .nav-btn{display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;background:none;border:none;color:var(--text-dim);font-family:var(--font-sans);font-size:0.82rem;font-weight:500;cursor:pointer;border-radius:6px;transition:all 0.2s;text-align:left}
 .nav-btn:hover{background:var(--surface2);color:var(--text)}
 .nav-btn.on{background:var(--accent-glow);color:var(--accent)}
@@ -109,6 +109,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);line-he
 /* Hamburger */
 .hamb{display:none;position:fixed;top:12px;left:12px;z-index:200;width:36px;height:36px;border-radius:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);cursor:pointer;align-items:center;justify-content:center;transition:all 0.2s}
 .hamb:hover{background:var(--surface2);border-color:var(--accent-dim)}
+.hamb.hd{opacity:0;pointer-events:none}
 .hamb svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 
 /* Overlay */
@@ -119,7 +120,6 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);line-he
 .sidebar-close{display:none;position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:6px;background:var(--surface2);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;align-items:center;justify-content:center;transition:all 0.2s}
 .sidebar-close:hover{background:var(--accent-glow);color:var(--accent);border-color:var(--accent-dim)}
 .sidebar-close svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
-.sidebar-header{position:relative}
 
 @media(max-width:800px){
   .sidebar{width:220px}
@@ -161,10 +161,10 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);line-he
   .cb{padding:10px 12px;font-size:0.72rem;overflow-x:auto;-webkit-overflow-scrolling:touch}
   .cb pre{white-space:pre-wrap;overflow-wrap:break-word;word-break:break-word}
   .cb .lt{display:none}
-  .sidebar-header{padding:16px 16px 14px}
-  .sidebar-header h1{font-size:1.1rem}
-  .sidebar-header p{font-size:0.7rem}
-  .sidebar-nav{padding:8px 8px 16px}
+  .sidebar-header{padding:14px 14px 12px}
+  .sidebar-header h1{font-size:1.05rem}
+  .sidebar-header p{font-size:0.65rem;margin-top:2px}
+  .sidebar-nav{padding:6px 8px 12px}
   .nav-btn{padding:10px 10px;font-size:0.8rem;gap:8px}
   .nav-btn .num{width:24px;height:24px;font-size:0.7rem}
   /* sidebar close btn */
@@ -601,9 +601,11 @@ var scrollY=0;
 function toggleSidebar(){
   var sb=document.getElementById('sb');
   var ov=document.getElementById('overlay');
+  var hm=document.getElementById('hamb');
   sbOpen=!sb.classList.contains('op');
   sb.classList.toggle('op',sbOpen);
   ov.classList.toggle('sh',sbOpen);
+  hm.classList.toggle('hd',sbOpen);
   if(sbOpen){
     scrollY=window.scrollY;
     document.body.style.position='fixed';
@@ -618,6 +620,7 @@ function closeSidebar(){
   sbOpen=false;
   document.getElementById('sb').classList.remove('op');
   document.getElementById('overlay').classList.remove('sh');
+  document.getElementById('hamb').classList.remove('hd');
   unlockScroll();
 }
 function unlockScroll(){

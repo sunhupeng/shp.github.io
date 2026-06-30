@@ -635,7 +635,7 @@ function ta(uid){
   if(!ans||!btn)return;
   var sh=!ans.classList.contains('sh');
   ans.classList.toggle('sh',sh);
-  btn.textContent=sh?'&#9660; 隐藏答案':'&#9656; 显示答案';
+  btn.innerHTML=sh?'\u25BC 隐藏答案':'\u25B6 显示答案';
 }
 
 function sel(el,ci,type,qi,oi){

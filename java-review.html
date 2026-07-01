@@ -62,7 +62,7 @@ body{font-family:var(--font-sans);background:var(--bg);color:var(--text);line-he
 /* Card */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;margin-bottom:12px;transition:border-color 0.2s}
 .card:hover{border-color:rgba(201,154,94,0.25)}
-.card .qt{font-size:0.9rem;line-height:1.7}
+.card .qt{font-size:0.9rem;line-height:1.7;white-space:pre-wrap}
 .card .qt code{font-family:var(--font-mono);font-size:0.82rem;background:var(--code-bg);padding:1px 6px;border-radius:3px;color:#e6d5b8}
 .card .ql{font-size:0.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}
 
@@ -254,7 +254,7 @@ var CHS = [
       {q:'public class Example3 {\n    public static void main(string args[]) {\n        System.out.println("ok");\n    }\n}',o:['A','B','C','D'],a:1,e:'B 行 string 应为 String（首字母大写）。'}
     ]},
     {t:'reading',l:'阅读程序题',qs:[
-      {q:'public class Speak {\n  void speakHello() { System.out.println("I\'m glad to meet you"); }\n}\nclass Xiti4 {\n  public static void main(String args[]) {\n    Speak sp = new Speak();\n    sp.speakHello();\n  }\n}',its:[
+      {q:'public class Speak {\n    void speakHello() { System.out.println("I\'m glad to meet you"); }\n}\nclass Xiti4 {\n    public static void main(String args[]) {\n        Speak sp = new Speak();\n        sp.speakHello();\n    }\n}',its:[
         {l:'A) 源文件的名字是什么？',a:'Speak.java（public 类为 Speak）'},
         {l:'B) 编译后生成几个字节码文件？名字是什么？',a:'2 个 —— Speak.class 和 Xiti4.class'},
         {l:'C) 用 Java 解释器运行哪个字节码文件？',a:'Xiti4（含有 main 方法）'},
@@ -284,20 +284,20 @@ var CHS = [
       {q:'下列哪一项是正确的 float 变量声明？',o:['A. float foo = 1e2;','B. float foo = 3.14;','C. float foo = 3.03d;','D. float foo = 0x0123;'],a:3,e:'0x0123 是 int 可隐式转 float。A 中 1e2 是 double，B 中 3.14 是 double，C 中 3.03d 是 double（d 后缀表示 double）。'},
       {q:'以下哪一项是正确的 char 型变量声明？',o:['A. char ch = "R";','B. char ch = \'\\\\\';','C. char ch = \'ABCD\';','D. char ch = "ABCD";'],a:1,e:'char 是单字符型，用单引号括起。B 是转义后的反斜杠字符。A 和 D 用双引号是字符串。C 中单引号内多于一个字符。'},
       {q:'哪个叙述是错误的？',o:['A. int[][] = new int[6][4]; a.length 是 6。','B. int[][] = new int[2][9]; a.length,a[0].length,a[1].length 都是 9。','C. int[] a = new int[3]; a[0],a[1],a[2] 都是 0。','D. float height = 1e1F; 是正确的。'],a:1,e:'a.length 是 2（行的数量），不是 9。a[0].length 和 a[1].length 才是 9（每行的列数）。C 正确：int 数组默认初始值为 0。'},
-      {q:'public class Test {\n  public static void main(String args[]) {\n    int arr[] = new int[10];\n    System.out.println(arr[1]);\n  }\n}',o:['A. 编译错误','B. 输出 null','C. 编译正确，运行异常','D. 输出 0'],a:3,e:'int 数组创建后各元素默认值为 0，arr[1] 输出 0。数组不会为 null（null 是引用类型的默认值）。'}
+      {q:'public class Test {\n    public static void main(String args[]) {\n        int arr[] = new int[10];\n        System.out.println(arr[1]);\n    }\n}',o:['A. 编译错误','B. 输出 null','C. 编译正确，运行异常','D. 输出 0'],a:3,e:'int 数组创建后各元素默认值为 0，arr[1] 输出 0。数组不会为 null（null 是引用类型的默认值）。'}
     ]},
     {t:'error',l:'挑错题',qs:[
-      {q:'public class Test1 {\n  public static void main(String args[]) {\n    char c = 65535;\n    byte b = 127;\n    int height = 100;\n    float f = 3.14;  // 哪行有错？\n  }\n}',o:['A','B','C','D'],a:3,e:'D 行 3.14 是 double 型，赋值给 float 需要加 f/F。'},
-      {q:'public class Test2 {\n  public static void main(String args[]) {\n    int x = 8;\n    byte b = 127;\n    b = x;\n    x = \'a\';\n    long y = b;\n    float z = (int)6.89;\n  }\n}',o:['A','B','C','D'],a:2,e:'C 行 int 赋值给 byte 可能损失精度，需强转。'},
-      {q:'public class Test3 {\n  public static void main(String args[]) {\n    char c = \'a\';\n    byte b = 128;   // 哪行有错？\n    int height = 100;\n    float f = 3.14F;\n  }\n}',o:['A','B','C','D'],a:1,e:'B 行 byte 范围 -128~127，128 超出范围。'},
-      {q:'public class Test4 {\n  public static void main(String args[]) {\n    char c = 30320;\n    byte b = 127;\n    int public = 100;  // 哪行有错？\n    float f = 3.14F;\n  }\n}',o:['A','B','C','D'],a:2,e:'C 行 public 是关键字，不能作为变量名。'}
+      {q:'public class Test1 {\n    public static void main(String args[]) {\n        char c = 65535;\n        byte b = 127;\n        int height = 100;\n        float f = 3.14;  // 哪行有错？\n    }\n}',o:['A','B','C','D'],a:3,e:'D 行 3.14 是 double 型，赋值给 float 需要加 f/F。'},
+      {q:'public class Test2 {\n    public static void main(String args[]) {\n        int x = 8;\n        byte b = 127;\n        b = x;\n        x = \'a\';\n        long y = b;\n        float z = (int)6.89;\n    }\n}',o:['A','B','C','D'],a:2,e:'C 行 int 赋值给 byte 可能损失精度，需强转。'},
+      {q:'public class Test3 {\n    public static void main(String args[]) {\n        char c = \'a\';\n        byte b = 128;   // 哪行有错？\n        int height = 100;\n        float f = 3.14F;\n    }\n}',o:['A','B','C','D'],a:1,e:'B 行 byte 范围 -128~127，128 超出范围。'},
+      {q:'public class Test4 {\n    public static void main(String args[]) {\n        char c = 30320;\n        byte b = 127;\n        int public = 100;  // 哪行有错？\n        float f = 3.14F;\n    }\n}',o:['A','B','C','D'],a:2,e:'C 行 public 是关键字，不能作为变量名。'}
     ]},
     {t:'reading',l:'阅读程序题',qs:[
-      {q:'public class E {\n  public static void main(String args[]) {\n    long[] a = {1,2,3,4};\n    long[] b = {100,200,300,400,500};\n    b = a;\n    System.out.println("数组 b 的长度:" + b.length);  //【代码1】\n    System.out.println("b[0]=" + b[0]);               //【代码2】\n  }\n}',its:[
+      {q:'public class E {\n    public static void main(String args[]) {\n        long[] a = {1, 2, 3, 4};\n        long[] b = {100, 200, 300, 400, 500};\n        b = a;\n        System.out.println("数组 b 的长度:" + b.length);  //【代码1】\n        System.out.println("b[0]=" + b[0]);               //【代码2】\n    }\n}',its:[
         {l:'【代码1】输出：',a:'数组 b 的长度:4（b 指向 a，长度变为 4）'},
         {l:'【代码2】输出：',a:'b[0]=1'}
       ],e:'考察数组引用赋值。b = a 让 b 指向 a 所引用的数组对象，b 原来的数组被丢弃。b.length 变成 4，b[0] 是 a[0]=1。'},
-      {q:'public class E {\n  public static void main(String args[]) {\n    int[] a = {10,20,30,40}, b[] = {{1,2},{4,5,6,7}};\n    b[0] = a;\n    b[0][1] = b[1][3];\n    System.out.println(b[0][3]);  //【代码1】\n    System.out.println(a[1]);     //【代码2】\n  }\n}',its:[
+      {q:'public class E {\n    public static void main(String args[]) {\n        int[] a = {10, 20, 30, 40}, b[] = {{1, 2}, {4, 5, 6, 7}};\n        b[0] = a;\n        b[0][1] = b[1][3];\n        System.out.println(b[0][3]);  //【代码1】\n        System.out.println(a[1]);     //【代码2】\n    }\n}',its:[
         {l:'【代码1】输出：',a:'40（b[0][3] = a[3] = 40）'},
         {l:'【代码2】输出：',a:'7（b[0][1] = b[1][3] = 7，b[0] 与 a 引用相同，a[1] 同步改为 7）'}
       ],e:'考察二维数组和引用赋值。b[0] = a 让 b[0] 指向 a 数组。b[0][1] = b[1][3] = 7 修改了 a[1] 的值（引用相同）。'}
@@ -318,22 +318,22 @@ var CHS = [
       {q:'if 语句中的条件表达式的值可以是 int 型数据。',a:'×',e:'if 条件必须是 boolean 型表达式。Java 不支持 C 语言中 int 隐式转 boolean 的做法。'}
     ]},
     {t:'choice',l:'单选题',qs:[
-      {q:'下列哪个叙述是正确的？',o:['A. 5.0/2+10 的结果是 double 型。','B. (int)5.8+1.0 结果是 int 型。','C. \'苹\'+\'果\' 结果是 char 型。','D. (short)10+\'a\' 结果是 short 型。'],a:0,e:'A 正确：5.0 是 double，运算结果提升为 double。B 错误：(int)5.8=5，5+1.0=6.0 为 double。C 错误：char+char→int，结果为 int。D 错误：short+char→int，结果为 int。'},
-      {q:'用哪个代码替换 while(【代码】) 会导致编译错误？\nint m=10,n=0;\nwhile(【代码】){ n++; }',o:['A. m-->0','B. m++>0','C. m=0','D. m>100&&true'],a:2,e:'C 中 m=0 是赋值表达式，结果是 int 型（0），而 while 条件需要 boolean 型。A 和 B 是比较运算，结果是 boolean。D 中 && 结果也是 boolean。'},
-      {q:'public class Test {\n  public static void main(String args[]) {\n    boolean boo = false;\n    if(boo = true) {\n      System.out.print("hello");\n      System.out.print("你好");\n    } else {\n      System.out.print("ok");\n      System.out.print("yes");\n    }\n  }\n}',o:['A. 编译错误','B. 输出 hello你好','C. 输出 ok','D. 输出 okyes'],a:1,e:'boo = true 是赋值表达式，结果为 true。注意：= 是赋值不是 ==，但 Java 中 boolean 赋值表达式的结果也是 boolean 型，所以可以通过编译，且条件恒为 true。'},
-      {q:'对于 int n=6789; 表达式的值为 7 的是？',o:['A. n%10','B. n/10%10','C. n/100%10','D. n/1000%10'],a:2,e:'n/100%10=67%10=7（百位数）。A n%10=9（个位），B n/10%10=678%10=8（十位），D n/1000%10=6%10=6（千位）。'},
-      {q:'哪个代码替换 if(【代码】) 会输出 hello？\nint m=0;\nif(【代码】){ System.out.println("您好"); }\nelse { System.out.println("hello"); }',o:['A. m--<=0','B. ++m>0','C. m++>0','D. --m<0'],a:2,e:'m++>0: 先用 m=0 比较，0>0 为 false，执行 else 输出 "hello"。'},
-      {q:'给定 int x=1; 哪个代码导致"可能损失精度"错误？',o:['A. short t=12+\'a\';','B. char m=\'a\'+x;','C. char c=\'a\'+1;','D. byte n=\'a\'+1;'],a:1,e:'\'a\'+x 中 x 是 int，结果为 int 不能赋值给 char。'}
+      {q:'下列哪个叙述是正确的？',o:['A. 5.0 / 2 + 10 的结果是 double 型。','B. (int)5.8 + 1.0 结果是 int 型。','C. \'苹\' + \'果\' 结果是 char 型。','D. (short)10 + \'a\' 结果是 short 型。'],a:0,e:'A 正确：5.0 是 double，运算结果提升为 double。B 错误：(int)5.8=5，5+1.0=6.0 为 double。C 错误：char+char→int，结果为 int。D 错误：short+char→int，结果为 int。'},
+      {q:'用哪个代码替换 while(【代码】) 会导致编译错误？\nint m = 10, n = 0;\nwhile (【代码】) { n++; }',o:['A. m-- > 0','B. m++ > 0','C. m = 0','D. m > 100 && true'],a:2,e:'C 中 m=0 是赋值表达式，结果是 int 型（0），而 while 条件需要 boolean 型。A 和 B 是比较运算，结果是 boolean。D 中 && 结果也是 boolean。'},
+      {q:'public class Test {\n    public static void main(String args[]) {\n        boolean boo = false;\n        if (boo = true) {\n            System.out.print("hello");\n            System.out.print("你好");\n        } else {\n            System.out.print("ok");\n            System.out.print("yes");\n        }\n    }\n}',o:['A. 编译错误','B. 输出 hello你好','C. 输出 ok','D. 输出 okyes'],a:1,e:'boo = true 是赋值表达式，结果为 true。注意：= 是赋值不是 ==，但 Java 中 boolean 赋值表达式的结果也是 boolean 型，所以可以通过编译，且条件恒为 true。'},
+      {q:'对于 int n = 6789; 表达式的值为 7 的是？',o:['A. n % 10','B. n / 10 % 10','C. n / 100 % 10','D. n / 1000 % 10'],a:2,e:'n/100%10=67%10=7（百位数）。A n%10=9（个位），B n/10%10=678%10=8（十位），D n/1000%10=6%10=6（千位）。'},
+      {q:'哪个代码替换 if(【代码】) 会输出 hello？\nint m = 0;\nif (【代码】) { System.out.println("您好"); }\nelse { System.out.println("hello"); }',o:['A. m-- <= 0','B. ++m > 0','C. m++ > 0','D. --m < 0'],a:2,e:'m++>0: 先用 m=0 比较，0>0 为 false，执行 else 输出 "hello"。'},
+      {q:'给定 int x = 1; 哪个代码导致"可能损失精度"错误？',o:['A. short t = 12 + \'a\';','B. char m = \'a\' + x;','C. char c = \'a\' + 1;','D. byte n = \'a\' + 1;'],a:1,e:'\'a\'+x 中 x 是 int，结果为 int 不能赋值给 char。'}
     ]},
     {t:'error',l:'挑错题',qs:[
       {q:'byte b = \'a\';\nint n = 100;\nchar c = 65;\nb = b;\nb = b + 1;  // 哪行有错？',o:['A','B','C','D'],a:3,e:'D: b+1 结果为 int，赋值给 byte 需强转。'},
       {q:'char ch = \'花\';\nbyte n = -100;\nch = ch - ch;  // 哪行有错？\nn = n;\nn = 127;',o:['A','B','C','D'],a:2,e:'C: ch-ch 结果为 int，不能赋值给 char。'},
-      {q:'int m = 1000;\nwhile(m > 100) {\n  m = m--;\n  if(m == 600) { continue; m++; }  // 哪行有错？\n}',o:['A','B','C','D'],a:3,e:'D: continue 后的 m++ 是不可达代码（unreachable）。'}
+      {q:'int m = 1000;\nwhile (m > 100) {\n    m = m--;\n    if (m == 600) { continue; m++; }  // 哪行有错？\n}',o:['A','B','C','D'],a:3,e:'D: continue 后的 m++ 是不可达代码（unreachable）。'}
     ]},
     {t:'reading',l:'阅读程序题',qs:[
-      {q:'char x=\'你\',y=\'e\',z=\'吃\';\nif(x>\'A\'){ y=\'苹\'; z=\'果\'; }\nelse y=\'酸\';\nz=\'甜\';\nSystem.out.println(x+","+y+","+z);',its:[{l:'输出结果：',a:'你,苹,甜'}],e:'考察 char 类型比较和字符串连接。x=\'你\' 的 Unicode 值大于 \'A\'，进入 if 分支，y=\'苹\'，z=\'果\'，然后 z 被赋值为\'甜\'覆盖。最后输出拼接结果。'},
-      {q:'char c = \'\\0\';\nfor(int i=1;i<=4;i++) {\n  switch(i) {\n    case 1: c=\'J\'; System.out.print(c);\n    case 2: c=\'e\'; System.out.print(c); break;\n    case 3: c=\'p\'; System.out.print(c);\n    default: System.out.print("好");\n  }\n}',its:[{l:'输出结果：',a:'JeJep好p好'}],e:'考察 switch 穿透特性（无 break 会继续执行下一 case）。i=1: case1→打印 J，穿透到 case2 打印 e 后 break。i=2: case2→打印 e 后 break。i=3: case3→打印 p，穿透到 default 打印"好"。i=4: 无匹配 case→default 打印"好"。'},
-      {q:'int x = 1, y = 6;\nwhile(y-- > 0) { x--; }\nSystem.out.print("x="+x+",y="+y);',its:[{l:'输出结果：',a:'x=-5,y=-1'}],e:'考察后置自减运算符。y-- > 0 先判断 y 再减 1。循环条件执行 6 次（y 从 6→0），循环体执行 6 次 x 从 1→-5。最后 y=-1（第 7 次判断时 y=0>0 为 false，y 再减为 -1）。'}
+      {q:'char x = \'你\', y = \'e\', z = \'吃\';\nif (x > \'A\') { y = \'苹\'; z = \'果\'; }\nelse y = \'酸\';\nz = \'甜\';\nSystem.out.println(x + "," + y + "," + z);',its:[{l:'输出结果：',a:'你,苹,甜'}],e:'考察 char 类型比较和字符串连接。x=\'你\' 的 Unicode 值大于 \'A\'，进入 if 分支，y=\'苹\'，z=\'果\'，然后 z 被赋值为\'甜\'覆盖。最后输出拼接结果。'},
+      {q:'char c = \'\\0\';\nfor (int i = 1; i <= 4; i++) {\n    switch (i) {\n        case 1: c = \'J\'; System.out.print(c);\n        case 2: c = \'e\'; System.out.print(c); break;\n        case 3: c = \'p\'; System.out.print(c);\n        default: System.out.print("好");\n    }\n}',its:[{l:'输出结果：',a:'JeJep好p好'}],e:'考察 switch 穿透特性（无 break 会继续执行下一 case）。i=1: case1→打印 J，穿透到 case2 打印 e 后 break。i=2: case2→打印 e 后 break。i=3: case3→打印 p，穿透到 default 打印"好"。i=4: 无匹配 case→default 打印"好"。'},
+      {q:'int x = 1, y = 6;\nwhile (y-- > 0) { x--; }\nSystem.out.print("x=" + x + ",y=" + y);',its:[{l:'输出结果：',a:'x=-5,y=-1'}],e:'考察后置自减运算符。y-- > 0 先判断 y 再减 1。循环条件执行 6 次（y 从 6→0），循环体执行 6 次 x 从 1→-5。最后 y=-1（第 7 次判断时 y=0>0 为 false，y 再减为 -1）。'}
     ]},
     {t:'code',l:'编程题',qs:[
       {q:'求 1! + 2! + … + 10!。',c:'public class FactorialSum {\n    public static void main(String[] args) {\n        long sum = 0, fact = 1;\n        for (int i = 1; i <= 10; i++) {\n            fact *= i;\n            sum += fact;\n        }\n        System.out.println("1!+2!+...+10! = " + sum);\n    }\n}'},
@@ -361,25 +361,24 @@ var CHS = [
     {t:'choice',l:'单选题',qs:[
       {q:'下列哪个叙述是正确的？',o:['A. 所有类必须在同一源文件中。','B. 类可以分布在多个源文件中，必须有一个含主类。','C. 源文件必须含有主类。','D. 主类必须是 public 类。'],a:1,e:'B 正确：Java 允许将类分散在多个源文件中，但程序入口（含 main 方法的类）所在的文件必须被包含。A 错误。C 错误：源文件可以没有主类（如工具类）。D 错误：主类不要求是 public。'},
       {q:'下列哪个叙述是正确的？',o:['A. 成员变量名不能和局部变量名相同。','B. 方法参数名可以和局部变量名相同。','C. 成员变量没有默认值。','D. 局部变量没有默认值。'],a:3,e:'D 正确：局部变量必须显式赋值才能使用。A 错误：可以同名（局部变量隐藏成员变量）。B 错误：参数名和局部变量名不能相同（在同一作用域内）。C 错误：成员变量有默认值。'},
-      {q:'class Hello {\n  Hello(int m) { }\n  int Hello() { return 20; }\n  hello() { }\n}',o:['A. 有两个构造方法。','B. int Hello() 是错误的。','C. 没有构造方法。','D. hello 方法无类型导致编译错误。'],a:1,e:'int Hello() 是普通方法（有返回类型），不是构造方法。构造方法只有 Hello(int m)。'},
-      {q:'class Dog {\n  Dog(int m) { }\n  Dog(double m) { }\n  int Dog(int m) { return 23; }\n  void Dog(double m) { }\n}',o:['A. Dog(int) 与 Dog(double) 是重载构造方法。','B. int Dog(int) 与 void Dog(double) 是重载非构造方法。','C. 只有两个构造方法且无无参构造。','D. 有三个构造方法。'],a:3,e:'只有前两个是构造方法，后两个是普通方法（有返回类型）。'},
-      {q:'下列哪个叙述是正确的？',o:['A. 成员变量有默认值。','B. this 可出现在 static 方法中。','C. 实例方法可以用类名调用。','D. 局部变量可以用访问修饰符。'],a:0,e:'A 正确：成员变量有默认初始值（数值型 0、boolean false、引用类型 null）。B 错误：this 不能在 static 方法中使用。C 错误：实例方法必须通过对象调用。D 错误：局部变量不能用访问修饰符。'},
-      {q:'class Tom {\n  void Tom() { System.out.println("ok"); }\n  Tom(int m) { System.out.println("你好"); }\n}\npublic class Test {\n  public static void main(String args[]) {\n    Tom cat = new Tom();\n  }\n}',o:['A. 输出 ok。','B. 没有构造方法。','C. 编译错误，无默认构造方法。','D. 无输出。'],a:2,e:'void Tom() 是普通方法（有返回类型）。类中只定义了 Tom(int m)，无默认无参构造，new Tom() 编译出错。'}
+      {q:'class Hello {\n    Hello(int m) { }\n    int Hello() { return 20; }\n    hello() { }\n}',o:['A. 有两个构造方法。','B. int Hello() 是错误的。','C. 没有构造方法。','D. hello 方法无类型导致编译错误。'],a:1,e:'int Hello() 是普通方法（有返回类型），不是构造方法。构造方法只有 Hello(int m)。'},
+      {q:'class Dog {\n    Dog(int m) { }\n    Dog(double m) { }\n    int Dog(int m) { return 23; }\n    void Dog(double m) { }\n}',o:['A. Dog(int) 与 Dog(double) 是重载构造方法。','B. int Dog(int) 与 void Dog(double) 是重载非构造方法。','C. 只有两个构造方法且无无参构造。','D. 有三个构造方法。'],a:3,e:'只有前两个是构造方法，后两个是普通方法（有返回类型）。'},
+      {q:'class Tom {\n    void Tom() { System.out.println("ok"); }\n    Tom(int m) { System.out.println("你好"); }\n}\npublic class Test {\n    public static void main(String args[]) {\n        Tom cat = new Tom();\n    }\n}',o:['A. 输出 ok。','B. 没有构造方法。','C. 编译错误，无默认构造方法。','D. 无输出。'],a:2,e:'void Tom() 是普通方法（有返回类型）。类中只定义了 Tom(int m)，无默认无参构造，new Tom() 编译出错。'}
     ]},
     {t:'error',l:'挑错题',qs:[
-      {q:'class People {\n  int m = 10, n;\n  n = 200;  // 哪行有错？\n  void f() { ... }\n}',o:['A','B','C','D'],a:1,e:'B: n=200 是语句，不能直接放在类体中，需在方法或构造块中。'},
-      {q:'class E {\n  int x;\n  public void f(int n) {\n    int m;\n    int t = x + n;\n    int y = x + m;  // 哪行有错？\n    m = 10;\n  }\n}',o:['A','B','C','D'],a:2,e:'C: m 未初始化就被使用。'},
-      {q:'class Tom { int x; static int y; ... }\npublic class E {\n  public static void main(String args[]) {\n    ...\n    Tom.x = 300;  // 哪行有错？\n  }\n}',o:['A','B','C','D'],a:2,e:'C: x 是实例变量，不能通过类名访问。'}
+      {q:'class People {\n    int m = 10, n;\n    n = 200;  // 哪行有错？\n    void f() { ... }\n}',o:['A','B','C','D'],a:1,e:'B: n=200 是语句，不能直接放在类体中，需在方法或构造块中。'},
+      {q:'class E {\n    int x;\n    public void f(int n) {\n        int m;\n        int t = x + n;\n        int y = x + m;  // 哪行有错？\n        m = 10;\n    }\n}',o:['A','B','C','D'],a:2,e:'C: m 未初始化就被使用。'},
+      {q:'class Tom { int x; static int y; ... }\npublic class E {\n    public static void main(String args[]) {\n        ...\n        Tom.x = 300;  // 哪行有错？\n    }\n}',o:['A','B','C','D'],a:2,e:'C: x 是实例变量，不能通过类名访问。'}
     ]},
     {t:'reading',l:'阅读程序题',qs:[
-      {q:'class Fish { int weight = 1; }\nclass Lake {\n  Fish fish;\n  void setFish(Fish s) { fish = s; }\n  void foodFish(int m) { fish.weight += m; }\n}\npublic class E {\n  public static void main(String args[]) {\n    Fish redFish = new Fish();\n    System.out.println(redFish.weight);  //【1】\n    Lake lake = new Lake();\n    lake.setFish(redFish);\n    lake.foodFish(120);\n    System.out.println(redFish.weight);  //【2】\n    System.out.println(lake.fish.weight); //【3】\n  }\n}',its:[
+      {q:'class Fish { int weight = 1; }\nclass Lake {\n    Fish fish;\n    void setFish(Fish s) { fish = s; }\n    void foodFish(int m) { fish.weight += m; }\n}\npublic class E {\n    public static void main(String args[]) {\n        Fish redFish = new Fish();\n        System.out.println(redFish.weight);  //【1】\n        Lake lake = new Lake();\n        lake.setFish(redFish);\n        lake.foodFish(120);\n        System.out.println(redFish.weight);  //【2】\n        System.out.println(lake.fish.weight); //【3】\n    }\n}',its:[
         {l:'【代码1】输出：',a:'1'},
         {l:'【代码2】输出：',a:'121'},
         {l:'【代码3】输出：',a:'121（引用传递，redFish 和 lake.fish 指向同一对象）'}
       ],e:'考察引用传递。setFish(redFish) 将 redFish 的引用传给 lake.fish，二者指向同一 Fish 对象。foodFish(120) 修改该对象的 weight。'},
-      {q:'class B {\n  int x=100, y=200;\n  public void setX(int x) { x=x; }\n  public void setY(int y) { this.y=y; }\n  public int getXYSum() { return x+y; }\n}\npublic class A {\n  public static void main(String args[]) {\n    B b = new B();\n    b.setX(-100);\n    b.setY(-200);\n    System.out.println("sum=" + b.getXYSum());\n  }\n}',its:[{l:'输出结果：',a:'sum=-100（setX 中 x=x 给参数赋值，未修改实例 x，实例 x=100；setY 设置 y=-200；100+(-200)=-100）'}],e:'考察局部变量隐藏和 this 关键字。setX 中参数 x 与成员变量 x 同名，x=x 只是参数自赋值，未修改成员变量。setY 用 this.y=y 正确修改成员变量。'},
-      {q:'class B {\n  int n;\n  static int sum=0;\n  void setN(int n) { this.n=n; }\n  int getSum() {\n    for(int i=1;i<=n;i++) sum=sum+i;\n    return sum;\n  }\n}\npublic class A {\n  public static void main(String args[]) {\n    B b1=new B(), b2=new B();\n    b1.setN(3); b2.setN(5);\n    int s1=b1.getSum(); int s2=b2.getSum();\n    System.out.println(s1+s2);\n  }\n}',its:[{l:'输出结果：',a:'27（static sum 累积：b1.getSum() 得到 6，b2.getSum() 从 6 累加到 21，6+21=27）'}],e:'考察 static 变量的全局共享特性。sum 是类变量，所有对象共享。b2.getSum() 从 b1 累加后的值 6 继续累加 1+2+3+4+5=15，sum 从 6→21。s1=6，s2=21，和为 27。'},
-      {q:'class A {\n  double f(int x,double y) { return x+y; }\n  int f(int x,int y) { return x*y; }\n}\npublic class E {\n  public static void main(String args[]) {\n    A a=new A();\n    System.out.println(a.f(10,10));   //【1】\n    System.out.println(a.f(10,10.0)); //【2】\n  }\n}',its:[
+      {q:'class B {\n    int x = 100, y = 200;\n    public void setX(int x) { x = x; }\n    public void setY(int y) { this.y = y; }\n    public int getXYSum() { return x + y; }\n}\npublic class A {\n    public static void main(String args[]) {\n        B b = new B();\n        b.setX(-100);\n        b.setY(-200);\n        System.out.println("sum=" + b.getXYSum());\n    }\n}',its:[{l:'输出结果：',a:'sum=-100（setX 中 x=x 给参数赋值，未修改实例 x，实例 x=100；setY 设置 y=-200；100+(-200)=-100）'}],e:'考察局部变量隐藏和 this 关键字。setX 中参数 x 与成员变量 x 同名，x=x 只是参数自赋值，未修改成员变量。setY 用 this.y=y 正确修改成员变量。'},
+      {q:'class B {\n    int n;\n    static int sum = 0;\n    void setN(int n) { this.n = n; }\n    int getSum() {\n        for (int i = 1; i <= n; i++) sum = sum + i;\n        return sum;\n    }\n}\npublic class A {\n    public static void main(String args[]) {\n        B b1 = new B(), b2 = new B();\n        b1.setN(3); b2.setN(5);\n        int s1 = b1.getSum(); int s2 = b2.getSum();\n        System.out.println(s1 + s2);\n    }\n}',its:[{l:'输出结果：',a:'27（static sum 累积：b1.getSum() 得到 6，b2.getSum() 从 6 累加到 21，6+21=27）'}],e:'考察 static 变量的全局共享特性。sum 是类变量，所有对象共享。b2.getSum() 从 b1 累加后的值 6 继续累加 1+2+3+4+5=15，sum 从 6→21。s1=6，s2=21，和为 27。'},
+      {q:'class A {\n    double f(int x, double y) { return x + y; }\n    int f(int x, int y) { return x * y; }\n}\npublic class E {\n    public static void main(String args[]) {\n        A a = new A();\n        System.out.println(a.f(10, 10));   //【1】\n        System.out.println(a.f(10, 10.0)); //【2】\n    }\n}',its:[
         {l:'【代码1】输出：',a:'100（int×int 匹配第二个方法）'},
         {l:'【代码2】输出：',a:'20.0（int+double→double 匹配第一个方法）'}
       ],e:'考察方法重载的静态绑定。编译器根据参数类型选择匹配的方法：f(10,10) 两个 int 匹配第二个方法返回 int 100；f(10,10.0) 第二个为 double 匹配第一个方法返回 double 20.0。'}
@@ -402,34 +401,34 @@ var CHS = [
     {t:'choice',l:'选择题',qs:[
       {q:'下列哪个叙述是正确的？',o:['A. 子类继承父类的构造方法。','B. abstract 类的子类必须是非 abstract 类。','C. 子类继承的方法只能操作子类继承和隐藏的成员变量。','D. 子类重写或新增的方法可直接操作被子类隐藏的成员变量。'],a:2,e:'C 正确：子类继承的方法操作的是子类能访问到的成员变量（继承或隐藏的）。A 错误：构造方法不被继承。B 错误：abstract 类的子类可以是 abstract 类。D 错误：操作隐藏变量需通过 super。'},
       {q:'下列哪个叙述是正确的？',o:['A. final 类可以有子类。','B. abstract 类中只有 abstract 方法。','C. abstract 类中非 abstract 方法不可用 final 修饰。','D. 不可同时用 final 和 abstract 修饰同一方法。','E. 允许 static 修饰 abstract 方法。'],a:3,e:'D 正确：final（禁止重写）和 abstract（强制重写）语义矛盾，不能共存。A 错误：final 类不能被继承。B 错误：abstract 类可以有具体方法。C 错误：abstract 类中非 abstract 方法可以用 final。E 错误：static abstract 非法。'},
-      {q:'class Father { private int money=12; float height; int seeMoney(){ return money; } }\nclass Son extends Father { int height; int lookMoney() { return seeMoney(); } }\n哪行有错？\n  erzi.money = 300;  //C\n  erzi.height = 1.78F; //D',o:['A','B','C','D'],a:2,e:'C: money 是 private 的，不能通过对象访问。'},
+      {q:'class Father { private int money = 12; float height; int seeMoney() { return money; } }\nclass Son extends Father { int height; int lookMoney() { return seeMoney(); } }\n哪行有错？\n    erzi.money = 300;  //C\n    erzi.height = 1.78F; //D',o:['A','B','C','D'],a:2,e:'C: money 是 private 的，不能通过对象访问。'},
       {q:'C 是 B 的子类，B 是 A 的子类。哪个叙述错误？',o:['A. cat instanceof B 是 true。','B. bird instanceof A 是 true。','C. cat instanceof A 是 true。','D. bird instanceof C 是 true。'],a:3,e:'D 错误：bird 是 B 的实例（不是 C 的），C 是 B 的子类。instanceof 检查对象是否是某类或其子类的实例。A cat 是 C 的实例→C extends B，所以 true。B bird 是 B 的实例→B extends A，所以 true。C 同 A，true。D bird 是 B 的实例，不是 C 的。'},
       {q:'class A { static void f() { } }\nclass B extends A { void f() { } }  // 哪行有错？',o:['A','B','C','D'],a:0,e:'A: 不能将父类的 static 方法重写为实例方法。'},
-      {q:'abstract class Takecare {\n  protected void speakHello() {}\n  public abstract static void cry();  // 哪行有错？\n  static int f(){ return 0; }\n  abstract float g();\n}',o:['A','B','C','D'],a:1,e:'B: static 和 abstract 不能同时修饰方法。'},
+      {q:'abstract class Takecare {\n    protected void speakHello() {}\n    public abstract static void cry();  // 哪行有错？\n    static int f() { return 0; }\n    abstract float g();\n}',o:['A','B','C','D'],a:1,e:'B: static 和 abstract 不能同时修饰方法。'},
       {q:'abstract class A { abstract float getFloat(); }\npublic class B extends A { private float getFloat() { return 1.0f; } }  // 哪行有错？',o:['A','B','C','D'],a:2,e:'C: 重写方法的访问权限不能更严格（父类默认 friendly，子类 private 更严格）。'},
-      {q:'class A { public float getNum() { return 3.0f; } }\npublic class B extends A { 【代码】 }\n将哪个代码放入不会导致编译错误？',o:['A. public float getNum(){return 4.0f;}','B. public void getNum(){}','C. public void getNum(double d){}','D. public double getNum(float d){return 4.0d;}'],a:0,e:'A 是正确重写。B 返回类型不同且非子类型。C 和 D 是重载。'},
-      {q:'class A { public int i=0; A(int m) { i=1; } }\nclass B extends A { B(int m) { i=2; } ... }',o:['A. 编译错误，A 没有无参构造。','B. 输出 0。','C. 输出 1。','D. 输出 2。'],a:0,e:'B 的构造方法默认有 super()，但 A 没有无参构造，编译错误。'}
+      {q:'class A { public float getNum() { return 3.0f; } }\npublic class B extends A { 【代码】 }\n将哪个代码放入不会导致编译错误？',o:['A. public float getNum() { return 4.0f; }','B. public void getNum() {}','C. public void getNum(double d) {}','D. public double getNum(float d) { return 4.0d; }'],a:0,e:'A 是正确重写。B 返回类型不同且非子类型。C 和 D 是重载。'},
+      {q:'class A { public int i = 0; A(int m) { i = 1; } }\nclass B extends A { B(int m) { i = 2; } ... }',o:['A. 编译错误，A 没有无参构造。','B. 输出 0。','C. 输出 1。','D. 输出 2。'],a:0,e:'B 的构造方法默认有 super()，但 A 没有无参构造，编译错误。'}
     ]},
     {t:'error',l:'挑错题',qs:[
-      {q:'abstract class AAA {\n  final static void speakHello() {}\n  final abstract void cry();  // 哪行有错？\n  static final int f(){ return 0; }\n  abstract float g();\n}',o:['A','B','C','D'],a:1,e:'B: final 和 abstract 不能共存。'},
-      {q:'class Animal { int m=100; }\nclass Dog extends Animal { double m; }\n...\n  animal = dog;\n  dog.m = 3.14;\n  animal.m = 3.14;  // 哪行有错？',o:['A','B','C','D'],a:3,e:'D: animal.m 是 int 型，不能赋值为 double 3.14。'}
+      {q:'abstract class AAA {\n    final static void speakHello() {}\n    final abstract void cry();  // 哪行有错？\n    static final int f() { return 0; }\n    abstract float g();\n}',o:['A','B','C','D'],a:1,e:'B: final 和 abstract 不能共存。'},
+      {q:'class Animal { int m = 100; }\nclass Dog extends Animal { double m; }\n...\n    animal = dog;\n    dog.m = 3.14;\n    animal.m = 3.14;  // 哪行有错？',o:['A','B','C','D'],a:3,e:'D: animal.m 是 int 型，不能赋值为 double 3.14。'}
     ]},
     {t:'reading',l:'阅读程序题',qs:[
-      {q:'class A { double f(double x,double y) { return x+y; } }\nclass B extends A {\n  double f(int x,int y) { return x*y; }\n}\npublic class E {\n  public static void main(String args[]) {\n    B b=new B();\n    System.out.println(b.f(3,5));     //【1】\n    System.out.println(b.f(3.0,5.0)); //【2】\n  }\n}',its:[
+      {q:'class A { double f(double x, double y) { return x + y; } }\nclass B extends A {\n    double f(int x, int y) { return x * y; }\n}\npublic class E {\n    public static void main(String args[]) {\n        B b = new B();\n        System.out.println(b.f(3, 5));     //【1】\n        System.out.println(b.f(3.0, 5.0)); //【2】\n    }\n}',its:[
         {l:'【代码1】输出：',a:'15（int×int 调用 B 的 f(int,int)）'},
         {l:'【代码2】输出：',a:'8.0（double+double 调用 A 的 f(double,double)）'}
       ],e:'考察重载与方法调用匹配。B 的 f(int,int) 不是重写（参数类型不同），是重载。b.f(3,5) 匹配 B 的 f(int,int) 返回 15；b.f(3.0,5.0) 匹配 A 的 f(double,double) 返回 8.0。'},
-      {q:'class A { public int getNumber(int a) { return a+1; } }\nclass B extends A {\n  public int getNumber(int a) { return a+100; }\n  public static void main(String args[]) {\n    A a=new A();\n    System.out.println(a.getNumber(10)); //【1】\n    a=new B();\n    System.out.println(a.getNumber(10)); //【2】\n  }\n}',its:[
+      {q:'class A { public int getNumber(int a) { return a + 1; } }\nclass B extends A {\n    public int getNumber(int a) { return a + 100; }\n    public static void main(String args[]) {\n        A a = new A();\n        System.out.println(a.getNumber(10)); //【1】\n        a = new B();\n        System.out.println(a.getNumber(10)); //【2】\n    }\n}',its:[
         {l:'【代码1】输出：',a:'11'},
         {l:'【代码2】输出：',a:'110'}
       ],e:'考察方法重写的动态绑定（多态）。a 的编译时类型是 A，运行时类型先是 A（返回 11），后是 B（返回 110）。动态绑定调用子类重写的方法。'},
-      {q:'class A {\n  double f(double x,double y) { return x+y; }\n  static int g(int n) { return n*n; }\n}\nclass B extends A {\n  double f(double x,double y) { double m=super.f(x,y); return m+x*y; }\n  static int g(int n) { return A.g(n)+n; }\n}\npublic class E {\n  public static void main(String args[]) {\n    B b=new B();\n    System.out.println(b.f(10.0,8.0)); //【1】\n    System.out.println(b.g(3));         //【2】\n    A a=new B();\n    System.out.println(a.f(10.0,8.0)); //【3】\n    System.out.println(a.g(3));         //【4】\n  }\n}',its:[
+      {q:'class A {\n    double f(double x, double y) { return x + y; }\n    static int g(int n) { return n * n; }\n}\nclass B extends A {\n    double f(double x, double y) { double m = super.f(x, y); return m + x * y; }\n    static int g(int n) { return A.g(n) + n; }\n}\npublic class E {\n    public static void main(String args[]) {\n        B b = new B();\n        System.out.println(b.f(10.0, 8.0)); //【1】\n        System.out.println(b.g(3));         //【2】\n        A a = new B();\n        System.out.println(a.f(10.0, 8.0)); //【3】\n        System.out.println(a.g(3));         //【4】\n    }\n}',its:[
         {l:'【代码1】输出：',a:'98.0（super.f=18 + 10*8=80 = 98）'},
         {l:'【代码2】输出：',a:'12（A.g(3)=9 + 3 = 12）'},
         {l:'【代码3】输出：',a:'98.0（动态绑定，调用 B 的 f）'},
         {l:'【代码4】输出：',a:'9（静态方法无多态，调用 A 的 g）'}
       ],e:'考察方法重写的动态绑定和静态方法的隐藏。f() 是实例方法，动态绑定到子类；g() 是静态方法，编译时绑定到引用类型。super.f() 调用父类方法。A.g(n) 显式调用父类静态方法。'},
-      {q:'class A { int m; int getM() { return m; } int seeM() { return m; } }\nclass B extends A {\n  int m;\n  int getM() { return m+100; }\n}\npublic class E {\n  public static void main(String args[]) {\n    B b=new B();\n    b.m = 20;\n    System.out.println(b.getM()); //【1】\n    A a=b;\n    a.m = -100;\n    System.out.println(a.getM()); //【2】\n    System.out.println(b.seeM()); //【3】\n  }\n}',its:[
+      {q:'class A { int m; int getM() { return m; } int seeM() { return m; } }\nclass B extends A {\n    int m;\n    int getM() { return m + 100; }\n}\npublic class E {\n    public static void main(String args[]) {\n        B b = new B();\n        b.m = 20;\n        System.out.println(b.getM()); //【1】\n        A a = b;\n        a.m = -100;\n        System.out.println(a.getM()); //【2】\n        System.out.println(b.seeM()); //【3】\n    }\n}',its:[
         {l:'【代码1】输出：',a:'120（b.m+100=20+100）'},
         {l:'【代码2】输出：',a:'120（上转型对象调用子类重写的 getM()，操作的是 b.m=20）'},
         {l:'【代码3】输出：',a:'-100（seeM() 被子类继承，操作的 m 是被子类隐藏的 A 类的 m，即 a.m=-100）'}
@@ -447,23 +446,23 @@ var CHS = [
     ]},
     {t:'choice',l:'选择题',qs:[
       {q:'下列哪个叙述是正确的？',o:['A. 一个类最多实现两个接口。','B. 抽象类实现接口必须重写全部方法。','C. 非抽象类实现接口可以只重写部分方法。','D. 允许接口中只有一个抽象方法。'],a:3,e:'D 正确：接口可以只有一个抽象方法（这样的接口称为函数式接口，可用 @FunctionalInterface 标注）。A 错误：类可以实现任意多个接口。B 错误：抽象类实现接口可以只重写部分方法，剩余由子类实现。C 错误：非抽象类实现接口必须重写全部抽象方法。'},
-      {q:'interface Takecare {\n  protected void speakHello();  //A\n  public abstract static void cry(); //B\n  int f(); //C\n  abstract float g(); //D\n}\n哪两个有错？',o:['A','B','C','D'],a:'A,B',e:'A: 接口方法不能用 protected（默认 public）。B: static 和 abstract 不能共存。'},
-      {q:'interface Com { int M=200; int f(); }\nclass ImpCom implements Com { 【代码】 }\n哪个替换不会导致编译错误？',o:['A. public int f(){return 100+M;}','B. int f(){return 100;}','C. public double f(){return 2.6;}','D. public abstract int f();'],a:0,e:'A 正确实现接口方法（必须用 public 修饰）。B 缺少 public 访问权限更严格。C 返回类型不匹配。D 仍然是抽象方法。'}
+      {q:'interface Takecare {\n    protected void speakHello();  //A\n    public abstract static void cry(); //B\n    int f(); //C\n    abstract float g(); //D\n}\n哪两个有错？',o:['A','B','C','D'],a:'A,B',e:'A: 接口方法不能用 protected（默认 public）。B: static 和 abstract 不能共存。'},
+      {q:'interface Com { int M = 200; int f(); }\nclass ImpCom implements Com { 【代码】 }\n哪个替换不会导致编译错误？',o:['A. public int f() { return 100 + M; }','B. int f() { return 100; }','C. public double f() { return 2.6; }','D. public abstract int f();'],a:0,e:'A 正确实现接口方法（必须用 public 修饰）。B 缺少 public 访问权限更严格。C 返回类型不匹配。D 仍然是抽象方法。'}
     ]},
     {t:'error',l:'挑错题',qs:[
-      {q:'public interface Com {\n  abstract void cry(); //A\n  public int x = 0;    //B\n  static int y = 0;    //C 哪行有错？\n}\nabstract class Cat implements Com {\n  abstract void cry(); //D\n}',o:['A','B','C','D'],a:2,e:'C: 接口中的变量默认是 public static final，但这里声明为 static int 缺少 final，实际上 Java 会自动补全为 public static final，所以 C 是合法的。本题设计意图认为接口变量必须显式声明为 final。'},
-      {q:'interface Com { int MAX=100; void f(); }\nabstract class Animal implements Com { int MIN; }\nclass Dog extends Animal {\n  public void f() { MIN=10; MAX=200; }  // 哪行有错？\n}',o:['A','B','C','D'],a:3,e:'D: MAX 是接口常量（隐式 final），不能重新赋值。'}
+      {q:'public interface Com {\n    abstract void cry(); //A\n    public int x = 0;    //B\n    static int y = 0;    //C 哪行有错？\n}\nabstract class Cat implements Com {\n    abstract void cry(); //D\n}',o:['A','B','C','D'],a:2,e:'C: 接口中的变量默认是 public static final，但这里声明为 static int 缺少 final，实际上 Java 会自动补全为 public static final，所以 C 是合法的。本题设计意图认为接口变量必须显式声明为 final。'},
+      {q:'interface Com { int MAX = 100; void f(); }\nabstract class Animal implements Com { int MIN; }\nclass Dog extends Animal {\n    public void f() { MIN = 10; MAX = 200; }  // 哪行有错？\n}',o:['A','B','C','D'],a:3,e:'D: MAX 是接口常量（隐式 final），不能重新赋值。'}
     ]},
     {t:'reading',l:'阅读程序题',qs:[
-      {q:'interface A { double f(double x,double y); }\nclass B implements A {\n  public double f(double x,double y) { return x*y; }\n  int g(int a,int b) { return a+b; }\n}\npublic class E {\n  public static void main(String args[]) {\n    A a=new B();\n    System.out.println(a.f(3,5)); //【1】\n    B b=(B)a;\n    System.out.println(b.g(3,5)); //【2】\n  }\n}',its:[
+      {q:'interface A { double f(double x, double y); }\nclass B implements A {\n    public double f(double x, double y) { return x * y; }\n    int g(int a, int b) { return a + b; }\n}\npublic class E {\n    public static void main(String args[]) {\n        A a = new B();\n        System.out.println(a.f(3, 5)); //【1】\n        B b = (B) a;\n        System.out.println(b.g(3, 5)); //【2】\n    }\n}',its:[
         {l:'【代码1】输出：',a:'15.0'},
         {l:'【代码2】输出：',a:'8'}
       ],e:'考察接口回调。A a=new B() 用接口变量引用实现类对象，a.f() 动态绑定到 B 的 f() 返回 15.0。强制转换后 b.g() 调用 B 新增的方法返回 8。'},
-      {q:'interface Com { int add(int a,int b); }\nabstract class A { abstract int add(int a,int b); }\nclass B extends A implements Com {\n  public int add(int a,int b) { return a+b; }\n}\npublic class E {\n  public static void main(String args[]) {\n    B b=new B();\n    Com com=b;\n    System.out.println(com.add(12,6)); //【1】\n    A a=b;\n    System.out.println(a.add(10,5));   //【2】\n  }\n}',its:[
+      {q:'interface Com { int add(int a, int b); }\nabstract class A { abstract int add(int a, int b); }\nclass B extends A implements Com {\n    public int add(int a, int b) { return a + b; }\n}\npublic class E {\n    public static void main(String args[]) {\n        B b = new B();\n        Com com = b;\n        System.out.println(com.add(12, 6)); //【1】\n        A a = b;\n        System.out.println(a.add(10, 5));   //【2】\n    }\n}',its:[
         {l:'【代码1】输出：',a:'18'},
         {l:'【代码2】输出：',a:'15'}
       ],e:'考察接口和抽象类的多实现。B 同时满足接口和抽象类的约束，add() 方法同时实现两者。通过 Com 接口变量和 A 抽象类变量都能调用 add()，动态绑定到 B 的实现。'},
-      {q:'interface Com {\n  int add(int a,int b);\n  public static int get(int n){ return n; }\n  public default int see(int n){ return n; }\n  public default int look(int n){ return n; }\n}\nclass A implements Com {\n  public int add(int a,int b) { return a+b; }\n  public int see(int n){ return n+1; }\n}\npublic class E {\n  public static void main(String args[]) {\n    A a=new A();\n    int m = a.add(12,6);\n    int n = Com.get(12);\n    int t = a.see(6);\n    int q = a.look(6);\n    System.out.printf("%d:%d:%d:%d",m,n,t,q);\n  }\n}',its:[{l:'【代码】输出：',a:'18:12:7:6'}],e:'考察接口的抽象方法、静态方法和默认方法。add() 必须实现；Com.get(12) 通过接口名调用静态方法；see() 被重写返回 n+1；look() 使用默认实现返回 n。'}
+      {q:'interface Com {\n    int add(int a, int b);\n    public static int get(int n) { return n; }\n    public default int see(int n) { return n; }\n    public default int look(int n) { return n; }\n}\nclass A implements Com {\n    public int add(int a, int b) { return a + b; }\n    public int see(int n) { return n + 1; }\n}\npublic class E {\n    public static void main(String args[]) {\n        A a = new A();\n        int m = a.add(12, 6);\n        int n = Com.get(12);\n        int t = a.see(6);\n        int q = a.look(6);\n        System.out.printf("%d:%d:%d:%d", m, n, t, q);\n    }\n}',its:[{l:'【代码】输出：',a:'18:12:7:6'}],e:'考察接口的抽象方法、静态方法和默认方法。add() 必须实现；Com.get(12) 通过接口名调用静态方法；see() 被重写返回 n+1；look() 使用默认实现返回 n。'}
     ]}
   ]},
   // 7
@@ -486,14 +485,14 @@ var CHS = [
       {q:'下列哪个叙述是错误的？',o:['A. 内部类中外嵌类的成员变量在内部类中有效。','B. 内部类方法可以调用外嵌类的方法。','C. 内部类中可以声明 static 变量。','D. 外嵌类可以用内部类声明对象作为成员。'],a:2,e:'非静态内部类不能声明 static 变量。'}
     ]},
     {t:'error',l:'挑错题',qs:[
-      {q:'class OutClass {\n  int m = 1;\n  static float x;\n  class InnerClass {\n    int m = 12;\n    static float n = 20.89f;  // 哪行有错？\n    InnerClass() { }\n    void f() { m=100; }\n  }\n}',o:['A','B','C','D'],a:2,e:'C: 非静态内部类不能声明 static 成员变量。'},
-      {q:'try{ m=Integer.parseInt("8888");\n  n=Integer.parseInt("ab89");\n  t=Integer.parseInt("1289");\n}\ncatch(Exception e) {}\ncatch(NumberFormatException e) {}  // 哪行有错？',o:['A','B','C','D'],a:3,e:'D: NumberFormatException 是 Exception 的子类，必须写在父类 catch 之前，否则不可达。'}
+      {q:'class OutClass {\n    int m = 1;\n    static float x;\n    class InnerClass {\n        int m = 12;\n        static float n = 20.89f;  // 哪行有错？\n        InnerClass() { }\n        void f() { m = 100; }\n    }\n}',o:['A','B','C','D'],a:2,e:'C: 非静态内部类不能声明 static 成员变量。'},
+      {q:'try { m = Integer.parseInt("8888");\n    n = Integer.parseInt("ab89");\n    t = Integer.parseInt("1289");\n}\ncatch (Exception e) {}\ncatch (NumberFormatException e) {}  // 哪行有错？',o:['A','B','C','D'],a:3,e:'D: NumberFormatException 是 Exception 的子类，必须写在父类 catch 之前，否则不可达。'}
     ]},
     {t:'reading',l:'阅读程序题',qs:[
-      {q:'class Cry { public void cry() { System.out.println("大家好"); } }\npublic class E {\n  public static void main(String args[]) {\n    Cry hello = new Cry() {\n      public void cry() { hello.cry(); }\n    };\n  }\n}',its:[{l:'输出结果：',a:'（无输出——main 方法中未调用 hello.cry()）'}],e:'考察匿名类的创建。new Cry(){...} 创建了 Cry 的匿名子类，重写了 cry() 方法。但 main 方法中只创建了对象，没有调用任何方法，所以无输出。注意匿名类中递归调用可能造成 StackOverflowError。'},
-      {q:'interface Com { public void speak(); }\npublic class E {\n  public static void main(String args[]) {\n    Com p = () -> { System.out.println("大家好,祝工作顺利！"); };\n    p.speak();\n    System.out.println("p 是接口变量");\n  }\n}',its:[{l:'输出结果：',a:'大家好,祝工作顺利！\np 是接口变量'}],e:'考察 Lambda 表达式（函数式接口）。Com 只有一个抽象方法，可以用 Lambda 实现。p.speak() 执行 Lambda 体，输出"大家好,祝工作顺利！"。'},
-      {q:'public class E {\n  public static void main(String args[]) {\n    try { methodA(); }\n    catch(IOException e) { System.out.print("你好"); return; }\n    finally { System.out.println(" fine thanks"); }\n  }\n  public static void methodA() throws IOException {\n    throw new IOException();\n  }\n}',its:[{l:'输出结果：',a:'你好 fine thanks（finally 在 return 之前执行）'}],e:'考察 try-catch-finally 执行顺序。catch 中 catch 和 return，但 finally 块在 return 之前执行。输出"你好"后执行 finally 输出"fine thanks"，然后 return。'},
-      {q:'class ScoreException extends Exception { int number; ScoreException(int n){ number=n; } int getMess(){ return number; } }\nclass Teacher {\n  public int giveScore(int score) throws ScoreException {\n    if(score>100|score<0) throw new ScoreException(score);\n    return score;\n  }\n}\npublic class E {\n  public static void main(String args[]) {\n    Teacher t = new Teacher();\n    int m=0, n=0;\n    try { m=t.giveScore(100); m=t.giveScore(101); }\n    catch(ScoreException e) { n=e.getMess(); }\n    System.out.printf("%d:%d",m,n);\n  }\n}',its:[{l:'输出结果：',a:'100:101（第一次调用返回 100，第二次抛出异常，m 保持 100）'}],e:'考察自定义异常和 try-catch 流程。giveScore(100) 返回 100 赋值给 m。giveScore(101) 抛出异常，m 未被赋新值（保持 100）。catch 捕获异常，n 获取异常中的 number=101。'},
+      {q:'class Cry { public void cry() { System.out.println("大家好"); } }\npublic class E {\n    public static void main(String args[]) {\n        Cry hello = new Cry() {\n            public void cry() { hello.cry(); }\n        };\n    }\n}',its:[{l:'输出结果：',a:'（无输出——main 方法中未调用 hello.cry()）'}],e:'考察匿名类的创建。new Cry(){...} 创建了 Cry 的匿名子类，重写了 cry() 方法。但 main 方法中只创建了对象，没有调用任何方法，所以无输出。注意匿名类中递归调用可能造成 StackOverflowError。'},
+      {q:'interface Com { public void speak(); }\npublic class E {\n    public static void main(String args[]) {\n        Com p = () -> { System.out.println("大家好,祝工作顺利！"); };\n        p.speak();\n        System.out.println("p 是接口变量");\n    }\n}',its:[{l:'输出结果：',a:'大家好,祝工作顺利！\np 是接口变量'}],e:'考察 Lambda 表达式（函数式接口）。Com 只有一个抽象方法，可以用 Lambda 实现。p.speak() 执行 Lambda 体，输出"大家好,祝工作顺利！"。'},
+      {q:'public class E {\n    public static void main(String args[]) {\n        try { methodA(); }\n        catch (IOException e) { System.out.print("你好"); return; }\n        finally { System.out.println(" fine thanks"); }\n    }\n    public static void methodA() throws IOException {\n        throw new IOException();\n    }\n}',its:[{l:'输出结果：',a:'你好 fine thanks（finally 在 return 之前执行）'}],e:'考察 try-catch-finally 执行顺序。catch 中 catch 和 return，但 finally 块在 return 之前执行。输出"你好"后执行 finally 输出"fine thanks"，然后 return。'},
+      {q:'class ScoreException extends Exception {\n    int number;\n    ScoreException(int n) { number = n; }\n    int getMess() { return number; }\n}\nclass Teacher {\n    public int giveScore(int score) throws ScoreException {\n        if (score > 100 | score < 0) throw new ScoreException(score);\n        return score;\n    }\n}\npublic class E {\n    public static void main(String args[]) {\n        Teacher t = new Teacher();\n        int m = 0, n = 0;\n        try { m = t.giveScore(100); m = t.giveScore(101); }\n        catch (ScoreException e) { n = e.getMess(); }\n        System.out.printf("%d:%d", m, n);\n    }\n}',its:[{l:'输出结果：',a:'100:101（第一次调用返回 100，第二次抛出异常，m 保持 100）'}],e:'考察自定义异常和 try-catch 流程。giveScore(100) 返回 100 赋值给 m。giveScore(101) 抛出异常，m 未被赋新值（保持 100）。catch 捕获异常，n 获取异常中的 number=101。'},
     ]}
   ]}
 ];

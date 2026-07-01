@@ -250,8 +250,8 @@ var CHS = [
     ]},
     {t:'error',l:'挑错题',qs:[
       {q:'public class Example1 {\n    public static void main(String args[]) {\n        System.out.println("ok");\n        System.out.println("hello");\n        system.out.println("您好");  // 哪行有错？\n    }\n}',o:['A','B','C','D'],a:3,e:'D 行 system.out.println 应为 System.out.println（S 大写）。'},
-      {q:'Public class Example2 { ... }  // 哪行有错？',o:['A','B','C','D'],a:0,e:'A 行 class 前 Public 应为 public（小写）。'},
-      {q:'public class Example3 {\n    public static void main(string args[]) { ... }  // 哪行有错？\n}',o:['A','B','C','D'],a:1,e:'B 行 string 应为 String（首字母大写）。'}
+      {q:'Public class Example2 {\n    public static void main(String args[]) {\n        System.out.println("ok");\n    }\n}',o:['A','B','C','D'],a:0,e:'A 行 class 前 Public 应为 public（小写）。'},
+      {q:'public class Example3 {\n    public static void main(string args[]) {\n        System.out.println("ok");\n    }\n}',o:['A','B','C','D'],a:1,e:'B 行 string 应为 String（首字母大写）。'}
     ]},
     {t:'reading',l:'阅读程序题',qs:[
       {q:'public class Speak {\n  void speakHello() { System.out.println("I\'m glad to meet you"); }\n}\nclass Xiti4 {\n  public static void main(String args[]) {\n    Speak sp = new Speak();\n    sp.speakHello();\n  }\n}',its:[
